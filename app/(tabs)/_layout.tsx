@@ -9,14 +9,22 @@ import {Text} from "react-native";
 
 export default function TabLayout() {
     const colorScheme = useColorScheme();
-    const {login, register, userId, loading} = useUser()
+    const {login, register, current, loading} = useUser()
 
     if(loading){
         return <Text>Loading...</Text>
     }
 
-    if(!userId){
+    if(!current){
         return <Redirect href={"/sign-in"}></Redirect>
+    }
+
+    if(current.role === "manager"){
+        return <Redirect href={"/(manager)"}></Redirect>
+    }
+
+    if(current.role === "supervisor"){
+        return <Redirect href={"/(supervisor)"}></Redirect>
     }
 
     return <Stack></Stack>

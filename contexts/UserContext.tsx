@@ -1,13 +1,15 @@
 import { ID } from "react-native-appwrite";
 import { createContext, useContext, useEffect, useState } from "react";
-import { account } from "@/lib/appwrite";
+import {account, teams, databases} from "@/lib/appwrite";
 import { toast } from "@/lib/toast";
+import {User, UserRole} from "@/api/models/User";
+import {APIService} from "@/api/appwriteApi";
 
 interface UserContextType {
     login:(email:string, password:string)=>Promise<void>,
-    register:(email:string, password:string)=>Promise<void>,
+    register:(email:string, password:string, firstName:string, lastName:string, role:UserRole)=>Promise<void>,
     logout:()=>Promise<void>,
-    userId:string|null,
+    current:User | null,
     loading:boolean
 }
 
@@ -18,13 +20,17 @@ export function useUser() {
 }
 
 export function UserProvider({children}) {
-    const [userId, setUserId] = useState<string|null>(null);
+    const [user, setUser] = useState<User>(null)
     const [loading, setLoading] = useState(true);
 
     async function login(email:string, password:string) {
-        const loggedIn = await account.createEmailPasswordSession(email, password);
-        setUserId(loggedIn.userId);
-        toast('Welcome back. You are logged in');
+        try {
+            const user = await APIService.login(email, password);
+            setUser(user);
+            toast('Welcome back. You are logged in');
+        }catch(e){
+            console.log("login ctx", e)
+        }
     }
 
     async function logout() {
@@ -33,23 +39,50 @@ export function UserProvider({children}) {
         toast('Logged out');
     }
 
-    async function register(email:string, password:string) {
+    async function register(email:string, password:string, firstName:string, lastName:string,role:UserRole) {
         try {
-            await account.create(ID.unique(), email, password);
-            await login(email, password);
-            toast('Account created');
+            const user = await APIService.register(email,password, firstName, lastName, role);
+            console.log("registered:",user)
+            setUser(user)
         }catch(e){
+            console.log(e)
             toast(e)
         }
     }
 
+    async function createMembership(teamId:string, email:string){
+        try{
+            await databases.createDocument('67059627002e0309280e','6705ae78001510b08394',ID.unique(),{
+                test:"bonjourent"
+            })
+            // await teams.createMembership(teamId, ['truc'], "groudonkyogre22@gmail.com",undefined,undefined,'https://cloud.appwrite.io/v1',undefined)
+        }
+        catch(e){
+            console.log(e)
+        }
+    }
+
+    async function joinTeam(teamId:string){
+        try{
+            await teams.createMembership(teamId, ['unverified'], undefined, userId)
+            toast("Vous avez rejoint la team")
+        }catch(e){
+            console.log(e)
+            toast(e)
+        }
+    }
+
+
     async function init() {
         try {
             const loggedIn = await account.get();
-            setUserId(loggedIn.$id);
+            const userData = await APIService.getUserById(loggedIn.$id)
+            setUser(userData);
             toast('Welcome back. You are logged in');
+
         } catch (err) {
-            setUserId(null);
+            setUser(null);
+            // return Promise.resolve()
         }
     }
 
@@ -60,7 +93,7 @@ export function UserProvider({children}) {
     }, []);
 
     return (
-        <UserContext.Provider value={{ userId: userId, login, logout, register, loading}}>
+        <UserContext.Provider value={{ current:user, login, logout, register, loading, joinTeam, createMembership}}>
             {children}
         </UserContext.Provider>
     );

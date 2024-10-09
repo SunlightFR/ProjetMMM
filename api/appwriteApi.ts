@@ -23,11 +23,13 @@ export const APIService:ApiInterface = {
     },
 
     login:async(email, password) => {
+        console.log("login")
         try {
-            const loggedIn = await account.createEmailPasswordSession(email, password);
-            const userData = await databases.getDocument(DATABASE_ID, USERS_COLLECTION_ID,loggedIn.userId);
-            console.log(userData)
+            const session = await account.createEmailPasswordSession(email, password);
+            console.log("session",session.userId, session.$id)
+            return await APIService.getUserById(session.userId);
         }catch (e){
+            console.error(e)
             return Promise.reject(e)
         }
     },

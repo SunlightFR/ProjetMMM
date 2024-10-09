@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { useUser } from '@/contexts/UserContext';
 import {router} from "expo-router";
+import {APIService} from "@/api/appwriteApi";
 
 
 export default function LoginScreen() {
@@ -39,12 +40,15 @@ export default function LoginScreen() {
                     title="Register"
                     onPress={
                         () => {
-                            user.register(email, password).then(()=>{
+                            user.register(email, password,"Lucas","T","manager").then(()=>{
                                 router.navigate('/(tabs)/')
                             })
                         }
                     }
                 />
+                <Button title={"test"} onPress={_=>{
+                    APIService.getUserById("6706f458000f60da4f94").then(d=>console.log(d))
+                }}></Button>
             </View>
         </View>
     );

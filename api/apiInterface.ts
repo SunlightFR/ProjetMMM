@@ -1,4 +1,4 @@
-import {User, UserRole} from "@/api/models/User";
+import {User, UserId, UserRole} from "@/api/models/User";
 import {Project} from "@/api/models/Project";
 
 export interface ApiInterface{
@@ -23,15 +23,15 @@ export interface ApiInterface{
      * Retourne les données d'un utilisateur
      * @param userId
      */
-    getUserById:(userId:string)=>Promise<User>,
+    getUserById:(userId:UserId)=>Promise<User>,
 
     /**
      * @returns projects une liste d'objets Projet dont l'utilisateur actuel est le chef
      */
-    getSupervisorProjects:()=>Promise<Project[]>,
+    getSupervisorProjects:(supervisorId:UserId)=>Promise<Project[]>,
 
     /**
      * @returns projects une liste d'objets Projet dont l'utilisateur actuel est le responsable
      */
-    getManagerProjects:()=>Promise<Project[]>
+    getManagerProjects:(managerId:UserId)=>Promise<Project[]>
 }

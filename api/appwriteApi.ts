@@ -1,7 +1,8 @@
 import {ApiInterface} from "@/api/apiInterface";
-import {account, DATABASE_ID, databases, USERS_COLLECTION_ID} from "@/lib/appwrite";
-import {User, UserRole} from "@/api/models/User";
-import {ID, Permission, Role} from "react-native-appwrite";
+import {account, DATABASE_ID, databases, PROJECTS_COLLECTION_ID, USERS_COLLECTION_ID} from "@/lib/appwrite";
+import {User, UserId, UserRole} from "@/api/models/User";
+import {ID, Permission, Query, Role} from "react-native-appwrite";
+import {Project} from "@/api/models/Project";
 
 export const APIService:ApiInterface = {
     logout:async()=>{
@@ -55,6 +56,31 @@ export const APIService:ApiInterface = {
                 role:role
             })
         }catch(e){
+            return Promise.reject(e)
+        }
+    },
+
+    getManagerProjects:async(managerId:UserId)=>{
+        try{
+            const documents = await databases.listDocuments(DATABASE_ID, PROJECTS_COLLECTION_ID,[
+                Query.equal("manager_id",managerId)
+            ])
+            const projects:Project[] = documents.documents.map(d=>({
+                end:d.end,
+                manager_id:managerId,
+                clientNumber:d.clientNumber,
+                resources:d.resources,
+                object:d.object,
+                location:d.location,
+                problems:d.problems,
+                status:d.status,
+                start:d.start,
+                supervisor_id:d.supervisor_id,
+                id:d.$id
+            }))
+            return projects;
+        }catch(e){
+            console.error("get manager projects",e)
             return Promise.reject(e)
         }
     }

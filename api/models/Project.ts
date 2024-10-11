@@ -14,7 +14,7 @@ export type Project = {
     problems:ProblemId[],
     status:ProjectStatus,
     start:Date,
-    end:Date,
+    duration:number,
     location:string,
     clientNumber:string,
 }

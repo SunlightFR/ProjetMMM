@@ -91,7 +91,7 @@ export const APIService:ApiInterface = {
                 Query.equal("manager_id",managerId)
             ])
             const projects:Project[] = results.documents.map(d=>({
-                end:d.end,
+                duration:d.duration,
                 manager_id:managerId,
                 clientNumber:d.clientNumber,
                 resources:d.resources,
@@ -130,7 +130,8 @@ export const APIService:ApiInterface = {
         }
     },
 
-    createResource:async (resourceInput:ResourceInput, authorizedUsers:UserId[])=>{
+    createResource:async (resourceInput:ResourceInput, authorizedUsers:UserId[],supervisorId:UserId)=>{
+        //todo permissions
         const permissions = authorizedUsers.map(id=>Permission.write(Role.user(id)))
         try{
             const result = await databases.createDocument(
@@ -146,7 +147,7 @@ export const APIService:ApiInterface = {
             } as Resource
         }catch (e){
             console.error(e)//todo
-            return Promise.resolve(e)
+            return Promise.reject(e)
         }
     },
 

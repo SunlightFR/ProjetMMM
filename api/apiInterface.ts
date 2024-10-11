@@ -52,5 +52,5 @@ export interface ApiInterface{
      *
      * @param resourceInput
      */
-    createResource:(resourceInput:ResourceInput)=>Promise<Resource>
+    createResource:(resourceInput:ResourceInput, authorizedUsers:UserId[], supervisorId:UserId)=>Promise<Resource>
 }

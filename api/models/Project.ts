@@ -3,7 +3,7 @@ import {ResourceId} from "@/api/models/Resource";
 import {ProblemId} from "@/api/models/Problems";
 
 export type ProjectId = string
-export type ProjectStatus = ""
+export type ProjectStatus = "not-done" | "in-progress" | "stopped" | "finished"
 
 export type Project = {
     id:ProjectId,

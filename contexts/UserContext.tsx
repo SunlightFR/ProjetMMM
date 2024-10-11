@@ -20,7 +20,7 @@ export function useUser() {
 }
 
 export function UserProvider({children}) {
-    const [user, setUser] = useState<User>(null)
+    const [user, setUser] = useState<User|null>(null)
     const [loading, setLoading] = useState(true);
 
     async function login(email:string, password:string) {
@@ -74,21 +74,27 @@ export function UserProvider({children}) {
 
 
     async function init() {
+        console.log("init")
         try {
             const loggedIn = await account.get();
+
+            console.log(loggedIn)
             const userData = await APIService.getUserById(loggedIn.$id)
             setUser(userData);
             toast('Welcome back. You are logged in');
-
+            return Promise.resolve()
         } catch (err) {
             setUser(null);
-            // return Promise.resolve()
+            return Promise.resolve()
         }
     }
 
     useEffect(() => {
         init().then(()=>{
+            console.log("fin de l'initialisation")
             setLoading(false)
+        }).catch(e=>{
+            console.error(e)
         });
     }, []);
 

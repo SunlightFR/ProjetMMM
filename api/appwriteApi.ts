@@ -64,21 +64,21 @@ export const APIService:ApiInterface = {
     },
 
     getManagerProjects:async(managerId:UserId)=>{
-        return Promise.resolve([
-            {
-                end:new Date(),
-                manager_id:managerId,
-                clientNumber:'029988.....',
-                resources:[] as ResourceId[],
-                object:"Chantier 1",
-                location:"Paris",
-                problems:[] as ProblemId[],
-                status:"not-done",
-                start:new Date(),
-                supervisor_id:'0',
-                id:'25'
-            }
-        ])
+        // return Promise.resolve([
+        //     {
+        //         end:new Date(),
+        //         manager_id:managerId,
+        //         clientNumber:'029988.....',
+        //         resources:[] as ResourceId[],
+        //         object:"Chantier 1",
+        //         location:"Paris",
+        //         problems:[] as ProblemId[],
+        //         status:"not-done",
+        //         start:new Date(),
+        //         supervisor_id:'0',
+        //         id:'25'
+        //     }
+        // ])
         try{
             const documents = await databases.listDocuments(DATABASE_ID, PROJECTS_COLLECTION_ID,[
                 Query.equal("manager_id",managerId)

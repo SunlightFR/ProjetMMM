@@ -8,6 +8,7 @@ import 'react-native-reanimated';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import {UserProvider} from "@/contexts/UserContext";
 import {IdeasProvider} from "@/contexts/IdeasContext";
+import {ProjectsProvider} from "@/contexts/ProjectsContext";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -31,9 +32,9 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <UserProvider>
-        <IdeasProvider>
+        <ProjectsProvider>
           <Slot></Slot>
-        </IdeasProvider>
+        </ProjectsProvider>
       </UserProvider>
       {/*<Stack>*/}
       {/*  <Stack.Screen name="(tabs)" options={{ headerShown: false }} />*/}

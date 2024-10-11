@@ -1,6 +1,7 @@
 import {User, UserId, UserRole} from "@/api/models/User";
 import {Project, ProjectStatus} from "@/api/models/Project";
 import {ResourceId} from "@/api/models/Resource";
+import {ProjectInput} from "@/types/inputTypes";
 
 export interface ApiInterface{
     /**
@@ -40,15 +41,5 @@ export interface ApiInterface{
      *
      * @param project
      */
-    createProject:(
-        object:string,
-        manager_id:UserId,
-        supervisor_id:UserId,
-        resources:ResourceId[],
-        status:ProjectStatus,
-        start:Date,
-        end:Date,
-        location:string,
-        clientNumber:string
-    ) =>Promise<Project>
+    createProject:(projectInput:ProjectInput) =>Promise<Project>
 }

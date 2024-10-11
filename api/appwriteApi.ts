@@ -5,6 +5,7 @@ import {ID, Permission, Query, Role} from "react-native-appwrite";
 import {Project, ProjectStatus} from "@/api/models/Project";
 import {ResourceId} from "@/api/models/Resource";
 import {ProblemId} from "@/api/models/Problems";
+import {ProjectInput} from "@/types/inputTypes";
 
 export const APIService:ApiInterface = {
     logout:async()=>{
@@ -102,44 +103,18 @@ export const APIService:ApiInterface = {
         }
     },
 
-    createProject:async(
-        object:string,
-        manager_id:UserId,
-        supervisor_id:UserId,
-        resources:ResourceId[],
-        status:ProjectStatus,
-        start:Date,
-        end:Date,
-        location:string,
-        clientNumber:string
-    ) =>{
+    createProject:async(projectInput:ProjectInput) =>{
         try{
             const result = await databases.createDocument(DATABASE_ID, PROJECTS_COLLECTION_ID, ID.unique(),{
-                object:object,
-                manager_id:manager_id,
-                supervisor_id:supervisor_id,
-                resources:resources,
-                status:status,
-                start:start,
-                end:end,
-                location:location,
-                clientNumber:clientNumber,
+                ...projectInput,
                 problems:[]
             },[
-                Permission.write(Role.user(supervisor_id)),
-                Permission.write(Role.user(manager_id))
+                Permission.write(Role.user(projectInput.supervisor_id)),
+                Permission.write(Role.user(projectInput.manager_id))
             ]);
             return {
+                ...projectInput,
                 id:result.$id,
-                object:object,
-                manager_id:manager_id,
-                supervisor_id:supervisor_id,
-                resources:resources,
-                status:status,
-                start:start,
-                end:end,
-                location:location,
-                clientNumber:clientNumber,
                 problems:[] as ProblemId[]
             } as Project
         }catch (e){

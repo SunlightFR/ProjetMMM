@@ -1,5 +1,12 @@
 import {ApiInterface} from "@/api/apiInterface";
-import {account, DATABASE_ID, databases, PROJECTS_COLLECTION_ID, USERS_COLLECTION_ID} from "@/lib/appwrite";
+import {
+    account,
+    DATABASE_ID,
+    databases,
+    PROJECTS_COLLECTION_ID,
+    RESOURCES_COLLECTION_ID,
+    USERS_COLLECTION_ID
+} from "@/lib/appwrite";
 import {User, UserId, UserRole} from "@/api/models/User";
 import {ID, Permission, Query, Role} from "react-native-appwrite";
 import {Project, ProjectStatus} from "@/api/models/Project";
@@ -80,10 +87,10 @@ export const APIService:ApiInterface = {
         //     }
         // ])
         try{
-            const documents = await databases.listDocuments(DATABASE_ID, PROJECTS_COLLECTION_ID,[
+            const results = await databases.listDocuments(DATABASE_ID, PROJECTS_COLLECTION_ID,[
                 Query.equal("manager_id",managerId)
             ])
-            const projects:Project[] = documents.documents.map(d=>({
+            const projects:Project[] = results.documents.map(d=>({
                 end:d.end,
                 manager_id:managerId,
                 clientNumber:d.clientNumber,
@@ -128,7 +135,7 @@ export const APIService:ApiInterface = {
         try{
             const result = await databases.createDocument(
                 DATABASE_ID,
-                PROJECTS_COLLECTION_ID,
+                RESOURCES_COLLECTION_ID,
                 ID.unique(),
                 resourceInput,
                 permissions
@@ -141,7 +148,23 @@ export const APIService:ApiInterface = {
             console.error(e)//todo
             return Promise.resolve(e)
         }
-    }
+    },
 
+    getResourceById:async (resourceId) => {
+        try{
+            const results = await databases.listDocuments(DATABASE_ID, RESOURCES_COLLECTION_ID,[
+                Query.equal("id",resourceId)
+            ])
+            const document = results.documents[0]
+            return {
+                id:document.$id,
+                name:document.name,
+                type:document.type
+            }
+        }catch(e){
+            console.error(e)//todo
+            return Promise.reject(e)
+        }
+    }
 
 }

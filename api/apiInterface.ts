@@ -45,6 +45,11 @@ export interface ApiInterface{
 
     /**
      *
+     * @param resourceId
+     */
+    getResourceById:(resourceId:ResourceId)=>Promise<Resource>,
+    /**
+     *
      * @param resourceInput
      */
     createResource:(resourceInput:ResourceInput)=>Promise<Resource>

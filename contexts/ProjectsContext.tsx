@@ -4,11 +4,17 @@ import {useUser} from "@/contexts/UserContext";
 import {Project} from "@/api/models/Project";
 import {APIService} from "@/api/appwriteApi";
 import {ProjectInput} from "@/types/inputTypes";
+import {Resource, ResourceId} from "@/api/models/Resource";
+
+type Resources = {
+    [id:ResourceId]:Resource
+}
 
 interface ProjectsContextType{
     loaded:boolean,
     projects?:Project[],
-    createNewProject:(projectInput:ProjectInput)=>Promise<void>;
+    createNewProject:(projectInput:ProjectInput)=>Promise<void>,
+    getResourceById:(resourceId:ResourceId)=>Promise<Resource>
 }
 
 const ProjectsContext = createContext<ProjectsContextType>({})
@@ -18,6 +24,8 @@ export const useProjects = ()=>useContext(ProjectsContext)
 export const ProjectsProvider = ({children})=>{
     const user = useUser()
     const [projects, setProjects] = useState<Project[]>()
+    const [resources, setResources] = useState<Resources>({})
+
     const [loaded, setLoaded] = useState<boolean>(false)
 
     const loadProjects = async ()=>{
@@ -45,6 +53,25 @@ export const ProjectsProvider = ({children})=>{
         }
     };
 
+    const getResourceById = async(resourceId:ResourceId)=>{
+        if(resources[resourceId]){
+            return Promise.resolve(resources[resourceId])
+        }else{
+            try{
+                const resource:Resource = await APIService.getResourceById(resourceId);
+                setResources(r=>({
+                    ...r,
+                    [resource.id]:resource
+                }))
+                return resource
+            }catch (e) {
+                console.error(e);
+                return Promise.reject(e)
+            }
+        }
+    }
+
+
     useEffect(() => {
         if(user.current){
             loadProjects().then(()=>{
@@ -56,7 +83,8 @@ export const ProjectsProvider = ({children})=>{
     return <ProjectsContext.Provider value={{
         loaded,
         projects,
-        createNewProject
+        createNewProject,
+        getResourceById
     }}>
         {children}
     </ProjectsContext.Provider>

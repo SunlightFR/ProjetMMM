@@ -6,6 +6,7 @@
 import { useColorScheme } from 'react-native';
 
 import { Colors } from '@/constants/Colors';
+import {useEffect, useState} from "react";
 
 export function useThemeColor(
   props: { light?: string; dark?: string },
@@ -19,4 +20,19 @@ export function useThemeColor(
   } else {
     return Colors[theme][colorName];
   }
+}
+
+type Theme = "dark" | "light"
+export function useTheme(){
+  const colorScheme = useColorScheme()
+  const [theme, setTheme] = useState<Theme>('dark')
+  useEffect(() => {
+    setTheme(colorScheme ?? 'light')
+  }, [colorScheme]);
+
+  return {
+    toggleTheme:()=>setTheme(theme=>theme==="dark" ? "light":"dark"),
+    colors:Colors[theme]
+  }
+
 }

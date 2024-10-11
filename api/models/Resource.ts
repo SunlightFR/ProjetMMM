@@ -1,7 +1,8 @@
-export type ResourceId = number
+export type ResourceId = string
+export type ResourceType = "vehicle" | "staff" | "tools" | string
 
 export type Resource = {
     id:ResourceId,
     name:string,
-    type:string
+    type:ResourceType
 }

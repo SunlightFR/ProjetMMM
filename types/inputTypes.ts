@@ -1,5 +1,5 @@
 import {UserId} from "@/api/models/User";
-import {ResourceId} from "@/api/models/Resource";
+import {ResourceId, ResourceType} from "@/api/models/Resource";
 import {ProblemId} from "@/api/models/Problems";
 import {ProjectId, ProjectStatus} from "@/api/models/Project";
 
@@ -13,4 +13,9 @@ export type ProjectInput = {
     end:Date,
     location:string,
     clientNumber:string,
+}
+
+export type ResourceInput = {
+    name:string,
+    type:ResourceType
 }

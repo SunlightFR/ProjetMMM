@@ -3,9 +3,9 @@ import {account, DATABASE_ID, databases, PROJECTS_COLLECTION_ID, USERS_COLLECTIO
 import {User, UserId, UserRole} from "@/api/models/User";
 import {ID, Permission, Query, Role} from "react-native-appwrite";
 import {Project, ProjectStatus} from "@/api/models/Project";
-import {ResourceId} from "@/api/models/Resource";
+import {Resource, ResourceId} from "@/api/models/Resource";
 import {ProblemId} from "@/api/models/Problems";
-import {ProjectInput} from "@/types/inputTypes";
+import {ProjectInput, ResourceInput} from "@/types/inputTypes";
 
 export const APIService:ApiInterface = {
     logout:async()=>{
@@ -121,5 +121,27 @@ export const APIService:ApiInterface = {
             console.error(e)
             return Promise.reject(e)
         }
+    },
+
+    createResource:async (resourceInput:ResourceInput, authorizedUsers:UserId[])=>{
+        const permissions = authorizedUsers.map(id=>Permission.write(Role.user(id)))
+        try{
+            const result = await databases.createDocument(
+                DATABASE_ID,
+                PROJECTS_COLLECTION_ID,
+                ID.unique(),
+                resourceInput,
+                permissions
+            );
+            return {
+                ...resourceInput,
+                id:result.$id
+            } as Resource
+        }catch (e){
+            console.error(e)//todo
+            return Promise.resolve(e)
+        }
     }
+
+
 }

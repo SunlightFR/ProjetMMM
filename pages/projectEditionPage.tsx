@@ -1,5 +1,5 @@
 import {ProjectId} from "@/api/models/Project";
-import {Button, View} from "react-native";
+import {Button, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {useEffect, useState} from "react";
 import {ProjectInput} from "@/types/inputTypes";
 import {ThemedTextInput} from "@/components/atoms/TextInput";
@@ -13,6 +13,7 @@ import {ThemedPage} from "@/components/ThemedPage";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {TextWithIcon} from "@/components/atoms/TextWithIcon";
 import {useTheme} from "@/hooks/useThemeColor";
+import {TouchableText} from "@/components/atoms/TouchableText";
 
 
 interface Props {
@@ -82,18 +83,31 @@ export const ProjectEditionPage = ({projectInput}:Props)=>{
                 text={"Client Number"}
             ></TextWithIcon>}
         ></ThemedTextInput>
+        <View style={styles.dateContainer}
+
+        >
+            <TouchableText
+                text={date?.toDateString()}
+                onPress={_=>setIsDatePickerVisible(true)}
+                label={<TextWithIcon
+                    icon={<Ionicons name={"calendar-outline"} color={theme.colors.text} size={20}></Ionicons>}
+                    text={"Date"}
+                ></TextWithIcon>}
+            ></TouchableText>
+            <Text>text</Text>
+        </View>
 
         <Button title={"créer"} onPress={_=>{
             projects.createNewProject({
-                object:"Test chantier",
-                end:new Date(),
+                object:"yeee",
+                duration:525,
                 start:new Date(),
                 clientNumber:"0235",
                 location:"Paris",
                 manager_id:user.current?.userId,
                 supervisor_id:user.current?.userId,
                 resources:[],
-                status:"stopped"
+                status:"not-done"
             }).then(d=>{
                 console.log(d)
             }).catch(e=>{
@@ -113,3 +127,9 @@ export const ProjectEditionPage = ({projectInput}:Props)=>{
 
     </ThemedPage>
 }
+
+const styles = StyleSheet.create({
+    dateContainer:{
+        flexDirection:"row"
+    }
+})

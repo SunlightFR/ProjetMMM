@@ -3,10 +3,10 @@ import {Text, StyleSheet, View} from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 const StatusColors = {
-    "finished":"green",
+    "finished":"#6cc460",
     "not-done":"grey",
-    "in-progress":"blue",
-    "stopped":"#f63838"
+    "in-progress":"#3b9dee",
+    "stopped":"#f64e4e"
 }
 const TextColor = "#111"
 

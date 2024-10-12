@@ -1,5 +1,5 @@
 import {createContext, useContext, useEffect, useState} from "react";
-import {UserId} from "@/api/models/User";
+import {User, UserId} from "@/api/models/User";
 import {useUser} from "@/contexts/UserContext";
 import {Project} from "@/api/models/Project";
 import {APIService} from "@/api/appwriteApi";
@@ -10,11 +10,16 @@ type Resources = {
     [id:ResourceId]:Resource
 }
 
+type Users = {
+    [id:UserId]:User
+}
+
 interface ProjectsContextType{
     loaded:boolean,
     projects?:Project[],
     createNewProject:(projectInput:ProjectInput)=>Promise<void>,
-    getResourceById:(resourceId:ResourceId)=>Promise<Resource>
+    getResourceById:(resourceId:ResourceId)=>Promise<Resource>,
+    getUserById:(userId:UserId)=>User,
 }
 
 const ProjectsContext = createContext<ProjectsContextType>({})
@@ -25,17 +30,29 @@ export const ProjectsProvider = ({children})=>{
     const user = useUser()
     const [projects, setProjects] = useState<Project[]>()
     const [resources, setResources] = useState<Resources>({})
-
+    const [users, setUsers] = useState<Users>({})
     const [loaded, setLoaded] = useState<boolean>(false)
+
+    useEffect(() => {
+        console.log(users)
+    }, [users]);
 
     const loadProjects = async ()=>{
         try{
             if(user.current){
                 if(user.current.role === "manager"){
-                    setProjects(await APIService.getManagerProjects(user.current.userId))
+                    const p = await APIService.getManagerProjects(user.current.userId)
+                    setProjects(p)
+                    p.forEach(async (pp)=>{
+                        await loadUser(pp.supervisor_id)
+                    })
                 }
                 else if(user.current.role==="supervisor"){
-                    setProjects(await APIService.getSupervisorProjects(user.current.userId))
+                    const p = await APIService.getSupervisorProjects(user.current.userId)
+                    setProjects(p)
+                    p.forEach(async (pp)=>{
+                        await loadUser(pp.manager_id)
+                    })
                 }
             }
         }catch(e){
@@ -71,6 +88,27 @@ export const ProjectsProvider = ({children})=>{
         }
     }
 
+    const loadUser=async(userId:UserId):Promise<void>=>{
+        if(users[userId]){
+            return Promise.resolve()
+        }else{
+            try{
+                const user:User = await APIService.getUserById(userId);
+                setUsers(u=>({
+                    ...u,
+                    [user.userId]:user
+                }))
+            }catch (e) {
+                console.error(e);
+                return Promise.reject(e)
+            }
+        }
+    }
+
+    const getUserById = (userId:UserId)=>{
+        return users[userId]
+    }
+
 
     useEffect(() => {
         if(user.current){
@@ -84,7 +122,8 @@ export const ProjectsProvider = ({children})=>{
         loaded,
         projects,
         createNewProject,
-        getResourceById
+        getResourceById,
+        getUserById
     }}>
         {children}
     </ProjectsContext.Provider>

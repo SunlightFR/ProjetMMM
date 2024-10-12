@@ -6,6 +6,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import {useTheme} from "@/hooks/useThemeColor";
 import {ProjectStatusIcon} from "@/components/atoms/ProjectStatus";
 import {WarningIcon} from "@/components/atoms/WarningIcon";
+import {useProjects} from "@/contexts/ProjectsContext";
 
 interface Props {
     project:Project
@@ -13,6 +14,8 @@ interface Props {
 export const ProjectCard = ({project}:Props)=>{
     const theme = useTheme();
     const user = useUser()
+    const projects = useProjects()
+
     if(!user.current) return <View><ActivityIndicator></ActivityIndicator></View>
     return <TouchableOpacity style={[
         {
@@ -36,7 +39,7 @@ export const ProjectCard = ({project}:Props)=>{
         ></TextWithIcon>
         <TextWithIcon
             icon={<Ionicons name={"person-circle-outline"} color={theme.colors.text} size={20}></Ionicons>}
-            text={user.current.role==="supervisor" ? project.manager_id:project.supervisor_id}
+            text={projects.getUserById(user.current.role==="supervisor" ? project.manager_id:project.supervisor_id)?.firstName}
         ></TextWithIcon>
         <TextWithIcon
             icon={<Ionicons name={"call-outline"} color={theme.colors.text} size={20}></Ionicons>}

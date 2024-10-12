@@ -26,9 +26,9 @@ type Theme = "dark" | "light"
 export function useTheme(){
   const colorScheme = useColorScheme()
   const [theme, setTheme] = useState<Theme>('dark')
-  useEffect(() => {
-    setTheme(colorScheme ?? 'light')
-  }, [colorScheme]);
+  // useEffect(() => {
+  //   setTheme(colorScheme ?? 'light')
+  // }, [colorScheme]);
 
   return {
     toggleTheme:()=>setTheme(theme=>theme==="dark" ? "light":"dark"),

@@ -11,6 +11,7 @@ export const ThemedPage = ({children}:Props)=>{
     const {colors} = useTheme()
 
     return <SafeAreaView style={[
+        styles.pageStyle,
         { backgroundColor:colors["background"] }
     ]}>
         {children}
@@ -19,6 +20,7 @@ export const ThemedPage = ({children}:Props)=>{
 
 const styles = StyleSheet.create({
     pageStyle:{
+        flex:1,
 
     }
 })

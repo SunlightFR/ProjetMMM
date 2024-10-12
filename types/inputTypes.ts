@@ -10,7 +10,7 @@ export type ProjectInput = {
     resources:ResourceId[],
     status:ProjectStatus,
     start:Date,
-    end:Date,
+    duration:number,
     location:string,
     clientNumber:string,
 }

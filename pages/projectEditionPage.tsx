@@ -99,7 +99,7 @@ export const ProjectEditionPage = ({projectInput}:Props)=>{
 
         <Button title={"créer"} onPress={_=>{
             projects.createNewProject({
-                object:"yeee",
+                object:"etvdsbhhhhb qerhk ts uoren qerk esr sqmerk ubqer rqe s jrebk qrej qer req qrve jfqdbuqyubqrh vqrubvr rv jrqdsuo jdfoqrvi qvoif",
                 duration:525,
                 start:new Date(),
                 clientNumber:"0235",

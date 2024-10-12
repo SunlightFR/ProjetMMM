@@ -1,5 +1,5 @@
 import {Project} from "@/api/models/Project";
-import {ActivityIndicator, Text, View, StyleSheet, TouchableOpacity} from "react-native";
+import {ActivityIndicator, Text, View, StyleSheet, TouchableOpacity, GestureResponderEvent} from "react-native";
 import {useUser} from "@/contexts/UserContext";
 import {TextWithIcon} from "@/components/atoms/TextWithIcon";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -9,9 +9,10 @@ import {WarningIcon} from "@/components/atoms/WarningIcon";
 import {useProjects} from "@/contexts/ProjectsContext";
 
 interface Props {
-    project:Project
+    project:Project,
+    onPress:(event:GestureResponderEvent)=>void
 }
-export const ProjectCard = ({project}:Props)=>{
+export const ProjectCard = ({project, onPress}:Props)=>{
     const theme = useTheme();
     const user = useUser()
     const projects = useProjects()
@@ -24,7 +25,7 @@ export const ProjectCard = ({project}:Props)=>{
             backgroundColor:theme.colors.background
         },
         styles.container
-    ]}>
+    ]} onPress={onPress}>
         <Text style={[
             {color:theme.colors.text},
             styles.objectText

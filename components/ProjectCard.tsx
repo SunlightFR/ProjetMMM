@@ -5,6 +5,7 @@ import {TextWithIcon} from "@/components/atoms/TextWithIcon";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {useTheme} from "@/hooks/useThemeColor";
 import {ProjectStatusIcon} from "@/components/atoms/ProjectStatus";
+import {WarningIcon} from "@/components/atoms/WarningIcon";
 
 interface Props {
     project:Project
@@ -15,7 +16,8 @@ export const ProjectCard = ({project}:Props)=>{
     if(!user.current) return <View><ActivityIndicator></ActivityIndicator></View>
     return <TouchableOpacity style={[
         {
-            borderColor:theme.colors.borderColor,
+            borderColor:theme.colors.border,
+            shadowColor:theme.colors.shadow,
             backgroundColor:theme.colors.background
         },
         styles.container
@@ -25,6 +27,10 @@ export const ProjectCard = ({project}:Props)=>{
             styles.objectText
         ]}>{project.object}</Text>
         <TextWithIcon
+            icon={<Ionicons name={"calendar-outline"} color={theme.colors.text} size={20}></Ionicons>}
+            text={project.location}
+        ></TextWithIcon>
+        <TextWithIcon
             icon={<Ionicons name={"location-outline"} color={theme.colors.text} size={20}></Ionicons>}
             text={project.location}
         ></TextWithIcon>
@@ -32,8 +38,13 @@ export const ProjectCard = ({project}:Props)=>{
             icon={<Ionicons name={"person-circle-outline"} color={theme.colors.text} size={20}></Ionicons>}
             text={user.current.role==="supervisor" ? project.manager_id:project.supervisor_id}
         ></TextWithIcon>
+        <TextWithIcon
+            icon={<Ionicons name={"call-outline"} color={theme.colors.text} size={20}></Ionicons>}
+            text={project.clientNumber}
+        ></TextWithIcon>
         <View style={styles.bottom}>
             <ProjectStatusIcon status={project.status}></ProjectStatusIcon>
+            <WarningIcon number={2}></WarningIcon>
         </View>
     </TouchableOpacity>
 }
@@ -47,11 +58,10 @@ const styles = StyleSheet.create({
         padding:10,
 
         elevation:5,
-        shadowRadius:2,
-        shadowColor:"pink",
+        shadowRadius:5,
         shadowOffset:{
-            width:0,
-            height:0
+            width:1,
+            height:1
         },
         shadowOpacity:0.8
     },
@@ -59,6 +69,8 @@ const styles = StyleSheet.create({
         fontSize:20
     },
     bottom:{
-        flexDirection:'row'
+        marginTop:4,
+        flexDirection:'row',
+        justifyContent:"space-between"
     }
 })

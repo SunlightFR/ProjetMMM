@@ -11,7 +11,7 @@ import {User, UserId, UserRole} from "@/api/models/User";
 import {ID, Permission, Query, Role} from "react-native-appwrite";
 import {Project, ProjectStatus} from "@/api/models/Project";
 import {Resource, ResourceId} from "@/api/models/Resource";
-import {ProblemId} from "@/api/models/Problems";
+import {Problem, ProblemId} from "@/api/models/Problems";
 import {ProjectInput, ResourceInput} from "@/types/inputTypes";
 
 export const APIService:ApiInterface = {
@@ -165,6 +165,14 @@ export const APIService:ApiInterface = {
         }catch(e){
             console.error(e)//todo
             return Promise.reject(e)
+        }
+    },
+
+    getProblemById:async(problemId:ProblemId):Promise<Problem>=>{
+        return {
+            id:'02',
+            description:"description pb",
+            title:"problème"
         }
     }
 

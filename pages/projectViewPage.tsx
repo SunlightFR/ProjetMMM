@@ -6,6 +6,10 @@ import {TextWithIcon} from "@/components/atoms/TextWithIcon";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {useTheme} from "@/hooks/useThemeColor";
 import {useProjects} from "@/contexts/ProjectsContext";
+import {useEffect, useState} from "react";
+import {Problem} from "@/api/models/Problems";
+import {ProblemCard} from "@/components/ProblemCard";
+import {Loader} from "@/components/atoms/Loader";
 
 interface Props{
     projectId:ProjectId,
@@ -17,6 +21,20 @@ export const ProjectViewPage = ({projectId,userRole}:Props)=>{
     if(!projects.projects) return <ActivityIndicator></ActivityIndicator>
     const project = projects.projects.find(p=>p.id===projectId);
     if(!project) return <Text>Problème...</Text>
+
+    const [problems, setProblems] = useState<Problem[]|undefined>(undefined)
+
+    useEffect(() => {
+        (async ()=>{
+            const pbs = []
+            for(const projectId of ['0', '1']){ //project.problems){
+                pbs.push(await projects.getProblemById(projectId))
+            }
+            console.log("problems",pbs)
+            setProblems(pbs)
+
+        })()
+    }, [project.problems]);
 
     return <ThemedPage>
         <View style={[
@@ -49,6 +67,21 @@ export const ProjectViewPage = ({projectId,userRole}:Props)=>{
             text={project.clientNumber}
         ></TextWithIcon>
         </View>
+        <View style={[
+            styles.problems
+        ]}>
+            <TextWithIcon
+                icon={<Ionicons name={"warning"} size={20} color={theme.colors.text}></Ionicons>}
+                text={"Problèmes"}
+                textStyle={{
+                    fontSize:20
+                }}
+                viewStyle={{
+                    marginLeft:-10
+                }}
+            ></TextWithIcon>
+            {problems!=undefined && problems.length>0 ? problems.map(problem=><ProblemCard problem={problem}/>) : <Loader/>}
+        </View>
     </ThemedPage>
 }
 
@@ -64,4 +97,8 @@ const styles = StyleSheet.create({
         fontSize:20,
         width:'90%'
     },
+    problems:{
+        marginHorizontal:15,
+        marginTop:15
+    }
 })

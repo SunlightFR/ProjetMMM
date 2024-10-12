@@ -5,6 +5,7 @@ import {Project} from "@/api/models/Project";
 import {APIService} from "@/api/appwriteApi";
 import {ProjectInput} from "@/types/inputTypes";
 import {Resource, ResourceId} from "@/api/models/Resource";
+import {Problem,ProblemId} from "@/api/models/Problems";
 
 type Resources = {
     [id:ResourceId]:Resource
@@ -14,12 +15,17 @@ type Users = {
     [id:UserId]:User
 }
 
+type Problems = {
+    [id:ProblemId]:Problem
+}
+
 interface ProjectsContextType{
     loaded:boolean,
     projects?:Project[],
     createNewProject:(projectInput:ProjectInput)=>Promise<void>,
     getResourceById:(resourceId:ResourceId)=>Promise<Resource>,
     getUserById:(userId:UserId)=>User,
+    getProblemById:(problemId:ProblemId)=>Promise<Problem>
 }
 
 const ProjectsContext = createContext<ProjectsContextType>({})
@@ -31,6 +37,7 @@ export const ProjectsProvider = ({children})=>{
     const [projects, setProjects] = useState<Project[]>()
     const [resources, setResources] = useState<Resources>({})
     const [users, setUsers] = useState<Users>({})
+    const [problems, setProblems] = useState<Problems>({})
     const [loaded, setLoaded] = useState<boolean>(false)
 
     useEffect(() => {
@@ -88,6 +95,25 @@ export const ProjectsProvider = ({children})=>{
         }
     }
 
+    const getProblemById=async(problemId:ProblemId):Promise<Problem>=>{
+        if(problems[problemId]){
+            return Promise.resolve(problems[problemId])
+        }else{
+            try{
+                const problem:Problem = await APIService.getProblemById(problemId);
+                setProblems(p=>({
+                    ...p,
+                    [problem.id]:problem
+                }))
+                return Promise.resolve(problem)
+            }catch (e) {
+                console.error(e);
+                return Promise.reject(e)
+            }
+        }
+    }
+
+
     const loadUser=async(userId:UserId):Promise<void>=>{
         if(users[userId]){
             return Promise.resolve()
@@ -123,7 +149,8 @@ export const ProjectsProvider = ({children})=>{
         projects,
         createNewProject,
         getResourceById,
-        getUserById
+        getUserById,
+        getProblemById
     }}>
         {children}
     </ProjectsContext.Provider>

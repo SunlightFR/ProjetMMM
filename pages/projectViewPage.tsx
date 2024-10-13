@@ -15,6 +15,8 @@ import {APIService} from "@/api/appwriteApi";
 import { Dimensions } from 'react-native';
 import {ThemedButton} from "@/components/atoms/ThemedButton";
 import {router} from "expo-router";
+import * as ImagePicker from 'expo-image-picker';
+import {toast} from "@/lib/toast";
 
 const screenWidth = Dimensions.get('window').width;
 const imageWidth = (screenWidth-30)/4
@@ -44,6 +46,24 @@ export const ProjectViewPage = ({projectId,userRole}:Props)=>{
 
         })()
     }, [project.problems]);
+
+    const pickImage = async () => {
+        // No permissions request is necessary for launching the image library
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        console.log(result);
+
+        if (!result.canceled) {
+            console.log(result.assets[0])
+            await projects.uploadPicture(projectId, result.assets[0]);
+            toast('photo uploadée')
+        }
+    };
 
     return <ThemedPage>
         <ScrollView>
@@ -110,7 +130,7 @@ export const ProjectViewPage = ({projectId,userRole}:Props)=>{
                 ></TextWithIcon>
                 <View>
                     {project.pics.map(id=>{
-                        console.log("pic id:", id, APIService.getPictureUrl(id))
+                        console.log("pic id:", id)
                         return <Image onLoad={_=>{
                             console.log("loadé !")
                         }} source={{
@@ -121,12 +141,14 @@ export const ProjectViewPage = ({projectId,userRole}:Props)=>{
                     })}
                 </View>
             </View>
-            <ThemedButton onPress={_=>router.navigate({
-                pathname:"/camera",
-                params:{
-                    id:project.id
-                }
-            })}>
+            <ThemedButton onPress={_=>pickImage()
+            //     router.navigate({
+            //     pathname:"/camera",
+            //     params:{
+            //         id:project.id
+            //     }
+            // })
+            }>
                 <Text>Ajouter une photo</Text>
             </ThemedButton>
         </ScrollView>

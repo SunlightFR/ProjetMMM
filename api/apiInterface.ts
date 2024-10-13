@@ -5,6 +5,7 @@ import {ProjectInput, ResourceInput} from "@/types/inputTypes";
 import {Problem, ProblemId} from "@/api/models/Problems";
 import {CameraCapturedPicture} from "expo-camera";
 import {Models} from "react-native-appwrite";
+import {ImagePickerAsset} from "expo-image-picker";
 
 export interface ApiInterface{
     /**
@@ -59,7 +60,7 @@ export interface ApiInterface{
 
     getProblemById:(problemId:ProblemId)=>Promise<Problem>,
 
-    uploadPicture:(picture:CameraCapturedPicture)=>Promise<Models.File>,
+    uploadPicture:(picture:ImagePickerAsset)=>Promise<Models.File>,
     getPictureUrl:(pictureId:string)=>string,
     getPicturePreview:(pictureId:string, width:number, height:number)=>string,
 

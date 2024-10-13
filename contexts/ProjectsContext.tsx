@@ -155,17 +155,17 @@ export const ProjectsProvider = ({children})=>{
     const uploadPicture = async (projectId:ProjectId, picture:CameraCapturedPicture)=>{
         try{
             const file = await APIService.uploadPicture(picture);
-            console.info("photo uploadée !")
+            console.info("photo uploadée !", file)
             const pics = projects![projectId].pics;
             pics.push(file.$id);
-            // await APIService.updatePictures(pics, projectId);
-            // setProjects(s=>({
-            //     ...s,
-            //     [projectId]:{
-            //         ...projects![projectId],
-            //         pics:pics
-            //     }
-            // }))
+            await APIService.updatePictures(pics, projectId);
+            setProjects(s=>({
+                ...s,
+                [projectId]:{
+                    ...projects![projectId],
+                    pics:pics
+                }
+            }))
         }catch(e){
             console.error(e)
         }

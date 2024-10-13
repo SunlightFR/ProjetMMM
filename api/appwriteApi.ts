@@ -14,6 +14,7 @@ import {Resource, ResourceId} from "@/api/models/Resource";
 import {Problem, ProblemId} from "@/api/models/Problems";
 import {ProjectInput, ResourceInput} from "@/types/inputTypes";
 import {CameraCapturedPicture} from "expo-camera";
+import {ImagePickerAsset} from "expo-image-picker";
 
 export const APIService:ApiInterface = {
     logout:async()=>{
@@ -179,16 +180,19 @@ export const APIService:ApiInterface = {
             title:"problème"
         }
     },
-    uploadPicture:async (picture:CameraCapturedPicture)=>{
+    uploadPicture:async (picture:ImagePickerAsset)=>{
         try{
-            return storage.createFile(STORAGE_PICS_ID, ID.unique(), {
-                name:"picture.jpg",
-                type:"jpg",
+            const response = await storage.createFile(STORAGE_PICS_ID, ID.unique(), {
+                name:picture.fileName,
+                type:picture.mimeType,
                 uri:picture.uri,
-                size:picture.width
+                size:picture.fileSize
             })
+            console.log("response",response)
+            return response;
 
         }catch(e){
+            console.error("upload:",e)
             return Promise.reject(e)
         }
     },

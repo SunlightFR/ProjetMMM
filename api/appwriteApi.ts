@@ -4,7 +4,7 @@ import {
     DATABASE_ID,
     databases,
     PROJECTS_COLLECTION_ID,
-    RESOURCES_COLLECTION_ID,
+    RESOURCES_COLLECTION_ID, storage, STORAGE_PICS_ID,
     USERS_COLLECTION_ID
 } from "@/lib/appwrite";
 import {User, UserId, UserRole} from "@/api/models/User";
@@ -101,6 +101,7 @@ export const APIService:ApiInterface = {
                 status:d.status,
                 start:d.start,
                 supervisor_id:d.supervisor_id,
+                pics:d.pics,
                 id:d.$id
             }))
             return projects;
@@ -114,7 +115,8 @@ export const APIService:ApiInterface = {
         try{
             const result = await databases.createDocument(DATABASE_ID, PROJECTS_COLLECTION_ID, ID.unique(),{
                 ...projectInput,
-                problems:[]
+                problems:[],
+                pics:['670bc0e200302924b3ba']
             },[
                 Permission.write(Role.user(projectInput.supervisor_id)),
                 Permission.write(Role.user(projectInput.manager_id))
@@ -122,7 +124,8 @@ export const APIService:ApiInterface = {
             return {
                 ...projectInput,
                 id:result.$id,
-                problems:[] as ProblemId[]
+                problems:[] as ProblemId[],
+                pics:['670bc0e200302924b3ba'],
             } as Project
         }catch (e){
             console.error(e)
@@ -174,6 +177,10 @@ export const APIService:ApiInterface = {
             description:"description pb",
             title:"problème"
         }
+    },
+
+    getPictureUrl:(pictureId:string)=>{
+        return storage.getFileView(STORAGE_PICS_ID,pictureId).toString();
     }
 
 }

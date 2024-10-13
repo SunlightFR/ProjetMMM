@@ -1,7 +1,7 @@
 import {Project, ProjectId} from "@/api/models/Project";
 import {UserRole} from "@/api/models/User";
 import {ThemedPage} from "@/components/ThemedPage";
-import {ActivityIndicator, StyleSheet, Text, View} from "react-native";
+import {ActivityIndicator, Image, ScrollView, StyleSheet, Text, View} from "react-native";
 import {TextWithIcon} from "@/components/atoms/TextWithIcon";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {useTheme} from "@/hooks/useThemeColor";
@@ -10,6 +10,8 @@ import {useEffect, useState} from "react";
 import {Problem} from "@/api/models/Problems";
 import {ProblemCard} from "@/components/ProblemCard";
 import {Loader} from "@/components/atoms/Loader";
+import {ProjectStatusIcon} from "@/components/atoms/ProjectStatus";
+import {APIService} from "@/api/appwriteApi";
 
 interface Props{
     projectId:ProjectId,
@@ -37,6 +39,7 @@ export const ProjectViewPage = ({projectId,userRole}:Props)=>{
     }, [project.problems]);
 
     return <ThemedPage>
+        <ScrollView>
         <View style={[
             {
                 backgroundColor:theme.colors.background,
@@ -50,6 +53,8 @@ export const ProjectViewPage = ({projectId,userRole}:Props)=>{
             <Ionicons name={"pencil"} color={theme.colors.text} size={20}></Ionicons>
         </View>
         <View style={{marginLeft:15}}>
+            <View style={{marginRight:"auto", marginBottom:10}}><ProjectStatusIcon status={project.status} ></ProjectStatusIcon></View>
+
         <TextWithIcon
             icon={<Ionicons name={"calendar-outline"} color={theme.colors.text} size={20}></Ionicons>}
             text={project.location}
@@ -82,6 +87,31 @@ export const ProjectViewPage = ({projectId,userRole}:Props)=>{
             ></TextWithIcon>
             {problems!=undefined && problems.length>0 ? problems.map(problem=><ProblemCard problem={problem}/>) : <Loader/>}
         </View>
+            <View>
+                <TextWithIcon
+                    icon={<Ionicons name={"camera-outline"} size={20} color={theme.colors.text}></Ionicons>}
+                    text={"Photos"}
+                    textStyle={{
+                        fontSize:20
+                    }}
+                    viewStyle={{
+                        marginLeft:-10
+                    }}
+                ></TextWithIcon>
+                <View>
+                    {project.pics.map(id=>{
+                        console.log("pic id:", id, APIService.getPictureUrl(id))
+                        return <Image onLoad={_=>{
+                            console.log("loadé !")
+                        }} source={{
+                            uri:APIService.getPictureUrl(id),
+                            width:50,
+                            height:50
+                        }}></Image>
+                    })}
+                </View>
+            </View>
+        </ScrollView>
     </ThemedPage>
 }
 

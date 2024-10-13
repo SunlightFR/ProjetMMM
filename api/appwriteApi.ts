@@ -182,7 +182,7 @@ export const APIService:ApiInterface = {
     uploadPicture:async (picture:CameraCapturedPicture)=>{
         try{
             return storage.createFile(STORAGE_PICS_ID, ID.unique(), {
-                name:"",
+                name:"picture.jpg",
                 type:"jpg",
                 uri:picture.uri,
                 size:picture.width
@@ -201,17 +201,16 @@ export const APIService:ApiInterface = {
         return storage.getFilePreview(STORAGE_PICS_ID, pictureId, width, height, 'center', 100).toString()
     },
 
-    // addPictureToProject:(pictureId, projectId)=>{
-    //     try{
-    //         const document = await databases.getDocument(DATABASE_ID, PROJECTS_COLLECTION_ID, projectId);
-    //         const pics = document.pics;
-    //         return await databases.updateDocument(DATABASE_ID, PROJECTS_COLLECTION_ID,projectId, {
-    //             pics: [...pics, pictureId]
-    //         });
-    //
-    //     }catch(e){
-    //
-    //     }
-    // }
+    updatePictures:async (pictures, projectId)=>{
+        try{
+            return await databases.updateDocument(DATABASE_ID, PROJECTS_COLLECTION_ID,projectId, {
+                pics: pictures
+            });
+
+        }catch(e){
+            console.error(e)
+            return Promise.reject(e);
+        }
+    }
 
 }

@@ -152,13 +152,24 @@ export const ProjectsProvider = ({children})=>{
         return users[userId]
     }
 
-    // const uploadPicture = (projectId:ProjectId, picture:CameraCapturedPicture)=>{
-    //     try{
-    //         const file = await APIService.uploadPicture(picture);
-    //
-    //
-    //     }
-    // }
+    const uploadPicture = async (projectId:ProjectId, picture:CameraCapturedPicture)=>{
+        try{
+            const file = await APIService.uploadPicture(picture);
+            console.info("photo uploadée !")
+            const pics = projects![projectId].pics;
+            pics.push(file.$id);
+            // await APIService.updatePictures(pics, projectId);
+            // setProjects(s=>({
+            //     ...s,
+            //     [projectId]:{
+            //         ...projects![projectId],
+            //         pics:pics
+            //     }
+            // }))
+        }catch(e){
+            console.error(e)
+        }
+    }
 
 
     useEffect(() => {
@@ -175,7 +186,8 @@ export const ProjectsProvider = ({children})=>{
         createNewProject,
         getResourceById,
         getUserById,
-        getProblemById
+        getProblemById,
+        uploadPicture
     }}>
         {children}
     </ProjectsContext.Provider>

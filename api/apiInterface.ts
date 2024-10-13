@@ -63,6 +63,6 @@ export interface ApiInterface{
     getPictureUrl:(pictureId:string)=>string,
     getPicturePreview:(pictureId:string, width:number, height:number)=>string,
 
-    addPictureToProject:(pictureId:string, projectId:ProjectId)=>Promise<void>,
+    updatePictures:(pictures:string[], projectId:ProjectId)=>Promise<any>,
 
 }

@@ -1,7 +1,7 @@
 import {Project, ProjectId} from "@/api/models/Project";
 import {UserRole} from "@/api/models/User";
 import {ThemedPage} from "@/components/ThemedPage";
-import {ActivityIndicator, Image, ScrollView, StyleSheet, Text, View} from "react-native";
+import {ActivityIndicator, Image, Linking, ScrollView, StyleSheet, Text, View} from "react-native";
 import {TextWithIcon} from "@/components/atoms/TextWithIcon";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {useTheme} from "@/hooks/useThemeColor";
@@ -13,6 +13,8 @@ import {Loader} from "@/components/atoms/Loader";
 import {ProjectStatusIcon} from "@/components/atoms/ProjectStatus";
 import {APIService} from "@/api/appwriteApi";
 import { Dimensions } from 'react-native';
+import {ThemedButton} from "@/components/atoms/ThemedButton";
+import {router} from "expo-router";
 
 const screenWidth = Dimensions.get('window').width;
 const imageWidth = (screenWidth-30)/4
@@ -72,10 +74,13 @@ export const ProjectViewPage = ({projectId,userRole}:Props)=>{
             icon={<Ionicons name={"person-circle-outline"} color={theme.colors.text} size={20}></Ionicons>}
             text={projects.getUserById(userRole==="supervisor" ? project.manager_id:project.supervisor_id)?.firstName}
         ></TextWithIcon>
-        <TextWithIcon
+        <View><TextWithIcon
             icon={<Ionicons name={"call-outline"} color={theme.colors.text} size={20}></Ionicons>}
             text={project.clientNumber}
         ></TextWithIcon>
+            <ThemedButton onPress={_=>Linking.openURL(`tel:${project.clientNumber}`)}><Text>Call</Text></ThemedButton>
+        </View>
+
         </View>
         <View style={[
             styles.problems
@@ -116,6 +121,14 @@ export const ProjectViewPage = ({projectId,userRole}:Props)=>{
                     })}
                 </View>
             </View>
+            <ThemedButton onPress={_=>router.navigate({
+                pathname:"/camera",
+                params:{
+                    id:project.id
+                }
+            })}>
+                <Text>Ajouter une photo</Text>
+            </ThemedButton>
         </ScrollView>
     </ThemedPage>
 }

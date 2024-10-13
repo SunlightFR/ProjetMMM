@@ -181,6 +181,10 @@ export const APIService:ApiInterface = {
 
     getPictureUrl:(pictureId:string)=>{
         return storage.getFileView(STORAGE_PICS_ID,pictureId).toString();
+    },
+
+    getPicturePreview:(pictureId:string, width:number, height:number)=>{
+        return storage.getFilePreview(STORAGE_PICS_ID, pictureId, width, height, 'center', 100).toString()
     }
 
 }

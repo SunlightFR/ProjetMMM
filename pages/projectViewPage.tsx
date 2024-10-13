@@ -12,6 +12,11 @@ import {ProblemCard} from "@/components/ProblemCard";
 import {Loader} from "@/components/atoms/Loader";
 import {ProjectStatusIcon} from "@/components/atoms/ProjectStatus";
 import {APIService} from "@/api/appwriteApi";
+import { Dimensions } from 'react-native';
+
+const screenWidth = Dimensions.get('window').width;
+const imageWidth = (screenWidth-30)/4
+console.info("width:",imageWidth)
 
 interface Props{
     projectId:ProjectId,
@@ -87,7 +92,7 @@ export const ProjectViewPage = ({projectId,userRole}:Props)=>{
             ></TextWithIcon>
             {problems!=undefined && problems.length>0 ? problems.map(problem=><ProblemCard problem={problem}/>) : <Loader/>}
         </View>
-            <View>
+            <View style={{marginHorizontal:20}}>
                 <TextWithIcon
                     icon={<Ionicons name={"camera-outline"} size={20} color={theme.colors.text}></Ionicons>}
                     text={"Photos"}
@@ -104,9 +109,9 @@ export const ProjectViewPage = ({projectId,userRole}:Props)=>{
                         return <Image onLoad={_=>{
                             console.log("loadé !")
                         }} source={{
-                            uri:APIService.getPictureUrl(id),
-                            width:50,
-                            height:50
+                            uri:APIService.getPicturePreview(id, 300, 525),
+                            width:imageWidth,
+                            height:imageWidth*1.75
                         }}></Image>
                     })}
                 </View>

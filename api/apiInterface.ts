@@ -58,5 +58,6 @@ export interface ApiInterface{
     getProblemById:(problemId:ProblemId)=>Promise<Problem>,
 
     getPictureUrl:(pictureId:string)=>string,
+    getPicturePreview:(pictureId:string, width:number, height:number)=>string,
 
 }

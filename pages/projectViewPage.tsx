@@ -26,7 +26,7 @@ export const ProjectViewPage = ({projectId,userRole}:Props)=>{
     const theme = useTheme()
     const projects = useProjects()
     if(!projects.projects) return <ActivityIndicator></ActivityIndicator>
-    const project = projects.projects.find(p=>p.id===projectId);
+    const project = projects.projects[projectId];
     if(!project) return <Text>Problème...</Text>
 
     const [problems, setProblems] = useState<Problem[]|undefined>(undefined)

@@ -1,12 +1,24 @@
 import {createContext, useContext, useEffect, useState} from "react";
 import {User, UserId} from "@/api/models/User";
 import {useUser} from "@/contexts/UserContext";
-import {Project} from "@/api/models/Project";
+import {Project, ProjectId} from "@/api/models/Project";
 import {APIService} from "@/api/appwriteApi";
 import {ProjectInput} from "@/types/inputTypes";
 import {Resource, ResourceId} from "@/api/models/Resource";
 import {Problem,ProblemId} from "@/api/models/Problems";
+import {CameraCapturedPicture} from "expo-camera";
 
+function listToObject(l:any[]){
+    const o = {}
+    l.forEach(item=>{
+        o[item.id] = item;
+    })
+    return o;
+}
+
+type Projects = {
+    [id:ProjectId]:Project
+}
 type Resources = {
     [id:ResourceId]:Resource
 }
@@ -21,11 +33,12 @@ type Problems = {
 
 interface ProjectsContextType{
     loaded:boolean,
-    projects?:Project[],
+    projects?:Projects,
     createNewProject:(projectInput:ProjectInput)=>Promise<void>,
     getResourceById:(resourceId:ResourceId)=>Promise<Resource>,
     getUserById:(userId:UserId)=>User,
-    getProblemById:(problemId:ProblemId)=>Promise<Problem>
+    getProblemById:(problemId:ProblemId)=>Promise<Problem>,
+    uploadPicture:(projectId:ProjectId, picture:CameraCapturedPicture)=>Promise<void>
 }
 
 const ProjectsContext = createContext<ProjectsContextType>({})
@@ -34,7 +47,7 @@ export const useProjects = ()=>useContext(ProjectsContext)
 
 export const ProjectsProvider = ({children})=>{
     const user = useUser()
-    const [projects, setProjects] = useState<Project[]>()
+    const [projects, setProjects] = useState<Projects>()
     const [resources, setResources] = useState<Resources>({})
     const [users, setUsers] = useState<Users>({})
     const [problems, setProblems] = useState<Problems>({})
@@ -49,14 +62,15 @@ export const ProjectsProvider = ({children})=>{
             if(user.current){
                 if(user.current.role === "manager"){
                     const p = await APIService.getManagerProjects(user.current.userId)
-                    setProjects(p)
+
+                    setProjects(listToObject(p))
                     p.forEach(async (pp)=>{
                         await loadUser(pp.supervisor_id)
                     })
                 }
                 else if(user.current.role==="supervisor"){
                     const p = await APIService.getSupervisorProjects(user.current.userId)
-                    setProjects(p)
+                    setProjects(listToObject(p))
                     p.forEach(async (pp)=>{
                         await loadUser(pp.manager_id)
                     })
@@ -71,7 +85,10 @@ export const ProjectsProvider = ({children})=>{
         try{
             const project:Project = await APIService.createProject(projectInput);
             console.log("le projet", project, "a été créé")
-            setProjects(s=>[...s!, project]);
+            setProjects(s=> ({
+                ...s!,
+                [project.id]:project
+            }));
         }catch(e){
             console.error(e)//todo
         }
@@ -134,6 +151,14 @@ export const ProjectsProvider = ({children})=>{
     const getUserById = (userId:UserId)=>{
         return users[userId]
     }
+
+    // const uploadPicture = (projectId:ProjectId, picture:CameraCapturedPicture)=>{
+    //     try{
+    //         const file = await APIService.uploadPicture(picture);
+    //
+    //
+    //     }
+    // }
 
 
     useEffect(() => {

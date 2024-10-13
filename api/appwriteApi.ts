@@ -13,6 +13,7 @@ import {Project, ProjectStatus} from "@/api/models/Project";
 import {Resource, ResourceId} from "@/api/models/Resource";
 import {Problem, ProblemId} from "@/api/models/Problems";
 import {ProjectInput, ResourceInput} from "@/types/inputTypes";
+import {CameraCapturedPicture} from "expo-camera";
 
 export const APIService:ApiInterface = {
     logout:async()=>{
@@ -178,6 +179,19 @@ export const APIService:ApiInterface = {
             title:"problème"
         }
     },
+    uploadPicture:async (picture:CameraCapturedPicture)=>{
+        try{
+            return storage.createFile(STORAGE_PICS_ID, ID.unique(), {
+                name:"",
+                type:"jpg",
+                uri:picture.uri,
+                size:picture.width
+            })
+
+        }catch(e){
+            return Promise.reject(e)
+        }
+    },
 
     getPictureUrl:(pictureId:string)=>{
         return storage.getFileView(STORAGE_PICS_ID,pictureId).toString();
@@ -185,6 +199,19 @@ export const APIService:ApiInterface = {
 
     getPicturePreview:(pictureId:string, width:number, height:number)=>{
         return storage.getFilePreview(STORAGE_PICS_ID, pictureId, width, height, 'center', 100).toString()
-    }
+    },
+
+    // addPictureToProject:(pictureId, projectId)=>{
+    //     try{
+    //         const document = await databases.getDocument(DATABASE_ID, PROJECTS_COLLECTION_ID, projectId);
+    //         const pics = document.pics;
+    //         return await databases.updateDocument(DATABASE_ID, PROJECTS_COLLECTION_ID,projectId, {
+    //             pics: [...pics, pictureId]
+    //         });
+    //
+    //     }catch(e){
+    //
+    //     }
+    // }
 
 }

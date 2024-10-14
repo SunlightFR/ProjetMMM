@@ -18,7 +18,7 @@ export const ProblemCard = ({problem}:Props)=>{
     ]}>
         <Text style={[
             {color:theme.colors.text, fontSize:18},
-        ]}>{problem.title}</Text>
+        ]}>{problem.object}</Text>
         <TextWithIcon
             icon={<Ionicons name={"information-circle-outline"} color={theme.colors.text} size={20}></Ionicons>}
             text={problem.description ?? 'pas de description'}

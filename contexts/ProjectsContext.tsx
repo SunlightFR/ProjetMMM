@@ -3,7 +3,7 @@ import {User, UserId} from "@/api/models/User";
 import {useUser} from "@/contexts/UserContext";
 import {Project, ProjectId, ProjectStatus} from "@/api/models/Project";
 import {APIService} from "@/api/appwriteApi";
-import {ProjectInput} from "@/types/inputTypes";
+import {ProblemInput, ProjectInput} from "@/types/inputTypes";
 import {Resource, ResourceId} from "@/api/models/Resource";
 import {Problem,ProblemId} from "@/api/models/Problems";
 import {CameraCapturedPicture} from "expo-camera";
@@ -40,7 +40,7 @@ interface ProjectsContextType{
     getProblemById:(problemId:ProblemId)=>Promise<Problem>,
     uploadPicture:(projectId:ProjectId, picture:CameraCapturedPicture)=>Promise<void>,
     updateProjectStatus:(projectId:ProjectId, status:ProjectStatus)=>Promise<any>,
-
+    createProblem:(projectId:ProjectId, problemInput:ProblemInput)=>Promise<void>
 }
 
 const ProjectsContext = createContext<ProjectsContextType>({})
@@ -190,6 +190,22 @@ export const ProjectsProvider = ({children})=>{
         }
     }
 
+    const createProblem = async (projectId:ProjectId, problemInput:ProblemInput)=>{
+        try{
+            const id = await APIService.createProblem(projectId, problemInput);
+
+            setProjects(s=>({
+                ...s,
+                [projectId]:{
+                    ...projects![projectId],
+                    problems:[...projects![projectId].problems, id]
+                }
+            }))
+        }catch(e){
+            console.error(e)
+        }
+    }
+
 
     useEffect(() => {
         if(user.current){
@@ -207,7 +223,8 @@ export const ProjectsProvider = ({children})=>{
         getUserById,
         getProblemById,
         uploadPicture,
-        updateProjectStatus
+        updateProjectStatus,
+        createProblem
     }}>
         {children}
     </ProjectsContext.Provider>

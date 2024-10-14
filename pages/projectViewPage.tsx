@@ -21,6 +21,9 @@ import {BottomSheetModal, BottomSheetModalProvider, BottomSheetView} from "@gorh
 import {gestureHandlerRootHOC} from "react-native-gesture-handler";
 import {StatusPicker} from "@/components/StatusPicker";
 import {ThemedBottomSheetModal} from "@/components/atoms/ThemedBottomSheetModal";
+import {ThemedModal} from "@/components/atoms/ThemedModal";
+import {ThemedTextInput} from "@/components/atoms/TextInput";
+import {ProblemEditor} from "@/components/ProblemEditor";
 
 const screenWidth = Dimensions.get('window').width;
 const imageWidth = (screenWidth-30)/4
@@ -41,11 +44,11 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId,userRole}:Props
 
 
     const [problems, setProblems] = useState<Problem[]|undefined>(undefined)
-
+    const [isProblemEditorVisible, setProblemEditorVisible] = useState<boolean>(false)
     useEffect(() => {
         (async ()=>{
             const pbs = []
-            for(const projectId of ['0', '1']){ //project.problems){
+            for(const projectId of project.problems){ //project.problems){
                 pbs.push(await projects.getProblemById(projectId))
             }
             console.log("problems",pbs)
@@ -122,7 +125,10 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId,userRole}:Props
                     marginLeft:-10
                 }}
             ></TextWithIcon>
-            {problems!=undefined && problems.length>0 ? problems.map(problem=><ProblemCard problem={problem}/>) : <Loader/>}
+            {problems === undefined && <Loader></Loader>}
+            {problems!=undefined && problems.length>0 ? problems.map(problem=><ProblemCard problem={problem}/>) :
+                <Text>Aucun problème !</Text>
+            }
         </View>
             <View style={{marginHorizontal:20}}>
                 <TextWithIcon
@@ -160,6 +166,15 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId,userRole}:Props
             </ThemedButton>
             <ThemedButton onPress={_=>bottomSheetModalRef.current?.present()}><Text>test</Text></ThemedButton>
         </ScrollView>
+
+            <ProblemEditor onClose={_=>setProblemEditorVisible(false)} onEnd={_=>{
+                projects.createProblem(projectId, _).then(()=>{
+                    setProblemEditorVisible(false)
+                }).catch(e=>{
+                    toast(e)
+                })
+            }} visible={isProblemEditorVisible}></ProblemEditor>
+            <ThemedButton onPress={_=>setProblemEditorVisible(true)}><Text>problème</Text></ThemedButton>
 
         <ThemedBottomSheetModal
             ref={bottomSheetModalRef}

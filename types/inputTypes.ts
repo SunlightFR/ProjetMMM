@@ -19,3 +19,8 @@ export type ResourceInput = {
     name:string,
     type:ResourceType
 }
+
+export type ProblemInput = {
+    object:string,
+    description?:string,
+}

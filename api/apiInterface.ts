@@ -60,7 +60,7 @@ export interface ApiInterface{
     createResource:(resourceInput:ResourceInput, authorizedUsers:UserId[], supervisorId:UserId)=>Promise<Resource>
 
     getProblemById:(problemId:ProblemId)=>Promise<Problem>,
-    createProblem:(problem:ProblemInput)=>Promise<ProblemId>,
+    createProblem:(projectId:ProjectId, problem:ProblemInput)=>Promise<ProblemId>,
 
     uploadPicture:(picture:ImagePickerAsset, creatorId:UserId, authorizedUsers:UserId[])=>Promise<Models.File>,
     getPictureUrl:(pictureId:string)=>string,

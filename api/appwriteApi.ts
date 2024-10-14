@@ -2,17 +2,17 @@ import {ApiInterface} from "@/api/apiInterface";
 import {
     account,
     DATABASE_ID,
-    databases,
+    databases, PROBLEMS_COLLECTION_ID,
     PROJECTS_COLLECTION_ID,
     RESOURCES_COLLECTION_ID, storage, STORAGE_PICS_ID,
     USERS_COLLECTION_ID
 } from "@/lib/appwrite";
 import {User, UserId, UserRole} from "@/api/models/User";
 import {ID, Permission, Query, Role} from "react-native-appwrite";
-import {Project, ProjectStatus} from "@/api/models/Project";
+import {Project, ProjectId, ProjectStatus} from "@/api/models/Project";
 import {Resource, ResourceId} from "@/api/models/Resource";
 import {Problem, ProblemId} from "@/api/models/Problems";
-import {ProjectInput, ResourceInput} from "@/types/inputTypes";
+import {ProblemInput, ProjectInput, ResourceInput} from "@/types/inputTypes";
 import {CameraCapturedPicture} from "expo-camera";
 import {ImagePickerAsset} from "expo-image-picker";
 
@@ -174,10 +174,12 @@ export const APIService:ApiInterface = {
     },
 
     getProblemById:async(problemId:ProblemId):Promise<Problem>=>{
+        const doc = await databases.getDocument(DATABASE_ID, PROBLEMS_COLLECTION_ID, problemId)
         return {
-            id:'02',
-            description:"description pb",
-            title:"problème"
+            id:problemId,
+            date:doc.$createdAt,
+            description:doc.description,
+            object:doc.object
         }
     },
     uploadPicture:async (picture:ImagePickerAsset, creatorId:UserId, authorizedUsers:UserId[])=>{
@@ -226,6 +228,24 @@ export const APIService:ApiInterface = {
         return databases.updateDocument(DATABASE_ID, PROJECTS_COLLECTION_ID, projectId, {
             status:status
         })
+    },
+
+    createProblem:async (projectId:ProjectId, problemInput:ProblemInput)=>{
+        try{
+            const doc = await databases.createDocument(DATABASE_ID, PROBLEMS_COLLECTION_ID, ID.unique(),problemInput)
+            const problem:Problem = {
+                id:doc.$id,
+                object:doc.object,
+                description:doc.description
+            }
+            const docs = await databases.getDocument(DATABASE_ID, PROJECTS_COLLECTION_ID, projectId)
+            await databases.updateDocument(DATABASE_ID,PROJECTS_COLLECTION_ID, projectId, {
+                problems:[...docs.problems, doc.$id]
+            })
+            return doc.$id
+        }catch(e){
+            return Promise.reject(e)
+        }
     }
 
 }

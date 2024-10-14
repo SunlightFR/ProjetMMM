@@ -6,7 +6,7 @@ import {TextWithIcon} from "@/components/atoms/TextWithIcon";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {useTheme} from "@/hooks/useThemeColor";
 import {useProjects} from "@/contexts/ProjectsContext";
-import {useEffect, useState} from "react";
+import {forwardRef, useEffect, useRef, useState} from "react";
 import {Problem} from "@/api/models/Problems";
 import {ProblemCard} from "@/components/ProblemCard";
 import {Loader} from "@/components/atoms/Loader";
@@ -17,6 +17,10 @@ import {ThemedButton} from "@/components/atoms/ThemedButton";
 import {router} from "expo-router";
 import * as ImagePicker from 'expo-image-picker';
 import {toast} from "@/lib/toast";
+import {BottomSheetModal, BottomSheetModalProvider, BottomSheetView} from "@gorhom/bottom-sheet";
+import {gestureHandlerRootHOC} from "react-native-gesture-handler";
+import {StatusPicker} from "@/components/StatusPicker";
+import {ThemedBottomSheetModal} from "@/components/atoms/ThemedBottomSheetModal";
 
 const screenWidth = Dimensions.get('window').width;
 const imageWidth = (screenWidth-30)/4
@@ -26,12 +30,15 @@ interface Props{
     projectId:ProjectId,
     userRole:UserRole
 }
-export const ProjectViewPage = ({projectId,userRole}:Props)=>{
+export const ProjectViewPage = gestureHandlerRootHOC(({projectId,userRole}:Props)=>{
     const theme = useTheme()
     const projects = useProjects()
     if(!projects.projects) return <ActivityIndicator></ActivityIndicator>
     const project = projects.projects[projectId];
     if(!project) return <Text>Problème...</Text>
+
+    const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+
 
     const [problems, setProblems] = useState<Problem[]|undefined>(undefined)
 
@@ -65,6 +72,7 @@ export const ProjectViewPage = ({projectId,userRole}:Props)=>{
     };
 
     return <ThemedPage>
+        <BottomSheetModalProvider>
         <ScrollView>
         <View style={[
             {
@@ -150,9 +158,36 @@ export const ProjectViewPage = ({projectId,userRole}:Props)=>{
             }>
                 <Text>Ajouter une photo</Text>
             </ThemedButton>
+            <ThemedButton onPress={_=>bottomSheetModalRef.current?.present()}><Text>test</Text></ThemedButton>
         </ScrollView>
+
+        <ThemedBottomSheetModal
+            ref={bottomSheetModalRef}
+            snapPoints={['25%','50%']}
+            // style={{
+            //     backgroundColor:theme.colors.background,
+            //     // borderColor:"blue"
+            // }}
+            //
+            // backgroundStyle={{
+            //     backgroundColor:theme.colors.background,
+            //     borderColor:"blue",
+            //     borderWidth:2,
+            //     borderStyle:"solid"
+            // }}
+            // handleIndicatorStyle={{backgroundColor:'red'}}
+        >
+            <BottomSheetView style={{
+                backgroundColor:theme.colors.background,
+                marginHorizontal:"auto"
+            }}>
+                <Text>Bonjour</Text>
+                <StatusPicker onSelected={_=>projects.updateProjectStatus(projectId, _)}></StatusPicker>
+            </BottomSheetView>
+        </ThemedBottomSheetModal>
+        </BottomSheetModalProvider>
     </ThemedPage>
-}
+})
 
 const styles = StyleSheet.create({
     titleContainer:{

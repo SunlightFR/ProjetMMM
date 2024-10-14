@@ -180,14 +180,19 @@ export const APIService:ApiInterface = {
             title:"problème"
         }
     },
-    uploadPicture:async (picture:ImagePickerAsset)=>{
+    uploadPicture:async (picture:ImagePickerAsset, creatorId:UserId, authorizedUsers:UserId[])=>{
         try{
             const response = await storage.createFile(STORAGE_PICS_ID, ID.unique(), {
                 name:picture.fileName,
                 type:picture.mimeType,
                 uri:picture.uri,
                 size:picture.fileSize
-            })
+            }
+            // ,[
+            //     ...(authorizedUsers.map(id=>Permission.read(Role.user(id)))),
+            //     Permission.update(Role.user(authorizedUsers[0]))
+            // ]
+            )
             console.log("response",response)
             return response;
 
@@ -215,6 +220,12 @@ export const APIService:ApiInterface = {
             console.error(e)
             return Promise.reject(e);
         }
+    },
+
+    updateProjectStatus:(projectId, status)=>{
+        return databases.updateDocument(DATABASE_ID, PROJECTS_COLLECTION_ID, projectId, {
+            status:status
+        })
     }
 
 }

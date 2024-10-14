@@ -1,7 +1,7 @@
 import {User, UserId, UserRole} from "@/api/models/User";
 import {Project, ProjectId, ProjectStatus} from "@/api/models/Project";
 import {Resource, ResourceId} from "@/api/models/Resource";
-import {ProjectInput, ResourceInput} from "@/types/inputTypes";
+import {ProblemInput, ProjectInput, ResourceInput} from "@/types/inputTypes";
 import {Problem, ProblemId} from "@/api/models/Problems";
 import {CameraCapturedPicture} from "expo-camera";
 import {Models} from "react-native-appwrite";
@@ -45,7 +45,8 @@ export interface ApiInterface{
      *
      * @param project
      */
-    createProject:(projectInput:ProjectInput) =>Promise<Project>
+    createProject:(projectInput:ProjectInput) =>Promise<Project>,
+    updateProjectStatus:(projectId:ProjectId, status:ProjectStatus)=>Promise<any>,
 
     /**
      *
@@ -59,8 +60,9 @@ export interface ApiInterface{
     createResource:(resourceInput:ResourceInput, authorizedUsers:UserId[], supervisorId:UserId)=>Promise<Resource>
 
     getProblemById:(problemId:ProblemId)=>Promise<Problem>,
+    createProblem:(problem:ProblemInput)=>Promise<ProblemId>,
 
-    uploadPicture:(picture:ImagePickerAsset)=>Promise<Models.File>,
+    uploadPicture:(picture:ImagePickerAsset, creatorId:UserId, authorizedUsers:UserId[])=>Promise<Models.File>,
     getPictureUrl:(pictureId:string)=>string,
     getPicturePreview:(pictureId:string, width:number, height:number)=>string,
 

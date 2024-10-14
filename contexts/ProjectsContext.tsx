@@ -1,7 +1,7 @@
 import {createContext, useContext, useEffect, useState} from "react";
 import {User, UserId} from "@/api/models/User";
 import {useUser} from "@/contexts/UserContext";
-import {Project, ProjectId} from "@/api/models/Project";
+import {Project, ProjectId, ProjectStatus} from "@/api/models/Project";
 import {APIService} from "@/api/appwriteApi";
 import {ProjectInput} from "@/types/inputTypes";
 import {Resource, ResourceId} from "@/api/models/Resource";
@@ -38,7 +38,9 @@ interface ProjectsContextType{
     getResourceById:(resourceId:ResourceId)=>Promise<Resource>,
     getUserById:(userId:UserId)=>User,
     getProblemById:(problemId:ProblemId)=>Promise<Problem>,
-    uploadPicture:(projectId:ProjectId, picture:CameraCapturedPicture)=>Promise<void>
+    uploadPicture:(projectId:ProjectId, picture:CameraCapturedPicture)=>Promise<void>,
+    updateProjectStatus:(projectId:ProjectId, status:ProjectStatus)=>Promise<any>,
+
 }
 
 const ProjectsContext = createContext<ProjectsContextType>({})
@@ -154,7 +156,9 @@ export const ProjectsProvider = ({children})=>{
 
     const uploadPicture = async (projectId:ProjectId, picture:CameraCapturedPicture)=>{
         try{
-            const file = await APIService.uploadPicture(picture);
+            const file = await APIService.uploadPicture(picture, [
+                Permissions
+            ]);
             console.info("photo uploadée !", file)
             const pics = projects![projectId].pics;
             pics.push(file.$id);
@@ -164,6 +168,21 @@ export const ProjectsProvider = ({children})=>{
                 [projectId]:{
                     ...projects![projectId],
                     pics:pics
+                }
+            }))
+        }catch(e){
+            console.error(e)
+        }
+    }
+
+    const updateProjectStatus = async (projectId:ProjectId, status:ProjectStatus)=>{
+        try{
+            await APIService.updateProjectStatus(projectId, status);
+            setProjects(s=>({
+                ...s,
+                [projectId]:{
+                    ...projects![projectId],
+                    status:status
                 }
             }))
         }catch(e){
@@ -187,7 +206,8 @@ export const ProjectsProvider = ({children})=>{
         getResourceById,
         getUserById,
         getProblemById,
-        uploadPicture
+        uploadPicture,
+        updateProjectStatus
     }}>
         {children}
     </ProjectsContext.Provider>

@@ -7,9 +7,10 @@ interface Props{
     value:string,
     onChangeText:(text:string)=>void,
     label:ReactNode,
-    type?:KeyboardTypeOptions
+    type?:KeyboardTypeOptions,
+    lines?:number
 }
-export const ThemedTextInput = ({type,label,onChangeText,value,placeholder}:Props)=>{
+export const ThemedTextInput = ({type,label,onChangeText,value,placeholder, lines}:Props)=>{
     const {colors} = useTheme()
 
     return <View style={[
@@ -23,6 +24,8 @@ export const ThemedTextInput = ({type,label,onChangeText,value,placeholder}:Prop
             onChangeText={onChangeText}
             value={value}
             placeholder={placeholder}
+            numberOfLines={lines}
+            multiline={lines !== undefined && lines >1}
             style={[
                 {
                     color:colors.text,

@@ -35,6 +35,7 @@ export const ProblemEditor=({onClose,visible, onEnd}:Props)=>{
             label={<Text>Title</Text>}
             placeholder={"yee"}></ThemedTextInput>
         <ThemedTextInput
+            lines={5}
             value={description} onChangeText={setDescription}
             label={<Text>Desc</Text>}
         ></ThemedTextInput>

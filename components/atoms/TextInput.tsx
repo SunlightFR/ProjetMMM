@@ -1,4 +1,4 @@
-import {KeyboardTypeOptions, StyleSheet, Text, TextInput, View} from "react-native";
+import {KeyboardTypeOptions, StyleProp, StyleSheet, TextInput, View, ViewStyle} from "react-native";
 import {useTheme} from "@/hooks/useThemeColor";
 import {ReactNode} from "react";
 
@@ -6,16 +6,23 @@ interface Props{
     placeholder?:string,
     value:string,
     onChangeText:(text:string)=>void,
+    //Un élément React placé au-dessus de l'input, ayant un rôle de label
     label:ReactNode,
+    //Type de clavier
     type?:KeyboardTypeOptions,
-    lines?:number
+    //Nombre de lignes de l'input
+    lines?:number,
+    style?:StyleProp<ViewStyle>
 }
-export const ThemedTextInput = ({type,label,onChangeText,value,placeholder, lines}:Props)=>{
+
+
+export const ThemedTextInput = ({type,label,onChangeText,value,placeholder, lines, style}:Props)=>{
     const {colors} = useTheme()
 
     return <View style={[
         { backgroundColor:colors.background },
-        styles.container
+        styles.container,
+        style
     ]}>
         {label}
         <TextInput
@@ -44,10 +51,12 @@ const styles = StyleSheet.create({
 
     },
     textInput:{
-        padding:6,
+        marginTop:5,
+        paddingHorizontal:10,
+        paddingVertical:5,
         borderRadius:10,
         borderWidth:2,
-        marginHorizontal:15,
+        fontSize:16,
 
         elevation:5,
         shadowRadius:5,

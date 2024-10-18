@@ -5,5 +5,6 @@ export type User = {
     userId:UserId,
     role:UserRole,
     firstName:string,
-    lastName:string
+    lastName:string,
+    contacts:string[]
 }

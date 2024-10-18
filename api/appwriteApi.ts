@@ -13,7 +13,6 @@ import {Project, ProjectId, ProjectStatus} from "@/api/models/Project";
 import {Resource, ResourceId} from "@/api/models/Resource";
 import {Problem, ProblemId} from "@/api/models/Problems";
 import {ProblemInput, ProjectInput, ResourceInput} from "@/types/inputTypes";
-import {CameraCapturedPicture} from "expo-camera";
 import {ImagePickerAsset} from "expo-image-picker";
 
 export const APIService:ApiInterface = {
@@ -28,7 +27,8 @@ export const APIService:ApiInterface = {
                 userId:userId,
                 role:userData.role,
                 firstName:userData.firstName,
-                lastName:userData.lastName
+                lastName:userData.lastName,
+                contacts:userData.contacts
             }
         }catch(e){
             return Promise.reject(e);
@@ -55,17 +55,18 @@ export const APIService:ApiInterface = {
             const y = await databases.createDocument(DATABASE_ID, USERS_COLLECTION_ID, x.$id,{
                 firstName:firstName,
                 lastName:lastName,
-                role:role
+                role:role,
+                contacts:[]
             },[
-                Permission.read(`user:${x.$id}`),  // Permission de lecture pour l'utilisateur
-                Permission.update(`user:${x.$id}`),  // Permission de mise à jour
+                Permission.update(`user:${x.$id}`),
                 Permission.delete(`user:${x.$id}`)
             ])
             return Promise.resolve({
                 userId:x.$id,
                 firstName:firstName,
                 lastName:lastName,
-                role:role
+                role:role,
+                contacts:[]
             })
         }catch(e){
             return Promise.reject(e)
@@ -114,20 +115,24 @@ export const APIService:ApiInterface = {
     },
 
     createProject:async(projectInput:ProjectInput) =>{
+        console.log(projectInput.supervisor_id, projectInput.manager_id, projectInput.duration)
+
         try{
             const result = await databases.createDocument(DATABASE_ID, PROJECTS_COLLECTION_ID, ID.unique(),{
                 ...projectInput,
                 problems:[],
-                pics:['670bc0e200302924b3ba']
+                pics:[]
             },[
                 Permission.write(Role.user(projectInput.supervisor_id)),
-                Permission.write(Role.user(projectInput.manager_id))
+                Permission.write(Role.user(projectInput.manager_id)),
+                Permission.read(Role.user(projectInput.manager_id)),
+                Permission.read(Role.user(projectInput.supervisor_id))
             ]);
             return {
                 ...projectInput,
                 id:result.$id,
                 problems:[] as ProblemId[],
-                pics:['670bc0e200302924b3ba'],
+                pics:[],
             } as Project
         }catch (e){
             console.error(e)
@@ -136,7 +141,6 @@ export const APIService:ApiInterface = {
     },
 
     createResource:async (resourceInput:ResourceInput, authorizedUsers:UserId[],supervisorId:UserId)=>{
-        //todo permissions
         const permissions = authorizedUsers.map(id=>Permission.write(Role.user(id)))
         try{
             const result = await databases.createDocument(
@@ -162,6 +166,7 @@ export const APIService:ApiInterface = {
                 Query.equal("id",resourceId)
             ])
             const document = results.documents[0]
+
             return {
                 id:document.$id,
                 name:document.name,
@@ -173,6 +178,31 @@ export const APIService:ApiInterface = {
         }
     },
 
+    getResourceAvailability:async (resourceId,from,to)=>{
+        try{
+            const projects = await databases.listDocuments(DATABASE_ID, PROJECTS_COLLECTION_ID, [
+                Query.contains("resources", resourceId)
+            ]) as unknown as Project[]
+            const startCheck = from.getTime() / (1000 * 60 * 60 * 12); // Conversion de la date en demi-journées
+            const endCheck = to.getTime() / (1000 * 60 * 60 * 12);
+            return !projects.some(project =>{
+                const projectStart = new Date(project.start).getTime() / (1000 * 60 * 60 * 12);
+                const projectEnd = projectStart + project.duration;
+
+                // Vérifier si l'intervalle du projet se chevauche avec l'intervalle donné
+                return (
+                    (startCheck >= projectStart && startCheck < projectEnd) ||  // chevauchement au début
+                    (endCheck > projectStart && endCheck <= projectEnd) ||      // chevauchement à la fin
+                    (startCheck <= projectStart && endCheck >= projectEnd)      // chevauchement total
+                );
+            })
+
+        }catch (e) {
+            return Promise.reject(e)
+        }
+    },
+
+
     getProblemById:async(problemId:ProblemId):Promise<Problem>=>{
         const doc = await databases.getDocument(DATABASE_ID, PROBLEMS_COLLECTION_ID, problemId)
         return {
@@ -182,13 +212,15 @@ export const APIService:ApiInterface = {
             object:doc.object
         }
     },
-    uploadPicture:async (picture:ImagePickerAsset, creatorId:UserId, authorizedUsers:UserId[])=>{
+
+    uploadPicture:async (picture:ImagePickerAsset)=>{
         try{
             const response = await storage.createFile(STORAGE_PICS_ID, ID.unique(), {
                 name:picture.fileName,
                 type:picture.mimeType,
                 uri:picture.uri,
-                size:picture.fileSize
+                size:picture.fileSize,
+
             }
             // ,[
             //     ...(authorizedUsers.map(id=>Permission.read(Role.user(id)))),
@@ -219,7 +251,7 @@ export const APIService:ApiInterface = {
             });
 
         }catch(e){
-            console.error(e)
+            console.error("update : ", e)
             return Promise.reject(e);
         }
     },
@@ -246,6 +278,12 @@ export const APIService:ApiInterface = {
         }catch(e){
             return Promise.reject(e)
         }
+    },
+
+    updateContacts:(userId, contacts)=>{
+        return databases.updateDocument(DATABASE_ID, USERS_COLLECTION_ID, userId, {
+            contacts:contacts
+        })
     }
 
 }

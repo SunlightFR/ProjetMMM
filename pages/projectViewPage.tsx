@@ -24,6 +24,7 @@ import {ThemedBottomSheetModal} from "@/components/atoms/ThemedBottomSheetModal"
 import {ThemedModal} from "@/components/atoms/ThemedModal";
 import {ThemedTextInput} from "@/components/atoms/TextInput";
 import {ProblemEditor} from "@/components/ProblemEditor";
+import {getEndDate} from "@/utils/dateUtils";
 
 const screenWidth = Dimensions.get('window').width;
 const imageWidth = (screenWidth-30)/4
@@ -94,7 +95,7 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId,userRole}:Props
 
         <TextWithIcon
             icon={<Ionicons name={"calendar-outline"} color={theme.colors.text} size={20}></Ionicons>}
-            text={project.location}
+            text={project.start + "-" + getEndDate(project.start, project.duration)}
         ></TextWithIcon>
         <TextWithIcon
             icon={<Ionicons name={"location-outline"} color={theme.colors.text} size={20}></Ionicons>}
@@ -104,11 +105,11 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId,userRole}:Props
             icon={<Ionicons name={"person-circle-outline"} color={theme.colors.text} size={20}></Ionicons>}
             text={projects.getUserById(userRole==="supervisor" ? project.manager_id:project.supervisor_id)?.firstName}
         ></TextWithIcon>
-        <View><TextWithIcon
+        <View style={{alignItems:'center', flexDirection:'row'}}><TextWithIcon
             icon={<Ionicons name={"call-outline"} color={theme.colors.text} size={20}></Ionicons>}
             text={project.clientNumber}
         ></TextWithIcon>
-            <ThemedButton onPress={_=>Linking.openURL(`tel:${project.clientNumber}`)}><Text>Call</Text></ThemedButton>
+            <ThemedButton onPress={_=>Linking.openURL(`tel:${project.clientNumber}`)}><TextWithIcon icon={<></>} text={"Appeler"}/></ThemedButton>
         </View>
 
         </View>
@@ -127,8 +128,16 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId,userRole}:Props
             ></TextWithIcon>
             {problems === undefined && <Loader></Loader>}
             {problems!=undefined && problems.length>0 ? problems.map(problem=><ProblemCard problem={problem}/>) :
-                <Text>Aucun problème !</Text>
+                <TextWithIcon
+                    text={"Aucun problème"}
+                ></TextWithIcon>
             }
+            <ThemedButton
+                onPress={_=>setProblemEditorVisible(true)}
+                style={{marginHorizontal:"auto"}}
+            >
+                <TextWithIcon icon={<></>} text={"Ajouter un problème"}></TextWithIcon>
+            </ThemedButton>
         </View>
             <View style={{marginHorizontal:20}}>
                 <TextWithIcon

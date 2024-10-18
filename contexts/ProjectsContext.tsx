@@ -4,9 +4,10 @@ import {useUser} from "@/contexts/UserContext";
 import {Project, ProjectId, ProjectStatus} from "@/api/models/Project";
 import {APIService} from "@/api/appwriteApi";
 import {ProblemInput, ProjectInput} from "@/types/inputTypes";
-import {Resource, ResourceId} from "@/api/models/Resource";
+import {Resource, ResourceId, ResourceWithAvailability} from "@/api/models/Resource";
 import {Problem,ProblemId} from "@/api/models/Problems";
 import {CameraCapturedPicture} from "expo-camera";
+import {useLoad} from "@/hooks/useLoad";
 
 function listToObject(l:any[]){
     const o = {}
@@ -20,7 +21,7 @@ type Projects = {
     [id:ProjectId]:Project
 }
 type Resources = {
-    [id:ResourceId]:Resource
+    [id:ResourceId]:ResourceWithAvailability
 }
 
 type Users = {
@@ -36,6 +37,7 @@ interface ProjectsContextType{
     projects?:Projects,
     createNewProject:(projectInput:ProjectInput)=>Promise<void>,
     getResourceById:(resourceId:ResourceId)=>Promise<Resource>,
+    loadUser:(userId:UserId)=>Promise<void>,
     getUserById:(userId:UserId)=>User,
     getProblemById:(problemId:ProblemId)=>Promise<Problem>,
     uploadPicture:(projectId:ProjectId, picture:CameraCapturedPicture)=>Promise<void>,
@@ -102,6 +104,8 @@ export const ProjectsProvider = ({children})=>{
         }else{
             try{
                 const resource:Resource = await APIService.getResourceById(resourceId);
+
+                const availability = await APIService.getRes
                 setResources(r=>({
                     ...r,
                     [resource.id]:resource
@@ -156,9 +160,7 @@ export const ProjectsProvider = ({children})=>{
 
     const uploadPicture = async (projectId:ProjectId, picture:CameraCapturedPicture)=>{
         try{
-            const file = await APIService.uploadPicture(picture, [
-                Permissions
-            ]);
+            const file = await APIService.uploadPicture(picture);
             console.info("photo uploadée !", file)
             const pics = projects![projectId].pics;
             pics.push(file.$id);
@@ -224,7 +226,8 @@ export const ProjectsProvider = ({children})=>{
         getProblemById,
         uploadPicture,
         updateProjectStatus,
-        createProblem
+        createProblem,
+        loadUser
     }}>
         {children}
     </ProjectsContext.Provider>

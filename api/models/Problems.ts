@@ -4,5 +4,5 @@ export type Problem = {
     id:ProblemId,
     object:string,
     description?:string,
-    date?:Date,
+    date?:string,
 }

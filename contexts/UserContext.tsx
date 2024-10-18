@@ -35,7 +35,7 @@ export function UserProvider({children}) {
 
     async function logout() {
         await account.deleteSession("current");
-        setUserId(null);
+        setUser(null);
         toast('Logged out');
     }
 

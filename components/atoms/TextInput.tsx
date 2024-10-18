@@ -1,6 +1,7 @@
 import {KeyboardTypeOptions, StyleProp, StyleSheet, TextInput, View, ViewStyle} from "react-native";
 import {useTheme} from "@/hooks/useThemeColor";
 import {ReactNode} from "react";
+import {toast} from "@/lib/toast";
 
 interface Props{
     placeholder?:string,
@@ -12,11 +13,13 @@ interface Props{
     type?:KeyboardTypeOptions,
     //Nombre de lignes de l'input
     lines?:number,
-    style?:StyleProp<ViewStyle>
+    style?:StyleProp<ViewStyle>,
+    disabled?:boolean,
+    disabledMessage?:string,
 }
 
 
-export const ThemedTextInput = ({type,label,onChangeText,value,placeholder, lines, style}:Props)=>{
+export const ThemedTextInput = ({type,label,onChangeText,value,placeholder, lines, style, disabledMessage, disabled}:Props)=>{
     const {colors} = useTheme()
 
     return <View style={[
@@ -33,6 +36,17 @@ export const ThemedTextInput = ({type,label,onChangeText,value,placeholder, line
             placeholder={placeholder}
             numberOfLines={lines}
             multiline={lines !== undefined && lines >1}
+            showSoftInputOnFocus={!disabled}
+            onPress={_=>{
+                console.log("pressé")
+                if(disabled) {
+                    _.preventDefault()
+                    // _.stopPropagation()
+                    if(disabledMessage) {
+                        toast(disabledMessage)
+                    }
+                }
+            }}
             style={[
                 {
                     color:colors.text,

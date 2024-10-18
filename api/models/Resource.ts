@@ -6,3 +6,7 @@ export type Resource = {
     name:string,
     type:ResourceType
 }
+
+export type ResourceWithAvailability = Resource & {
+    available:boolean
+}

@@ -14,7 +14,6 @@ export const ThemedBottomSheetModal = forwardRef((props, ref)=>{
             borderStyle:"solid"
         }}
         handleIndicatorStyle={{backgroundColor:colors.border}}
-
         {...props}
 
     >

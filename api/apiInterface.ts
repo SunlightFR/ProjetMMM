@@ -1,6 +1,6 @@
 import {User, UserId, UserRole} from "@/api/models/User";
 import {Project, ProjectId, ProjectStatus} from "@/api/models/Project";
-import {Resource, ResourceId} from "@/api/models/Resource";
+import {Resource, ResourceId, ResourceWithAvailability} from "@/api/models/Resource";
 import {ProblemInput, ProjectInput, ResourceInput} from "@/types/inputTypes";
 import {Problem, ProblemId} from "@/api/models/Problems";
 import {CameraCapturedPicture} from "expo-camera";
@@ -53,19 +53,23 @@ export interface ApiInterface{
      * @param resourceId
      */
     getResourceById:(resourceId:ResourceId)=>Promise<Resource>,
+    getResourceAvailability:(resourceId:ResourceId, from:Date, to:Date)=>Promise<boolean>,
     /**
      *
      * @param resourceInput
      */
     createResource:(resourceInput:ResourceInput, authorizedUsers:UserId[], supervisorId:UserId)=>Promise<Resource>
 
+    getResources:(resources:ResourceId[])=>Promise<Resource[]>,
+
     getProblemById:(problemId:ProblemId)=>Promise<Problem>,
     createProblem:(projectId:ProjectId, problem:ProblemInput)=>Promise<ProblemId>,
 
-    uploadPicture:(picture:ImagePickerAsset, creatorId:UserId, authorizedUsers:UserId[])=>Promise<Models.File>,
+    uploadPicture:(picture:ImagePickerAsset)=>Promise<Models.File>,
     getPictureUrl:(pictureId:string)=>string,
     getPicturePreview:(pictureId:string, width:number, height:number)=>string,
 
     updatePictures:(pictures:string[], projectId:ProjectId)=>Promise<any>,
 
+    updateContacts:(userId:UserId, contacts:UserId[])=>Promise<any>,
 }

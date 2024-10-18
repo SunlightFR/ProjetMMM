@@ -4,16 +4,18 @@ import {ReactNode} from "react";
 import {useTheme} from "@/hooks/useThemeColor";
 
 interface Props{
-    icon:ReactNode,
+    icon?:ReactNode,
+    iconPosition?:"left" | "right",
     text:string,
     textStyle?:StyleProp<TextStyle>
     viewStyle?:StyleProp<ViewStyle>
 }
-export const TextWithIcon = ({textStyle,icon,viewStyle,text}:Props)=>{
+export const TextWithIcon = ({textStyle,icon,viewStyle,text, iconPosition="left"}:Props)=>{
     const {colors} = useTheme()
     return <View style={[styles.container,viewStyle]}>
-        {icon}
-        <Text style={[{color:colors.text}, styles.text,textStyle]}>{text}</Text>
+        {icon && iconPosition === "left" && icon}
+        <Text style={[{color:colors.text}, styles.text,textStyle, {marginLeft:icon ? 6 : 0}]}>{text}</Text>
+        {icon && iconPosition === "right" && icon }
     </View>
 }
 
@@ -21,11 +23,8 @@ const styles = StyleSheet.create({
     container:{
         alignItems:"center",
         flexDirection:"row",
-        paddingHorizontal:10,
-        paddingVertical:5
     },
     text:{
         fontSize:16,
-        marginLeft:6
     }
 })

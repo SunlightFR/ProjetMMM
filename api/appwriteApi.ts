@@ -102,7 +102,7 @@ export const APIService:ApiInterface = {
                 location:d.location,
                 problems:d.problems,
                 status:d.status,
-                start:d.start,
+                start:new Date(d.start),
                 supervisor_id:d.supervisor_id,
                 pics:d.pics,
                 id:d.$id

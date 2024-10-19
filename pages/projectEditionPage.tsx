@@ -33,6 +33,8 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput}:Props)=>
     //On considère que si un projectId est fourni, on est en mode édition.
     const mode = projectInput ? "edition":"creation"
 
+    console.log("MODE : ", mode, projectInput)
+
     const userBottomSheetModalRef = useRef<BottomSheetModal>(null);
 
 
@@ -145,7 +147,7 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput}:Props)=>
             disabled={projectInput_.start===undefined}
             placeholder={"numéro"}
             type={"number-pad"}
-            value={projectInput_.duration ?? ""}
+            value={projectInput_.duration?.toString()}
             onChangeText={text=>setProjectInput(s=>({
                 ...s,
                 duration:text
@@ -166,7 +168,7 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput}:Props)=>
         ></TouchableText>
 
         <Button title={"créer"} onPress={_=>{
-            const pI = projectInput_
+            const pI = {...projectInput_}
             pI.supervisor_id = user.current!.userId
             pI.resources = []
             pI.duration = Number.parseInt(pI.duration)

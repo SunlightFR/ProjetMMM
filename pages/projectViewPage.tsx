@@ -88,14 +88,14 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId,userRole}:Props
                 {color:theme.colors.text},
                 styles.objectText
             ]}>{project.object}</Text>
-            <Ionicons name={"pencil"} color={theme.colors.text} size={20}></Ionicons>
+            <Ionicons name={"pencil"} color={theme.colors.text} size={20} onPress={_=>router.navigate({pathname:"edit", params:{id:projectId}})}></Ionicons>
         </View>
         <View style={{marginLeft:15}}>
             <View style={{marginRight:"auto", marginBottom:10}}><ProjectStatusIcon status={project.status} ></ProjectStatusIcon></View>
 
         <TextWithIcon
             icon={<Ionicons name={"calendar-outline"} color={theme.colors.text} size={20}></Ionicons>}
-            text={project.start + "-" + getEndDate(project.start, project.duration)}
+            text={project.start + "-" + getEndDate(project.start, project.duration).getDate()}
         ></TextWithIcon>
         <TextWithIcon
             icon={<Ionicons name={"location-outline"} color={theme.colors.text} size={20}></Ionicons>}

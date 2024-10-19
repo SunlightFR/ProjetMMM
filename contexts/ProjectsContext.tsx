@@ -36,6 +36,7 @@ interface ProjectsContextType{
     loaded:boolean,
     projects?:Projects,
     createNewProject:(projectInput:ProjectInput)=>Promise<void>,
+    updateProject:(projectId:ProjectId, projectInput:ProjectInput)=>Promise<void>,
     getResourceById:(resourceId:ResourceId)=>Promise<Resource>,
     loadUser:(userId:UserId)=>Promise<void>,
     getUserById:(userId:UserId)=>User,
@@ -97,6 +98,22 @@ export const ProjectsProvider = ({children})=>{
             console.error(e)//todo
         }
     };
+
+    const updateProject = async (projectId:ProjectId, projectInput:ProjectInput)=>{
+        try{
+            const result = await APIService.updateProject(projectId, projectInput);
+            setProjects(s=>({
+                ...s!,
+                [projectId]:{
+                    ...s![projectId],
+                    ...projectInput
+                }
+            }))
+
+        }catch (e) {
+            return Promise.reject(e)
+        }
+    }
 
     const getResourceById = async(resourceId:ResourceId)=>{
         if(resources[resourceId]){
@@ -221,6 +238,7 @@ export const ProjectsProvider = ({children})=>{
         loaded,
         projects,
         createNewProject,
+        updateProject,
         getResourceById,
         getUserById,
         getProblemById,

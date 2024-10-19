@@ -46,6 +46,7 @@ export interface ApiInterface{
      * @param project
      */
     createProject:(projectInput:ProjectInput) =>Promise<Project>,
+    updateProject:(projectId:ProjectId, projectInput:ProjectInput)=>Promise<any>,
     updateProjectStatus:(projectId:ProjectId, status:ProjectStatus)=>Promise<any>,
 
     /**

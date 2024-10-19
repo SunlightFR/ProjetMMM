@@ -1,4 +1,4 @@
-import {ProjectId} from "@/api/models/Project";
+import {Project, ProjectId} from "@/api/models/Project";
 import {Button, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {useEffect, useRef, useState} from "react";
 import {ProjectInput} from "@/types/inputTypes";
@@ -24,9 +24,10 @@ import Checkbox from 'expo-checkbox';
 
 
 interface Props {
-    projectInput?:Partial<ProjectInput>
+    projectInput?:Partial<ProjectInput>,
+    projectId?:ProjectId,
 }
-export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput}:Props)=>{
+export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput,projectId}:Props)=>{
     const theme = useTheme()
     const user = useUser()
     const projects = useProjects()
@@ -62,6 +63,36 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput}:Props)=>
                 ...s,
                 start:new Date(selectedDate.getFullYear(),selectedDate.getMonth(),selectedDate.getDate(), 0)
             }))
+        }
+    }
+
+    const updateProject = ()=>{
+        const pI = projectInput_ as Project
+        delete pI.id
+        delete pI.supervisor_id
+        delete pI.problems
+        delete pI.pics
+        projects.updateProject(projectId, projectInput_).then(d=>{
+            console.log("update",d)
+        }).catch(e=>{
+            console.error('update',e)
+        });
+    }
+
+    const createProject = ()=>{
+        const pI = {...projectInput_}
+        pI.supervisor_id = user.current!.userId
+        pI.resources = []
+        pI.duration = Number.parseInt(pI.duration)
+        pI.status = 'not-done'
+        projects.createNewProject(pI)
+    }
+
+    const submit = ()=>{
+        if(mode==="edition"){
+            updateProject()
+        }else{
+            createProject()
         }
     }
 
@@ -168,12 +199,13 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput}:Props)=>
         ></TouchableText>
 
         <Button title={"créer"} onPress={_=>{
-            const pI = {...projectInput_}
-            pI.supervisor_id = user.current!.userId
-            pI.resources = []
-            pI.duration = Number.parseInt(pI.duration)
-            pI.status = 'not-done'
-            projects.createNewProject(pI)
+            submit()
+            // const pI = {...projectInput_}
+            // pI.supervisor_id = user.current!.userId
+            // pI.resources = []
+            // pI.duration = Number.parseInt(pI.duration)
+            // pI.status = 'not-done'
+            // projects.createNewProject(pI)
             // projects.createNewProject({
             //     object:"etvdsbhhhhb qerhk ts uoren qerk esr sqmerk ubqer rqe s jrebk qrej qer req qrve jfqdbuqyubqrh vqrubvr rv jrqdsuo jdfoqrvi qvoif",
             //     duration:525,
@@ -185,11 +217,12 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput}:Props)=>
             //     resources:[],
             //     status:"not-done"
             // })
-                .then(d=>{
-                console.log(d)
-            }).catch(e=>{
-                console.error(e)
-        })}}></Button>
+        //         .then(d=>{
+        //         console.log(d)
+        //     }).catch(e=>{
+        //         console.error(e)
+        // })
+        }}></Button>
         <Button title={"ouvrir"} onPress={_=>userBottomSheetModalRef.current!.present()}></Button>
 
         {isDatePickerVisible && <DateTimePicker

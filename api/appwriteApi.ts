@@ -140,6 +140,10 @@ export const APIService:ApiInterface = {
         }
     },
 
+    updateProject:async (projectId, projectInput) => {
+        return databases.updateDocument(DATABASE_ID, PROJECTS_COLLECTION_ID, projectId, projectInput);
+    },
+
     createResource:async (resourceInput:ResourceInput, authorizedUsers:UserId[],supervisorId:UserId)=>{
         const permissions = authorizedUsers.map(id=>Permission.write(Role.user(id)))
         try{

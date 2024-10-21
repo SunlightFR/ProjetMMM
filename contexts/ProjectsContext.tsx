@@ -3,11 +3,12 @@ import {User, UserId} from "@/api/models/User";
 import {useUser} from "@/contexts/UserContext";
 import {Project, ProjectId, ProjectStatus} from "@/api/models/Project";
 import {APIService} from "@/api/appwriteApi";
-import {ProblemInput, ProjectInput} from "@/types/inputTypes";
+import {ProblemInput, ProjectInput, ResourceInput} from "@/types/inputTypes";
 import {Resource, ResourceId, ResourceWithAvailability} from "@/api/models/Resource";
 import {Problem,ProblemId} from "@/api/models/Problems";
 import {CameraCapturedPicture} from "expo-camera";
 import {useLoad} from "@/hooks/useLoad";
+import {areDatesNotOverlapping} from "@/utils/dateUtils";
 
 function listToObject(l:any[]){
     const o = {}
@@ -43,7 +44,10 @@ interface ProjectsContextType{
     getProblemById:(problemId:ProblemId)=>Promise<Problem>,
     uploadPicture:(projectId:ProjectId, picture:CameraCapturedPicture)=>Promise<void>,
     updateProjectStatus:(projectId:ProjectId, status:ProjectStatus)=>Promise<any>,
-    createProblem:(projectId:ProjectId, problemInput:ProblemInput)=>Promise<void>
+    createProblem:(projectId:ProjectId, problemInput:ProblemInput)=>Promise<void>,
+    isResourceAvailable:(resourceId:ResourceId, start:Date, duration:number)=>boolean,
+    createResource:(resourceInput:ResourceInput)=>Promise<Resource>,
+    getResources:()=>Promise<ResourceId>
 }
 
 const ProjectsContext = createContext<ProjectsContextType>({})
@@ -66,6 +70,7 @@ export const ProjectsProvider = ({children})=>{
         try{
             if(user.current){
                 if(user.current.role === "manager"){
+                    await loadResources()
                     const p = await APIService.getManagerProjects(user.current.userId)
 
                     setProjects(listToObject(p))
@@ -74,6 +79,7 @@ export const ProjectsProvider = ({children})=>{
                     })
                 }
                 else if(user.current.role==="supervisor"){
+                    await loadResources()
                     const p = await APIService.getSupervisorProjects(user.current.userId)
                     setProjects(listToObject(p))
                     p.forEach(async (pp)=>{
@@ -86,7 +92,14 @@ export const ProjectsProvider = ({children})=>{
         }
     }
 
+    const loadResources = async ()=>{
+        if(true || user.current && user.current.role==="supervisor"){
+            setResources(await APIService.getSupervisorResources(user.current.userId))
+        }
+    }
+
     const createNewProject = async (projectInput:ProjectInput)=>{
+        console.log("project input", projectInput)
         try{
             const project:Project = await APIService.createProject(projectInput);
             console.log("le projet", project, "a été créé")
@@ -115,6 +128,7 @@ export const ProjectsProvider = ({children})=>{
         }
     }
 
+
     const getResourceById = async(resourceId:ResourceId)=>{
         if(resources[resourceId]){
             return Promise.resolve(resources[resourceId])
@@ -122,7 +136,6 @@ export const ProjectsProvider = ({children})=>{
             try{
                 const resource:Resource = await APIService.getResourceById(resourceId);
 
-                const availability = await APIService.getRes
                 setResources(r=>({
                     ...r,
                     [resource.id]:resource
@@ -151,6 +164,10 @@ export const ProjectsProvider = ({children})=>{
                 return Promise.reject(e)
             }
         }
+    }
+
+    const createResource = (resourceInput:ResourceInput)=>{
+        return APIService.createResource(resourceInput,[], user.current?.userId)
     }
 
 
@@ -225,6 +242,14 @@ export const ProjectsProvider = ({children})=>{
         }
     }
 
+    const isResourceAvailable = (resourceId:ResourceId, start:Date, duration:number)=>{
+        if(!projects) return false;
+
+        return !Object.keys(projects).filter(id=>projects[id].resources.includes(resourceId)).some(id=>{
+            return !areDatesNotOverlapping(projects[id].start, projects[id].duration, start, duration)
+        })
+    }
+
 
     useEffect(() => {
         if(user.current){
@@ -245,7 +270,10 @@ export const ProjectsProvider = ({children})=>{
         uploadPicture,
         updateProjectStatus,
         createProblem,
-        loadUser
+        loadUser,
+        isResourceAvailable,
+        createResource,
+        resources
     }}>
         {children}
     </ProjectsContext.Provider>

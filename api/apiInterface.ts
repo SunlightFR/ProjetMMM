@@ -61,6 +61,7 @@ export interface ApiInterface{
      */
     createResource:(resourceInput:ResourceInput, authorizedUsers:UserId[], supervisorId:UserId)=>Promise<Resource>
 
+    getSupervisorResources:(supervisorId:UserId)=>Promise<Resource>,
     getResources:(resources:ResourceId[])=>Promise<Resource[]>,
 
     getProblemById:(problemId:ProblemId)=>Promise<Problem>,

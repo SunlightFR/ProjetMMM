@@ -20,6 +20,7 @@ import {BottomSheetModal, BottomSheetModalProvider, BottomSheetView} from "@gorh
 import {gestureHandlerRootHOC} from "react-native-gesture-handler";
 import {ResourceButton} from "@/components/atoms/ResourceButton";
 import Checkbox from 'expo-checkbox';
+import {ResourcePicker} from "@/components/ResourcePicker";
 
 
 
@@ -37,7 +38,7 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput,projectId
     console.log("MODE : ", mode, projectInput)
 
     const userBottomSheetModalRef = useRef<BottomSheetModal>(null);
-
+    const resourcesBottomSheetModalRef = useRef<BottomSheetModal>(null);
 
     const [projectInput_, setProjectInput] = useState<Partial<ProjectInput>>({})
     useEffect(() => {
@@ -82,7 +83,6 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput,projectId
     const createProject = ()=>{
         const pI = {...projectInput_}
         pI.supervisor_id = user.current!.userId
-        pI.resources = []
         pI.duration = Number.parseInt(pI.duration)
         pI.status = 'not-done'
         projects.createNewProject(pI)
@@ -223,7 +223,7 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput,projectId
         //         console.error(e)
         // })
         }}></Button>
-        <Button title={"ouvrir"} onPress={_=>userBottomSheetModalRef.current!.present()}></Button>
+        <Button title={"ouvrir"} onPress={_=>resourcesBottomSheetModalRef.current!.present()}></Button>
 
         {isDatePickerVisible && <DateTimePicker
             value={projectInput_?.start ?? date ??  new Date()}
@@ -239,6 +239,18 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput,projectId
         <ThemedBottomSheetModal ref={userBottomSheetModalRef} snapPoints={['25%','50%']} >
             <BottomSheetView>
                 <UserPicker selectedUser={projectInput_.manager_id} users={['67052d650020a8263f27']} onSelected={u=>setProjectInput(s=>({...s, manager_id:u}))}></UserPicker>
+            </BottomSheetView>
+        </ThemedBottomSheetModal>
+
+        <ThemedBottomSheetModal ref={resourcesBottomSheetModalRef} snapPoints={['25%','50%']} >
+            <BottomSheetView>
+                <ResourcePicker resourceIds={projects.resources} onSelected={(rids)=>{
+                    console.log("validation",rids)
+                    setProjectInput(p=>({
+                        ...p,
+                        resources:rids
+                    }))
+                }} start={projectInput_.start} duration={projectInput_.duration}></ResourcePicker>
             </BottomSheetView>
         </ThemedBottomSheetModal>
 

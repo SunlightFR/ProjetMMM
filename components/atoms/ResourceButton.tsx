@@ -10,7 +10,7 @@ interface Props{
     available:boolean,
     onPress:(e:GestureResponderEvent)=>void
 }
-const getResourceIcon = (type:ResourceType)=>{
+export const getResourceIcon = (type:ResourceType)=>{
     switch (type){
         case "vehicle":return "truck"
         case "tools":return "wrench"

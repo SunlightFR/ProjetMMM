@@ -25,6 +25,7 @@ import {ThemedModal} from "@/components/atoms/ThemedModal";
 import {ThemedTextInput} from "@/components/atoms/TextInput";
 import {ProblemEditor} from "@/components/ProblemEditor";
 import {getEndDate} from "@/utils/dateUtils";
+import {ResourceEditor} from "@/components/ResourceEditor";
 
 const screenWidth = Dimensions.get('window').width;
 const imageWidth = (screenWidth-30)/4
@@ -183,6 +184,8 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId,userRole}:Props
                     toast(e)
                 })
             }} visible={isProblemEditorVisible}></ProblemEditor>
+
+
             <ThemedButton onPress={_=>setProblemEditorVisible(true)}><Text>problème</Text></ThemedButton>
 
         <ThemedBottomSheetModal

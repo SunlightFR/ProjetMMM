@@ -47,6 +47,22 @@ export const APIService:ApiInterface = {
         }
     },
 
+    getSupervisorResources:async supervisorId => {
+        const docs = await databases.listDocuments(DATABASE_ID, RESOURCES_COLLECTION_ID,[
+            Query.equal("supervisor_id", supervisorId)
+        ])
+        const resources = {}
+        for(const doc of docs.documents){
+            resources[doc.$id] = {
+                name:doc.name,
+                supervisor_id:supervisorId,
+                type:doc.type,
+                id:doc.$id
+            }
+        }
+        return resources
+    },
+
     register:async (email:string, password:string,firstName:string,lastName:string, role:UserRole)=>{
         try{
             await APIService.logout();
@@ -151,7 +167,7 @@ export const APIService:ApiInterface = {
                 DATABASE_ID,
                 RESOURCES_COLLECTION_ID,
                 ID.unique(),
-                resourceInput,
+                {...resourceInput, supervisor_id:supervisorId},
                 permissions
             );
             return {
@@ -165,6 +181,7 @@ export const APIService:ApiInterface = {
     },
 
     getResourceById:async (resourceId) => {
+        console.log("get resource")
         try{
             const results = await databases.listDocuments(DATABASE_ID, RESOURCES_COLLECTION_ID,[
                 Query.equal("id",resourceId)

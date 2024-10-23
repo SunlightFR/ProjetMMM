@@ -29,7 +29,7 @@ export const ResourceButton = ({available,name,type,onPress, selected=false}:Pro
         borderRadius:5
     }}>
         {selected && <View style={{alignSelf:"flex-end", marginRight:2, marginTop:2}}><Ionicons name={"checkmark-circle"} size={10} color={"green"}></Ionicons></View>}
-        <FontAwesome6 style={{flex:1}} name={getResourceIcon(type)} size={60} color={"grey"}></FontAwesome6>
+        <FontAwesome6  style={{flex:1,marginTop:15}} name={getResourceIcon(type)} size={60} color={"grey"}></FontAwesome6>
         <Text>{name}</Text>
         {!available && <View style={
             {

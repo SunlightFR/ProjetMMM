@@ -6,5 +6,5 @@ export default function (){
     const {id} = useLocalSearchParams()
     const projects = useProjects()
     console.log("Projet:", projects.projects[id])
-    return <ProjectEditionPage projectInput={projects.projects![id]}></ProjectEditionPage>
+    return <ProjectEditionPage projectId={id} projectInput={projects.projects![id]}></ProjectEditionPage>
 }

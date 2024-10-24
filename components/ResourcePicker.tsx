@@ -29,11 +29,13 @@ export const ResourcePicker = ({resourceIds,selectedResource,onSelected, start, 
     useEffect(() => {
         (async ()=>{
            const r:ResourceWithAvailability[] = []
-            console.log("resource picker : ", resourceIds)
+            // console.log("resource picker : ", resourceIds)
            for(let id in resourceIds){
                const resource = resourceIds[id]
-               console.log("resource", resource)
+               // console.log("resource", resource)
                resource.available = projects.isResourceAvailable(id, start, duration)
+               console.info(projects.isResourceAvailable(resource.id, start, duration), start, duration)
+
                r.push(resource)
            }
            setResources(r)
@@ -74,6 +76,7 @@ export const ResourcePicker = ({resourceIds,selectedResource,onSelected, start, 
         //todo
         projects.createResource(resourceInput).then(resource=>{
             resource.available = projects.isResourceAvailable(resource.id, start, duration)
+            console.info(projects.isResourceAvailable(resource.id, start, duration), start, duration)
             setResources(r=>[...r, resource])
             setIsModalOpen(false)
         })

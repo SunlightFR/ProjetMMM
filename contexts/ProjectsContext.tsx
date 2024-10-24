@@ -47,7 +47,8 @@ interface ProjectsContextType{
     createProblem:(projectId:ProjectId, problemInput:ProblemInput)=>Promise<void>,
     isResourceAvailable:(resourceId:ResourceId, start:Date, duration:number)=>boolean,
     createResource:(resourceInput:ResourceInput)=>Promise<Resource>,
-    getResources:()=>Promise<ResourceId>
+    getResources:()=>Promise<ResourceId>,
+    getProjectResources:(projectId:ProjectId)=>Promise<Resources>
 }
 
 const ProjectsContext = createContext<ProjectsContextType>({})
@@ -111,6 +112,16 @@ export const ProjectsProvider = ({children})=>{
             console.error(e)//todo
         }
     };
+
+    const getProjectResources = async (projectId:ProjectId) =>{
+        if(projects && projects[projectId]){
+            const r:Resources = {}
+            for(let resourceId of projects[projectId].resources){
+                r[resourceId] = await getResourceById(resourceId)
+            }
+            return r;
+        }
+    }
 
     const updateProject = async (projectId:ProjectId, projectInput:ProjectInput)=>{
         try{
@@ -273,7 +284,8 @@ export const ProjectsProvider = ({children})=>{
         loadUser,
         isResourceAvailable,
         createResource,
-        resources
+        resources,
+        getProjectResources
     }}>
         {children}
     </ProjectsContext.Provider>

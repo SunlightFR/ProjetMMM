@@ -8,16 +8,19 @@ import {TouchableOpacity, View} from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {useTheme} from "@/hooks/useThemeColor";
 import {ThemedBottomSheetModal} from "@/components/atoms/ThemedBottomSheetModal";
-import {ThemedButton} from "@/components/atoms/ThemedButton";
+import {ThemedButton, ThemedButton2} from "@/components/atoms/ThemedButton";
 import {usePick} from "@/hooks/usePick";
+import {toast} from "@/lib/toast";
 
 interface Props{
     users:UserId[],
     selectedUser?:UserId,
-    onSelected:(selectedUser:UserId)=>void
+    onSelected:(selectedUser:UserId | undefined)=>void,
+    start:Date,
+    duration:number
 }
 
-export const UserPicker = ({users, selectedUser, onSelected}:Props) =>{
+export const UserPicker = ({start, duration, users, selectedUser, onSelected}:Props) =>{
     const {colors} = useTheme()
     const projects = useProjects();
     const [selectedUser_, setSelectedUser] = useState<UserId|undefined>()
@@ -35,6 +38,10 @@ export const UserPicker = ({users, selectedUser, onSelected}:Props) =>{
     }, [selectedUser]);
 
     const toggle = (userId:UserId)=>{
+        if(!projects.isManagerAvailable(userId, start, duration)){
+            toast("cet utilisateur n'est pas dispo !")
+            return;
+        }
         if(selectedUser_ === userId){
             setSelectedUser(undefined)
         }else{
@@ -68,13 +75,15 @@ export const UserPicker = ({users, selectedUser, onSelected}:Props) =>{
                         }}>
                             <ThemedText>{user.firstName} {user.lastName}</ThemedText>
                             <ThemedText>{user.role}</ThemedText>
+                            {!projects.isManagerAvailable(userId, start, duration) && <ThemedText>Indisponible !</ThemedText>}
                         </View>
                     </TouchableOpacity>
                 )
             })}
-            <ThemedButton
+            <ThemedButton2
                 onPress={_=>onSelected(selectedUser_)}
-            ><ThemedText>Valider</ThemedText></ThemedButton>
+                title={"Valider"}
+            />
         </View>
     )
 }

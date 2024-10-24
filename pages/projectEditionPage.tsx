@@ -1,10 +1,8 @@
 import {Project, ProjectId} from "@/api/models/Project";
-import {Button, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Button, StyleSheet, View} from "react-native";
 import {useEffect, useRef, useState} from "react";
 import {ProjectInput} from "@/types/inputTypes";
 import {ThemedTextInput} from "@/components/atoms/TextInput";
-import {SafeAreaView} from "react-native-safe-area-context";
-import {APIService} from "@/api/appwriteApi";
 import DateTimePicker, {DateTimePickerEvent} from '@react-native-community/datetimepicker';
 
 import {useUser} from "@/contexts/UserContext";
@@ -23,17 +21,17 @@ import Checkbox from 'expo-checkbox';
 import {ResourcePicker} from "@/components/ResourcePicker";
 
 
-
 interface Props {
-    projectInput?:Partial<ProjectInput>,
-    projectId?:ProjectId,
+    projectInput?: Partial<ProjectInput>,
+    projectId?: ProjectId,
 }
-export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput,projectId}:Props)=>{
+
+export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectId}: Props) => {
     const theme = useTheme()
     const user = useUser()
     const projects = useProjects()
     //On considère que si un projectId est fourni, on est en mode édition.
-    const mode = projectInput ? "edition":"creation"
+    const mode = projectInput ? "edition" : "creation"
 
     console.log("MODE : ", mode, projectInput)
 
@@ -42,7 +40,7 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput,projectId
 
     const [projectInput_, setProjectInput] = useState<Partial<ProjectInput>>({})
     useEffect(() => {
-        if(projectInput) {
+        if (projectInput) {
             console.log("refresh", projectInput)
             setProjectInput(projectInput)
         }
@@ -52,35 +50,35 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput,projectId
     //todo
     const [date, setDate] = useState<Date>()
     const [duration, setDuration] = useState<number>()
-    const [morningAfternoon, setMorningAfternoon] = useState<"morning"|"afternoon"|undefined>()
+    const [morningAfternoon, setMorningAfternoon] = useState<"morning" | "afternoon" | undefined>()
 
 
-    const handleDateChange = (event:DateTimePickerEvent, selectedDate:Date) => {
-        if(event.type==="dismissed"){
+    const handleDateChange = (event: DateTimePickerEvent, selectedDate: Date) => {
+        if (event.type === "dismissed") {
             setIsDatePickerVisible(false)
-        }else{
+        } else {
             setIsDatePickerVisible(false)
-            setProjectInput(s=>({
+            setProjectInput(s => ({
                 ...s,
-                start:new Date(selectedDate.getFullYear(),selectedDate.getMonth(),selectedDate.getDate(), 0)
+                start: new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate(), 0)
             }))
         }
     }
 
-    const updateProject = ()=>{
+    const updateProject = () => {
         const pI = projectInput_ as Project
         delete pI.id
         delete pI.supervisor_id
         delete pI.problems
         delete pI.pics
-        projects.updateProject(projectId, projectInput_).then(d=>{
-            console.log("update",d)
-        }).catch(e=>{
-            console.error('update',e)
+        projects.updateProject(projectId, projectInput_).then(d => {
+            console.log("update", d)
+        }).catch(e => {
+            console.error('update', e)
         });
     }
 
-    const createProject = ()=>{
+    const createProject = () => {
         const pI = {...projectInput_}
         pI.supervisor_id = user.current!.userId
         pI.duration = Number.parseInt(pI.duration)
@@ -88,44 +86,49 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput,projectId
         projects.createNewProject(pI)
     }
 
-    const submit = ()=>{
-        if(mode==="edition"){
+    const submit = () => {
+        if (mode === "edition") {
             updateProject()
-        }else{
+        } else {
             createProject()
         }
     }
 
     return <ThemedPage><BottomSheetModalProvider>
         <ThemedTextInput
+            style={{marginBottom:8}}
             value={projectInput_?.object ?? ""}
-            onChangeText={text=>setProjectInput(s=>({
+            onChangeText={text => setProjectInput(s => ({
                 ...s,
-                object:text
+                object: text
             }))}
             label={<TextWithIcon
                 icon={<Ionicons name={"construct-outline"} color={theme.colors.text} size={20}></Ionicons>}
                 text={"Object"}
             ></TextWithIcon>}
         ></ThemedTextInput>
+
         <ThemedTextInput
+            style={{marginBottom:8}}
             value={projectInput_?.location ?? ""}
-            onChangeText={text=>setProjectInput(s=>({
+            onChangeText={text => setProjectInput(s => ({
                 ...s,
-                location:text
+                location: text
             }))}
             label={<TextWithIcon
                 icon={<Ionicons name={"location-outline"} color={theme.colors.text} size={20}></Ionicons>}
                 text={"Location"}
             ></TextWithIcon>}
         ></ThemedTextInput>
+
         <ThemedTextInput
+            style={{marginBottom:8}}
             placeholder={"numéro"}
             type={"phone-pad"}
             value={projectInput_?.clientNumber ?? ""}
-            onChangeText={text=>setProjectInput(s=>({
+            onChangeText={text => setProjectInput(s => ({
                 ...s,
-                clientNumber:text
+                clientNumber: text
             }))}
             label={<TextWithIcon
                 icon={<Ionicons name={"call-outline"} color={theme.colors.text} size={20}></Ionicons>}
@@ -137,23 +140,23 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput,projectId
         >
             <TouchableText
                 text={projectInput_.start?.toDateString()}
-                onPress={_=>setIsDatePickerVisible(true)}
+                onPress={_ => setIsDatePickerVisible(true)}
                 label={<TextWithIcon
                     icon={<Ionicons name={"calendar-outline"} color={theme.colors.text} size={20}></Ionicons>}
                     text={"Date"}
                 ></TextWithIcon>}
             ></TouchableText>
             <Checkbox
-                disabled={projectInput_.start===undefined}
+                disabled={projectInput_.start === undefined}
                 // style = {{backgroundColor:'red'}}
                 value={projectInput_.start?.getHours() === 0}
-                onChange={(_)=>{
+                onChange={(_) => {
                     console.log("changé")
                     const date = projectInput_.start
                     date?.setHours(0)
-                    setProjectInput(s=>({
+                    setProjectInput(s => ({
                         ...s,
-                        start:date
+                        start: date
                     }))
                 }}
             ></Checkbox>
@@ -174,14 +177,15 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput,projectId
 
         </View>
         <ThemedTextInput
+            style={{marginBottom:8}}
             disabledMessage={"Veuillez d'abord saisir une date"}
-            disabled={projectInput_.start===undefined}
+            disabled={projectInput_.start === undefined}
             placeholder={"numéro"}
             type={"number-pad"}
             value={projectInput_.duration?.toString()}
-            onChangeText={text=>setProjectInput(s=>({
+            onChangeText={text => setProjectInput(s => ({
                 ...s,
-                duration:text
+                duration: text
             }))}
             label={<TextWithIcon
                 icon={<Ionicons name={"calendar-outline"} color={theme.colors.text} size={20}></Ionicons>}
@@ -190,15 +194,15 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput,projectId
         ></ThemedTextInput>
 
         <TouchableText
-            text={projectInput_.manager_id ? projects.getUserById(projectInput_.manager_id).firstName:""}
-            onPress={_=>userBottomSheetModalRef.current!.present()}
+            text={projectInput_.manager_id ? projects.getUserById(projectInput_.manager_id).firstName : ""}
+            onPress={_ => userBottomSheetModalRef.current!.present()}
             label={<TextWithIcon
                 icon={<Ionicons name={"person-circle-outline"} color={theme.colors.text} size={20}></Ionicons>}
                 text={"Manager"}
             ></TextWithIcon>}
         ></TouchableText>
 
-        <Button title={"créer"} onPress={_=>{
+        <Button title={"créer"} onPress={_ => {
             submit()
             // const pI = {...projectInput_}
             // pI.supervisor_id = user.current!.userId
@@ -217,43 +221,50 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput,projectId
             //     resources:[],
             //     status:"not-done"
             // })
-        //         .then(d=>{
-        //         console.log(d)
-        //     }).catch(e=>{
-        //         console.error(e)
-        // })
+            //         .then(d=>{
+            //         console.log(d)
+            //     }).catch(e=>{
+            //         console.error(e)
+            // })
         }}></Button>
-        <Button title={"ouvrir"} onPress={_=>resourcesBottomSheetModalRef.current!.present()}></Button>
+        <Button title={"ouvrir"} onPress={_ => resourcesBottomSheetModalRef.current!.present()}></Button>
 
         {isDatePickerVisible && <DateTimePicker
-            value={projectInput_?.start ?? date ??  new Date()}
+            value={projectInput_?.start ?? date ?? new Date()}
             mode="date"
             display="default"
             onChange={handleDateChange}
 
             // style={styles.datetimePicker}
         />}
-        <ResourceButton selected={true} type={"tools"} name={"Outil1"} available={false} onPress={_=>{}}></ResourceButton>
+        <ResourceButton selected={true} type={"tools"} name={"Outil1"} available={false} onPress={_ => {
+        }}></ResourceButton>
 
 
-        <ThemedBottomSheetModal ref={userBottomSheetModalRef} snapPoints={['25%','50%']} >
+        <ThemedBottomSheetModal ref={userBottomSheetModalRef} snapPoints={['25%', '50%']}>
             <BottomSheetView>
-                <UserPicker selectedUser={projectInput_.manager_id} users={['67052d650020a8263f27']} onSelected={u=>setProjectInput(s=>({...s, manager_id:u}))}></UserPicker>
+                <UserPicker
+                    selectedUser={projectInput_.manager_id}
+                    users={['67052d650020a8263f27']}
+                    onSelected={u => setProjectInput(s => ({...s, manager_id: u}))}
+                    start={projectInput_.start}
+                    duration={projectInput_.duration}
+                ></UserPicker>
+
             </BottomSheetView>
         </ThemedBottomSheetModal>
 
-        <ThemedBottomSheetModal ref={resourcesBottomSheetModalRef} snapPoints={['25%','50%']} >
+        <ThemedBottomSheetModal ref={resourcesBottomSheetModalRef} snapPoints={['25%', '50%']}>
             <BottomSheetView>
-                <ResourcePicker resourceIds={projects.resources} onSelected={(rids)=>{
-                    console.log("validation",rids)
-                    setProjectInput(p=>({
+                <ResourcePicker resourceIds={projects.resources} onSelected={(rids) => {
+                    console.log("validation", rids)
+                    setProjectInput(p => ({
                         ...p,
-                        resources:rids
+                        resources: rids
                     }))
                 }} start={projectInput_.start} duration={projectInput_.duration}></ResourcePicker>
             </BottomSheetView>
         </ThemedBottomSheetModal>
-
 
 
     </BottomSheetModalProvider>
@@ -262,7 +273,8 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput,projectId
 })
 
 const styles = StyleSheet.create({
-    dateContainer:{
-        flexDirection:"row"
+    dateContainer: {
+        flexDirection: "row",
+        marginBottom:8
     }
 })

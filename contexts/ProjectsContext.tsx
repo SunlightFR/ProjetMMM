@@ -47,6 +47,7 @@ interface ProjectsContextType{
     updateProjectStatus:(projectId:ProjectId, status:ProjectStatus)=>Promise<any>,
     createProblem:(projectId:ProjectId, problemInput:ProblemInput)=>Promise<void>,
     isResourceAvailable:(resourceId:ResourceId, start:Date, duration:number)=>boolean,
+    isManagerAvailable:(managerId:UserId, start:Date, duration:number)=>boolean,
     createResource:(resourceInput:ResourceInput)=>Promise<Resource>,
     getResources:()=>Promise<ResourceId>,
     getProjectResources:(projectId:ProjectId)=>Promise<Resources>
@@ -262,6 +263,14 @@ export const ProjectsProvider = ({children})=>{
         })
     }
 
+    const isManagerAvailable =  (managerId:UserId, start:Date, duration:number)=>{
+        if(!projects) return false;
+
+        return !Object.keys(projects).filter(id=>projects[id].manager_id === managerId).some(id=>{
+            return !areDatesNotOverlapping(projects[id].start, projects[id].duration, start, duration)
+        })
+    }
+
 
     useEffect(() => {
         if(user.current){
@@ -286,7 +295,8 @@ export const ProjectsProvider = ({children})=>{
         isResourceAvailable,
         createResource,
         resources,
-        getProjectResources
+        getProjectResources,
+        isManagerAvailable
     }}>
         {children}
     </ProjectsContext.Provider>

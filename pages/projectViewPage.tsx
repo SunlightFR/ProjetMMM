@@ -50,24 +50,32 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId, userRole}: Pro
             for (const projectId of project.problems) {
                 pbs.push(await projects.getProblemById(projectId))
             }
-            console.log("problems", pbs)
+            // console.log("problems", pbs)
             setProblems(pbs)
-
         })()
     }, [project.problems]);
 
+    /**
+     * Propose à l'utilisateur de prendre une photo.
+     */
     const pickImage = async () => {
         let result = await ImagePicker.launchCameraAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             quality: 0.5,//qualité baissée car Appwrite n'accepte que des images <5Mo
         });
 
-        console.log(result);
+        // console.log(result);
 
         if (!result.canceled) {
-            console.log(result.assets[0])
-            await projects.uploadPicture(projectId, result.assets[0]);
-            toast('photo uploadée')
+            // console.log(result.assets[0])
+            toast("Photo en cours d'envoi")
+            try{
+                await projects.uploadPicture(projectId, result.assets[0]);
+                toast('photo uploadée')
+            }
+            catch(e){
+                toast("Impossible d'envoyer la photo pour le moment")
+            }
         }
     };
 
@@ -84,11 +92,12 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId, userRole}: Pro
                         {color: theme.colors.text},
                         styles.objectText
                     ]}>{project.object}</Text>
-                    {userRole === "supervisor" && <Ionicons name={"pencil"} color={theme.colors.text} size={20}
-                                                            onPress={_ => router.navigate({
-                                                                pathname: "edit",
-                                                                params: {id: projectId}
-                                                            })}></Ionicons>}
+                    {userRole === "supervisor" && <Ionicons
+                        name={"pencil"} color={theme.colors.text} size={20}
+                        onPress={_ => router.navigate({
+                            pathname: "edit",
+                            params: {id: projectId}
+                        })}/>}
                 </View>
                 <View style={{marginLeft: 15}}>
                     <View style={{marginRight: "auto", marginBottom: 10}}><ProjectStatusIcon
@@ -97,21 +106,28 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId, userRole}: Pro
                     <TextWithIcon
                         icon={<Ionicons name={"calendar-outline"} color={theme.colors.text} size={20}></Ionicons>}
                         text={project.start + "-" + getEndDate(project.start, project.duration).getDate()}
+                        viewStyle={{marginBottom:8}}
                     ></TextWithIcon>
                     <TextWithIcon
                         icon={<Ionicons name={"location-outline"} color={theme.colors.text} size={20}></Ionicons>}
                         text={project.location}
+                        viewStyle={{marginBottom:8}}
                     ></TextWithIcon>
                     <TextWithIcon
                         icon={<Ionicons name={"person-circle-outline"} color={theme.colors.text} size={20}></Ionicons>}
                         text={projects.getUserById(userRole === "supervisor" ? project.manager_id : project.supervisor_id)?.firstName}
+                        viewStyle={{marginBottom:4}}
                     ></TextWithIcon>
-                    <View style={{alignItems: 'center', flexDirection: 'row'}}><TextWithIcon
-                        icon={<Ionicons name={"call-outline"} color={theme.colors.text} size={20}></Ionicons>}
-                        text={project.clientNumber}
-                    ></TextWithIcon>
-                        <ThemedButton2 title={"Appeler"}
-                                       onPress={_ => Linking.openURL(`tel:${project.clientNumber}`)}></ThemedButton2>
+                    <View style={{alignItems: 'center', flexDirection: 'row'}}>
+                        <TextWithIcon
+                            icon={<Ionicons name={"call-outline"} color={theme.colors.text} size={20}></Ionicons>}
+                            text={project.clientNumber}
+                            viewStyle={{marginRight:10}}
+                        ></TextWithIcon>
+                        <ThemedButton2
+                            title={"Appeler"}
+                            onPress={_ => Linking.openURL(`tel:${project.clientNumber}`)}
+                        ></ThemedButton2>
                     </View>
 
 
@@ -126,7 +142,7 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId, userRole}: Pro
                             fontSize: 20
                         }}
                         viewStyle={{
-                            marginLeft: -10
+                            // marginLeft: -10
                         }}
                     ></TextWithIcon>
                     {problems === undefined && <Loader></Loader>}
@@ -134,6 +150,7 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId, userRole}: Pro
                             problem={problem}/>) :
                         <TextWithIcon
                             text={"Aucun problème"}
+                            viewStyle={{marginVertical:8}}
                         ></TextWithIcon>
                     }
                     {userRole === "manager" && <ThemedButton2
@@ -150,7 +167,7 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId, userRole}: Pro
                             fontSize: 20
                         }}
                         viewStyle={{
-                            marginLeft: -10
+                            marginBottom:8
                         }}
                     ></TextWithIcon>
                     <View>
@@ -166,10 +183,22 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId, userRole}: Pro
                         })}
                     </View>
                 </View>
-                <ThemedButton2 onPress={_ => pickImage()} title={"Ajouter une image"}/>
+                <ThemedButton2 style={{marginHorizontal:"auto", marginTop:8}}  onPress={_ => pickImage()} title={"Ajouter une image"}/>
                 {/*<ThemedButton onPress={_=>bottomSheetModalRef.current?.present()}><Text>test</Text></ThemedButton>*/}
                 {/*{project.resources}*/}
-                <ResourcesViewer projectId={projectId}></ResourcesViewer>
+                <View style={{marginHorizontal: 20}}>
+                    <TextWithIcon
+                        icon={<Ionicons name={"cog-outline"} size={20} color={theme.colors.text}></Ionicons>}
+                        text={"Resources"}
+                        textStyle={{
+                            fontSize: 20
+                        }}
+                        // viewStyle={{
+                        //     marginBottom:8
+                        // }}
+                    ></TextWithIcon>
+                    <ResourcesViewer projectId={projectId}></ResourcesViewer>
+                </View>
             </ScrollView>
 
             <ProblemEditor onClose={_ => setProblemEditorVisible(false)} onEnd={_ => {
@@ -224,7 +253,7 @@ const styles = StyleSheet.create({
         width: '90%'
     },
     problems: {
-        marginHorizontal: 15,
+        marginHorizontal: 20,
         marginTop: 15
     }
 })

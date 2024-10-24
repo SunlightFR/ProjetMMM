@@ -22,18 +22,19 @@ export const ThemedButton = ({children,onPress, style}:Props)=>{
 }
 interface Props2{
     onPress:(event:GestureResponderEvent)=>void,
-    title:string
+    title:string,
+    style?:StyleProp<ViewStyle>
 }
-export const ThemedButton2 = ({onPress, title}:Props2)=>{
+export const ThemedButton2 = ({onPress, title, style}:Props2)=>{
     const {colors}= useTheme()
-    return <Pressable onPress={onPress} style={{
+    return <Pressable onPress={onPress} style={[{
         backgroundColor:colors.border,
         justifyContent:"center",
         alignItems:"center",
-        borderRadius:10,
-        paddingHorizontal:10,
-        paddingVertical:5,
-    }}>
+        borderRadius:15,
+        paddingHorizontal:12,
+        paddingVertical:4,
+    },style]}>
         <Text style={{
             fontSize:18,
             color:colors.text

@@ -9,6 +9,7 @@ import {Problem,ProblemId} from "@/api/models/Problems";
 import {CameraCapturedPicture} from "expo-camera";
 import {useLoad} from "@/hooks/useLoad";
 import {areDatesNotOverlapping} from "@/utils/dateUtils";
+import {ImagePickerAsset} from "expo-image-picker";
 
 function listToObject(l:any[]){
     const o = {}
@@ -42,7 +43,7 @@ interface ProjectsContextType{
     loadUser:(userId:UserId)=>Promise<void>,
     getUserById:(userId:UserId)=>User,
     getProblemById:(problemId:ProblemId)=>Promise<Problem>,
-    uploadPicture:(projectId:ProjectId, picture:CameraCapturedPicture)=>Promise<void>,
+    uploadPicture:(projectId:ProjectId, picture:ImagePickerAsset)=>Promise<void>,
     updateProjectStatus:(projectId:ProjectId, status:ProjectStatus)=>Promise<any>,
     createProblem:(projectId:ProjectId, problemInput:ProblemInput)=>Promise<void>,
     isResourceAvailable:(resourceId:ResourceId, start:Date, duration:number)=>boolean,

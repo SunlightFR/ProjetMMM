@@ -56,7 +56,7 @@ export const ProjectCard = ({project, onPress}: Props) => {
         ></TextWithIcon>
         <View style={styles.bottom}>
             <ProjectStatusIcon status={project.status}></ProjectStatusIcon>
-            <WarningIcon number={2}></WarningIcon>
+            {project.problems.length > 0 && <WarningIcon number={project.problems.length}/>}
         </View>
     </TouchableOpacity>
 }

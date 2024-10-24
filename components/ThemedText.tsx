@@ -14,7 +14,7 @@ export function ThemedText(props: ThemedTextProps) {
           {
             color:colors.text,
             backgroundColor:colors.background
-          }
+          },
       ]}
       {...props}
     />

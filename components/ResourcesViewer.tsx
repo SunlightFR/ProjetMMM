@@ -19,13 +19,14 @@ export const ResourcesViewer = ({projectId}:Props)=>{
     }, []);
     const ResourceByType = (resources_:Resource[], type:ResourceType)=>{
         return <View style={{alignItems:'center', paddingHorizontal:10, width:'100%', justifyContent:'center'}}>
-            <ThemedText>{type}</ThemedText>
+            <ThemedText >{type}</ThemedText>
             <View style={{
                 flexDirection:'row',
                 flexWrap:"wrap",
                 gap:10,
-                marginHorizontal:"auto"
+                marginHorizontal:"auto",
                 // justifyContent:"",
+                marginTop:3
             }}>
                 {resources_ && Object.values(resources_).filter(r=>r.type===type).sort().map(resource=><ResourceButton
                     selected={false}

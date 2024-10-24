@@ -1,6 +1,7 @@
 import {ProjectStatus} from "@/api/models/Project";
-import {TouchableOpacity, View} from "react-native";
+import {View} from "react-native";
 import {ProjectStatusIcon} from "@/components/atoms/ProjectStatus";
+import {TextWithIcon} from "@/components/atoms/TextWithIcon";
 
 interface Props {
     currentStatus?:ProjectStatus,
@@ -9,10 +10,16 @@ interface Props {
 
 export const StatusPicker = ({currentStatus, onSelected}:Props)=>{
     return <View>
-        {(['not-done', 'in-progress', 'finished', 'stopped'] as ProjectStatus[]).map(status=>{
-            return <TouchableOpacity onPress={_=>onSelected(status)}>
-                <ProjectStatusIcon status={status}/>
-            </TouchableOpacity>
-        })}
+        <TextWithIcon
+            text={"Choisissez un statut pour le chantier"}
+            viewStyle={{marginBottom:5}}
+        />
+        <View
+            style={{marginHorizontal:"auto", gap:3, marginBottom:10}}
+        >
+            {(['not-done', 'in-progress', 'finished', 'stopped'] as ProjectStatus[]).map(status=>{
+                return <ProjectStatusIcon status={status} onPress={_=>onSelected(status)}/>
+            })}
+        </View>
     </View>
 }

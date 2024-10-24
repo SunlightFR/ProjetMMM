@@ -100,8 +100,12 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId, userRole}: Pro
                         })}/>}
                 </View>
                 <View style={{marginLeft: 15}}>
-                    <View style={{marginRight: "auto", marginBottom: 10}}><ProjectStatusIcon
-                        status={project.status}></ProjectStatusIcon></View>
+                    <View style={{marginRight: "auto", marginBottom: 10}}>
+                        <ProjectStatusIcon
+                            status={project.status}
+                            onPress={_=>bottomSheetModalRef.current!.present()}
+                        ></ProjectStatusIcon>
+                    </View>
 
                     <TextWithIcon
                         icon={<Ionicons name={"calendar-outline"} color={theme.colors.text} size={20}></Ionicons>}
@@ -232,7 +236,6 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId, userRole}: Pro
                     backgroundColor: theme.colors.background,
                     marginHorizontal: "auto"
                 }}>
-                    <Text>Bonjour</Text>
                     <StatusPicker onSelected={_ => projects.updateProjectStatus(projectId, _)}></StatusPicker>
                 </BottomSheetView>
             </ThemedBottomSheetModal>

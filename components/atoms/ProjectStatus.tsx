@@ -1,37 +1,48 @@
 import {ProjectStatus} from "@/api/models/Project";
-import {Text, StyleSheet, View} from "react-native";
+import {Text, StyleSheet, GestureResponderEvent, Pressable} from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
+/**
+ * Couleur correspondant à chaque statut
+ */
 const StatusColors = {
     "finished":"#6cc460",
     "not-done":"grey",
     "in-progress":"#3b9dee",
     "stopped":"#f64e4e"
 }
-const TextColor = "#111"
+
+/**
+ * Code d'icône Ionicons correspondant à chaque statut
+ */
+const Icons = {
+    "finished":"checkmark-circle-outline",
+    "in-progress":"time-outline",
+    "stopped":"alert-circle-outline",
+    "not-done":"calendar-outline"
+}
+
+const textColor = "#111"
 
 interface Props{
-    status:ProjectStatus
+    status:ProjectStatus,
+    onPress:(e:GestureResponderEvent)=>void
 }
-export const ProjectStatusIcon = ({status}:Props)=>{
+export const ProjectStatusIcon = ({status,onPress}:Props)=>{
+    return (
+        <Pressable
+            onPress={onPress}
+            style={[
+                { backgroundColor: StatusColors[status] },
+                styles.container
+            ]}
+        >
+            <Text style={styles.text}>{status}</Text>
 
-    const statusIcon = (status:ProjectStatus)=>{
-        const iconSize = 20
-        switch (status){
-            case "finished":return <Ionicons name={"checkmark-circle-outline"} size={iconSize} color={TextColor}></Ionicons>
-            case "in-progress":return <Ionicons name={"time-outline"} size={iconSize} color={TextColor}></Ionicons>
-            case "stopped":return <Ionicons name={"alert-circle-outline"} size={iconSize} color={TextColor}></Ionicons>
-            case "not-done":return <Ionicons name={"calendar-outline"} size={iconSize} color={TextColor}></Ionicons>
-        }
-    }
-
-    return <View style={[
-        { backgroundColor: StatusColors[status] },
-        styles.container
-    ]}>
-        <Text style={styles.text}>{status}</Text>
-        {statusIcon(status)}
-    </View>
+            {/*@ts-ignore*/}
+            <Ionicons name={Icons[status]} size={20} color={textColor}/>
+        </Pressable>
+    )
 }
 
 const styles = StyleSheet.create({
@@ -39,10 +50,11 @@ const styles = StyleSheet.create({
         flexDirection:"row",
         borderRadius:7,
         paddingHorizontal:6,
-        paddingVertical:3
+        paddingVertical:3,
+        justifyContent:"center"
     },
     text:{
-        color:TextColor,
+        color:textColor,
         marginRight:3
     }
 })

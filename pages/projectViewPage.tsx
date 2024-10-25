@@ -23,6 +23,7 @@ import {ThemedBottomSheetModal} from "@/components/atoms/ThemedBottomSheetModal"
 import {ProblemEditor} from "@/components/ProblemEditor";
 import {getEndDate} from "@/utils/dateUtils";
 import {ResourcesViewer} from "@/components/ResourcesViewer";
+import {Pictures} from "@/components/Pictures";
 
 const screenWidth = Dimensions.get('window').width;
 const imageWidth = (screenWidth - 30) / 4
@@ -175,16 +176,7 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId, userRole}: Pro
                         }}
                     ></TextWithIcon>
                     <View>
-                        {project.pics.map(id => {
-                            console.log("pic id:", id)
-                            return <Image onLoad={_ => {
-                                console.log("loadé !")
-                            }} source={{
-                                uri: APIService.getPicturePreview(id, 300, 525),
-                                width: imageWidth,
-                                height: imageWidth * 1.75
-                            }}></Image>
-                        })}
+                        <Pictures picturesIds={project.pics}></Pictures>
                     </View>
                 </View>
                 <ThemedButton2 style={{marginHorizontal:"auto", marginTop:8}}  onPress={_ => pickImage()} title={"Ajouter une image"}/>

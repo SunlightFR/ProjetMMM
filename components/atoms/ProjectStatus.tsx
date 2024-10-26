@@ -26,7 +26,7 @@ const textColor = "#111"
 
 interface Props{
     status:ProjectStatus,
-    onPress:(e:GestureResponderEvent)=>void
+    onPress?:(e:GestureResponderEvent)=>void
 }
 export const ProjectStatusIcon = ({status,onPress}:Props)=>{
     return (

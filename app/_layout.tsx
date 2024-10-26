@@ -9,6 +9,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import {UserProvider} from "@/contexts/UserContext";
 import {IdeasProvider} from "@/contexts/IdeasContext";
 import {ProjectsProvider} from "@/contexts/ProjectsContext";
+import '../i18n'
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();

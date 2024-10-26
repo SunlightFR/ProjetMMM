@@ -1,7 +1,7 @@
 import {ProjectStatus} from "@/api/models/Project";
 import {Text, StyleSheet, GestureResponderEvent, Pressable} from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
-
+import {useTranslation} from "react-i18next";
 /**
  * Couleur correspondant à chaque statut
  */
@@ -29,6 +29,7 @@ interface Props{
     onPress?:(e:GestureResponderEvent)=>void
 }
 export const ProjectStatusIcon = ({status,onPress}:Props)=>{
+    const {t,i18n} = useTranslation()
     return (
         <Pressable
             onPress={onPress}
@@ -37,7 +38,7 @@ export const ProjectStatusIcon = ({status,onPress}:Props)=>{
                 styles.container
             ]}
         >
-            <Text style={styles.text}>{status}</Text>
+            <Text style={styles.text}>{t(status)}</Text>
 
             {/*@ts-ignore*/}
             <Ionicons name={Icons[status]} size={20} color={textColor}/>

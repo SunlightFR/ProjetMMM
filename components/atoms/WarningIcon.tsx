@@ -2,6 +2,7 @@ import {ProjectStatus} from "@/api/models/Project";
 import {Text, StyleSheet, View} from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {useTheme} from "@/hooks/useThemeColor";
+import {useTranslation} from "react-i18next";
 
 const AlertColor = "#f63838"
 
@@ -10,6 +11,7 @@ interface Props{
 }
 export const WarningIcon = ({number}:Props)=>{
     const {colors} = useTheme()
+    const {t} = useTranslation()
     return <View style={[
         { borderColor: AlertColor },
         styles.container
@@ -18,7 +20,7 @@ export const WarningIcon = ({number}:Props)=>{
         <Text style={[
             {color:colors.text},
             styles.text
-        ]}>{number} problems</Text>
+        ]}>{number + t('problems')}</Text>
     </View>
 }
 

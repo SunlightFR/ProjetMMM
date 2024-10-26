@@ -2,6 +2,7 @@ import {ResourceType} from "@/api/models/Resource";
 import {GestureResponderEvent, Text, TouchableOpacity, View} from "react-native";
 import {FontAwesome6} from "@expo/vector-icons";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import {useTranslation} from "react-i18next";
 
 interface Props{
     selected?:boolean,
@@ -19,6 +20,7 @@ export const getResourceIcon = (type:ResourceType)=>{
     }
 }
 export const ResourceButton = ({available,name,type,onPress, selected=false}:Props)=>{
+    const {t} = useTranslation()
     return <TouchableOpacity onPress={onPress} style={{
         width:100,
         height:100,
@@ -46,7 +48,7 @@ export const ResourceButton = ({available,name,type,onPress, selected=false}:Pro
             <Text style={{
                 transform:"rotate(-45deg)",
                 fontSize:18,
-            }}>Indisponible</Text>
+            }}>{t('unavailable')}</Text>
         </View>}
 
     </TouchableOpacity>

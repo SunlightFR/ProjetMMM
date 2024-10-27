@@ -5,5 +5,13 @@
   "stopped":"Arrêté",
   "unavailable": "Indisponible",
   "problems": " problèmes",
+  "(morning)": " (matin)",
+  "(afternoon)": " (après-midi)",
+  "call": "Appeler le client",
+  "Problems": "Problèmes",
+  "no-problem": "Aucun problème",
+  "Pictures": "Photos",
+  "add-image": "Prendre une photo",
+  "Resources": "Ressources",
   "no-resource": "Aucune resource"
 }

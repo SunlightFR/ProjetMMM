@@ -87,12 +87,12 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId, userRole}: Pro
         return Intl.DateTimeFormat('fr', {//TODO locale
                 dateStyle:"medium"
             }).format(start)
-            + (start.getHours() === 0 ? " (matin)" : " (aprem)")
+            + (start.getHours() === 0 ? t("(morning)") : t("(afternoon)"))
             + " - "
             +Intl.DateTimeFormat('fr', {//TODO locale
                 dateStyle:"medium"
             }).format(end)
-            + (end.getHours() === 0 ? " (matin)" : " (aprem)")
+            + (end.getHours() === 0 ? t("(morning)") : t("(afternoon)"))
     }
 
     return <ThemedPage>
@@ -145,7 +145,7 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId, userRole}: Pro
                             viewStyle={{marginRight:10}}
                         ></TextWithIcon>
                         <ThemedButton2
-                            title={"Appeler"}
+                            title={t("call")}
                             onPress={_ => Linking.openURL(`tel:${project.clientNumber}`)}
                         ></ThemedButton2>
                     </View>
@@ -157,7 +157,7 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId, userRole}: Pro
                 ]}>
                     <TextWithIcon
                         icon={<Ionicons name={"warning"} size={20} color={theme.colors.text}></Ionicons>}
-                        text={"Problèmes"}
+                        text={t("Problems")}
                         textStyle={{
                             fontSize: 20
                         }}
@@ -169,7 +169,7 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId, userRole}: Pro
                     {problems != undefined && problems.length > 0 ? problems.map(problem => <ProblemCard
                             problem={problem}/>) :
                         <TextWithIcon
-                            text={"Aucun problème"}
+                            text={t("no-problem")}
                             viewStyle={{marginVertical:8}}
                         ></TextWithIcon>
                     }
@@ -182,7 +182,7 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId, userRole}: Pro
                 <View style={{marginHorizontal: 20}}>
                     <TextWithIcon
                         icon={<Ionicons name={"camera-outline"} size={20} color={theme.colors.text}></Ionicons>}
-                        text={"Photos"}
+                        text={t("Pictures")}
                         textStyle={{
                             fontSize: 20
                         }}
@@ -194,13 +194,13 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId, userRole}: Pro
                         <Pictures picturesIds={project.pics}></Pictures>
                     </View>
                 </View>
-                <ThemedButton2 style={{marginHorizontal:"auto", marginTop:8}}  onPress={_ => pickImage()} title={"Ajouter une image"}/>
+                <ThemedButton2 style={{marginHorizontal:"auto", marginTop:8}}  onPress={_ => pickImage()} title={t("add-image")}/>
                 {/*<ThemedButton onPress={_=>bottomSheetModalRef.current?.present()}><Text>test</Text></ThemedButton>*/}
                 {/*{project.resources}*/}
                 <View style={{marginHorizontal: 20}}>
                     <TextWithIcon
                         icon={<Ionicons name={"cog-outline"} size={20} color={theme.colors.text}></Ionicons>}
-                        text={"Resources"}
+                        text={t("Resources")}
                         textStyle={{
                             fontSize: 20
                         }}

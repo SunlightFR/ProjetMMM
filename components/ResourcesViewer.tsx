@@ -5,11 +5,13 @@ import {ThemedText} from "@/components/ThemedText";
 import {ResourceButton} from "@/components/atoms/ResourceButton";
 import {useEffect, useState} from "react";
 import {ProjectId} from "@/api/models/Project";
+import {useTranslation} from "react-i18next";
 
 interface Props{
     projectId:ProjectId
 }
 export const ResourcesViewer = ({projectId}:Props)=>{
+    const {t} = useTranslation()
     const projects = useProjects();
     const [resources, setResources] = useState<Resource>()
     useEffect(() => {
@@ -19,7 +21,7 @@ export const ResourcesViewer = ({projectId}:Props)=>{
     }, []);
     const ResourceByType = (resources_:Resource[], type:ResourceType)=>{
         return <View style={{alignItems:'center', paddingHorizontal:10, width:'100%', justifyContent:'center'}}>
-            <ThemedText >{type}</ThemedText>
+            <ThemedText >{t(type)}</ThemedText>
             <View style={{
                 flexDirection:'row',
                 flexWrap:"wrap",

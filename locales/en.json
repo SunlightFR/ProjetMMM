@@ -13,5 +13,8 @@
   "Pictures": "Pictures",
   "add-image": "Take a picture",
   "Resources": "Resources",
-  "no-resource": "No resource"
+  "no-resource": "No resource",
+  "vehicle": "Vehicles",
+  "tools": "Tools",
+  "staff": "Staff"
 }

@@ -19,6 +19,7 @@ import {gestureHandlerRootHOC} from "react-native-gesture-handler";
 import {ResourceButton} from "@/components/atoms/ResourceButton";
 import Checkbox from 'expo-checkbox';
 import {ResourcePicker} from "@/components/ResourcePicker";
+import {MorningAfternoonPicker} from "@/components/MorningAfternoonPicker";
 
 
 interface Props {
@@ -30,7 +31,8 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
     const theme = useTheme()
     const user = useUser()
     const projects = useProjects()
-    //On considère que si un projectId est fourni, on est en mode édition.
+
+    //On considère que si un projectInput est fourni, on est en mode édition.
     const mode = projectInput ? "edition" : "creation"
 
     console.log("MODE : ", mode, projectInput)
@@ -39,9 +41,9 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
     const resourcesBottomSheetModalRef = useRef<BottomSheetModal>(null);
 
     const [projectInput_, setProjectInput] = useState<Partial<ProjectInput>>({})
+
     useEffect(() => {
         if (projectInput) {
-            console.log("refresh", projectInput)
             setProjectInput(projectInput)
         }
     }, [projectInput]);
@@ -146,6 +148,14 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
                     text={"Date"}
                 ></TextWithIcon>}
             ></TouchableText>
+            <MorningAfternoonPicker onSelected={hour=>{
+                const date = projectInput_.start
+                date?.setHours(hour)
+                setProjectInput(s => ({
+                    ...s,
+                    start: date
+                }))
+            }}/>
             <Checkbox
                 disabled={projectInput_.start === undefined}
                 // style = {{backgroundColor:'red'}}
@@ -256,8 +266,10 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
 
         <ThemedBottomSheetModal ref={resourcesBottomSheetModalRef} snapPoints={['25%', '50%']}>
             <BottomSheetView>
-                <ResourcePicker resourceIds={projects.resources} onSelected={(rids) => {
-                    console.log("validation", rids)
+                <ResourcePicker
+                    selectedResources={projectInput_.resources}
+                    resourceIds={projects.resources} onSelected={(rids) => {
+                    console.error("validation", rids)
                     setProjectInput(p => ({
                         ...p,
                         resources: rids

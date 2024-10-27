@@ -163,10 +163,11 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId, userRole}: Pro
                         }}
                         viewStyle={{
                             // marginLeft: -10
+                            marginBottom:8
                         }}
                     ></TextWithIcon>
                     {problems === undefined && <Loader></Loader>}
-                    {problems != undefined && problems.length > 0 ? problems.map(problem => <ProblemCard
+                    {problems != undefined && problems.length > 0 ? problems.sort((a,b)=>a.date<b.date ? -1 : 1).map(problem => <ProblemCard
                             problem={problem}/>) :
                         <TextWithIcon
                             text={t("no-problem")}

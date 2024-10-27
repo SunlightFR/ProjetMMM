@@ -25,7 +25,10 @@ export const ProblemCard = ({problem}:Props)=>{
         ></TextWithIcon>
         <TextWithIcon
             icon={<Ionicons name={"calendar-outline"} color={theme.colors.text} size={20}></Ionicons>}
-            text={problem.date ?? "date non renseignée"}
+            text={problem.date ? Intl.DateTimeFormat('fr', {//TODO locale
+                dateStyle:"long",
+                timeStyle:"short"
+            }).format(new Date(problem.date)) : "date non renseignée"}
         ></TextWithIcon>
     </View>
 }

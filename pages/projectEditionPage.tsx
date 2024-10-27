@@ -4,7 +4,6 @@ import {useEffect, useRef, useState} from "react";
 import {ProjectInput} from "@/types/inputTypes";
 import {ThemedTextInput} from "@/components/atoms/TextInput";
 import DateTimePicker, {DateTimePickerEvent} from '@react-native-community/datetimepicker';
-
 import {useUser} from "@/contexts/UserContext";
 import {useProjects} from "@/contexts/ProjectsContext";
 import {ThemedPage} from "@/components/ThemedPage";
@@ -20,6 +19,7 @@ import {ResourceButton} from "@/components/atoms/ResourceButton";
 import {ResourcePicker} from "@/components/ResourcePicker";
 import {MorningAfternoonPicker} from "@/components/MorningAfternoonPicker";
 import {useTranslation} from "react-i18next";
+import {toast} from "@/lib/toast";
 
 
 interface Props {
@@ -170,7 +170,7 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
         </View>
         <ThemedTextInput
             style={{marginBottom:8}}
-            disabledMessage={"Veuillez d'abord saisir une date"}
+            disabledMessage={t("select-date")}
             disabled={projectInput_.start === undefined}
             placeholder={"numéro"}
             type={"number-pad"}
@@ -188,7 +188,13 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
         <TouchableText
             placeholder={t("Manager")}
             text={projectInput_.manager_id ? projects.getUserById(projectInput_.manager_id).firstName : undefined}
-            onPress={_ => userBottomSheetModalRef.current!.present()}
+            onPress={_ => {
+                if(projectInput_.start){
+                    userBottomSheetModalRef.current!.present()
+                }else {
+                    toast(t("select-date"))
+                }
+            }}
             label={<TextWithIcon
                 icon={<Ionicons name={"person-circle-outline"} color={theme.colors.text} size={20}></Ionicons>}
                 text={t("Manager")}

@@ -195,7 +195,7 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId, userRole}: Pro
                         <Pictures picturesIds={project.pics}></Pictures>
                     </View>
                 </View>
-                <ThemedButton2 style={{marginHorizontal:"auto", marginTop:8}}  onPress={_ => pickImage()} title={t("add-image")}/>
+                <ThemedButton2 style={{marginHorizontal:"auto", marginVertical:8}}  onPress={_ => pickImage()} title={t("add-image")}/>
                 {/*<ThemedButton onPress={_=>bottomSheetModalRef.current?.present()}><Text>test</Text></ThemedButton>*/}
                 {/*{project.resources}*/}
                 <View style={{marginHorizontal: 20}}>

@@ -20,6 +20,7 @@ import {ResourceButton} from "@/components/atoms/ResourceButton";
 import Checkbox from 'expo-checkbox';
 import {ResourcePicker} from "@/components/ResourcePicker";
 import {MorningAfternoonPicker} from "@/components/MorningAfternoonPicker";
+import {useTranslation} from "react-i18next";
 
 
 interface Props {
@@ -29,6 +30,7 @@ interface Props {
 
 export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectId}: Props) => {
     const theme = useTheme()
+    const {t} = useTranslation()
     const user = useUser()
     const projects = useProjects()
 
@@ -97,6 +99,7 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
     }
 
     return <ThemedPage><BottomSheetModalProvider>
+        <View style={{marginHorizontal:15}}>
         <ThemedTextInput
             style={{marginBottom:8}}
             value={projectInput_?.object ?? ""}
@@ -106,7 +109,7 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
             }))}
             label={<TextWithIcon
                 icon={<Ionicons name={"construct-outline"} color={theme.colors.text} size={20}></Ionicons>}
-                text={"Object"}
+                text={t("Object")}
             ></TextWithIcon>}
         ></ThemedTextInput>
 
@@ -119,7 +122,7 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
             }))}
             label={<TextWithIcon
                 icon={<Ionicons name={"location-outline"} color={theme.colors.text} size={20}></Ionicons>}
-                text={"Location"}
+                text={t("Location")}
             ></TextWithIcon>}
         ></ThemedTextInput>
 
@@ -134,7 +137,7 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
             }))}
             label={<TextWithIcon
                 icon={<Ionicons name={"call-outline"} color={theme.colors.text} size={20}></Ionicons>}
-                text={"Client Number"}
+                text={t("Client-number")}
             ></TextWithIcon>}
         ></ThemedTextInput>
         <View style={styles.dateContainer}
@@ -145,7 +148,7 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
                 onPress={_ => setIsDatePickerVisible(true)}
                 label={<TextWithIcon
                     icon={<Ionicons name={"calendar-outline"} color={theme.colors.text} size={20}></Ionicons>}
-                    text={"Date"}
+                    text={t("Date")}
                 ></TextWithIcon>}
             ></TouchableText>
             <MorningAfternoonPicker onSelected={hour=>{
@@ -156,20 +159,20 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
                     start: date
                 }))
             }}/>
-            <Checkbox
-                disabled={projectInput_.start === undefined}
-                // style = {{backgroundColor:'red'}}
-                value={projectInput_.start?.getHours() === 0}
-                onChange={(_) => {
-                    console.log("changé")
-                    const date = projectInput_.start
-                    date?.setHours(0)
-                    setProjectInput(s => ({
-                        ...s,
-                        start: date
-                    }))
-                }}
-            ></Checkbox>
+            {/*<Checkbox*/}
+            {/*    disabled={projectInput_.start === undefined}*/}
+            {/*    // style = {{backgroundColor:'red'}}*/}
+            {/*    value={projectInput_.start?.getHours() === 0}*/}
+            {/*    onChange={(_) => {*/}
+            {/*        console.log("changé")*/}
+            {/*        const date = projectInput_.start*/}
+            {/*        date?.setHours(0)*/}
+            {/*        setProjectInput(s => ({*/}
+            {/*            ...s,*/}
+            {/*            start: date*/}
+            {/*        }))*/}
+            {/*    }}*/}
+            {/*></Checkbox>*/}
             {/*<Checkbox*/}
             {/*    disabled={date === undefined}*/}
             {/*    style = {{}}*/}
@@ -199,7 +202,7 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
             }))}
             label={<TextWithIcon
                 icon={<Ionicons name={"calendar-outline"} color={theme.colors.text} size={20}></Ionicons>}
-                text={"Duration"}
+                text={t("Duration")}
             ></TextWithIcon>}
         ></ThemedTextInput>
 
@@ -208,7 +211,7 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
             onPress={_ => userBottomSheetModalRef.current!.present()}
             label={<TextWithIcon
                 icon={<Ionicons name={"person-circle-outline"} color={theme.colors.text} size={20}></Ionicons>}
-                text={"Manager"}
+                text={t("Manager")}
             ></TextWithIcon>}
         ></TouchableText>
 
@@ -277,6 +280,7 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
                 }} start={projectInput_.start} duration={projectInput_.duration}></ResourcePicker>
             </BottomSheetView>
         </ThemedBottomSheetModal>
+        </View>
 
 
     </BottomSheetModalProvider>
@@ -287,6 +291,8 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
 const styles = StyleSheet.create({
     dateContainer: {
         flexDirection: "row",
-        marginBottom:8
+        marginBottom:8,
+        alignItems:"center",
+        // justifyContent:"space-between"
     }
 })

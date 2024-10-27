@@ -17,7 +17,6 @@ import {UserPicker} from "@/components/ManagerPicker";
 import {BottomSheetModal, BottomSheetModalProvider, BottomSheetView} from "@gorhom/bottom-sheet";
 import {gestureHandlerRootHOC} from "react-native-gesture-handler";
 import {ResourceButton} from "@/components/atoms/ResourceButton";
-import Checkbox from 'expo-checkbox';
 import {ResourcePicker} from "@/components/ResourcePicker";
 import {MorningAfternoonPicker} from "@/components/MorningAfternoonPicker";
 import {useTranslation} from "react-i18next";
@@ -101,6 +100,7 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
     return <ThemedPage><BottomSheetModalProvider>
         <View style={{marginHorizontal:15}}>
         <ThemedTextInput
+            placeholder={t('Object')}
             style={{marginBottom:8}}
             value={projectInput_?.object ?? ""}
             onChangeText={text => setProjectInput(s => ({
@@ -114,6 +114,7 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
         ></ThemedTextInput>
 
         <ThemedTextInput
+            placeholder={t("Location")}
             style={{marginBottom:8}}
             value={projectInput_?.location ?? ""}
             onChangeText={text => setProjectInput(s => ({
@@ -128,7 +129,7 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
 
         <ThemedTextInput
             style={{marginBottom:8}}
-            placeholder={"numéro"}
+            placeholder={t("Client-number")}
             type={"phone-pad"}
             value={projectInput_?.clientNumber ?? ""}
             onChangeText={text => setProjectInput(s => ({
@@ -145,6 +146,7 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
         >
             <TouchableText
                 text={projectInput_.start?.toDateString()}
+                placeholder={t('Date')}
                 onPress={_ => setIsDatePickerVisible(true)}
                 label={<TextWithIcon
                     icon={<Ionicons name={"calendar-outline"} color={theme.colors.text} size={20}></Ionicons>}
@@ -163,33 +165,6 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
                 }}
                 disabled={projectInput_.start === undefined}
             />
-            {/*<Checkbox*/}
-            {/*    disabled={projectInput_.start === undefined}*/}
-            {/*    // style = {{backgroundColor:'red'}}*/}
-            {/*    value={projectInput_.start?.getHours() === 0}*/}
-            {/*    onChange={(_) => {*/}
-            {/*        console.log("changé")*/}
-            {/*        const date = projectInput_.start*/}
-            {/*        date?.setHours(0)*/}
-            {/*        setProjectInput(s => ({*/}
-            {/*            ...s,*/}
-            {/*            start: date*/}
-            {/*        }))*/}
-            {/*    }}*/}
-            {/*></Checkbox>*/}
-            {/*<Checkbox*/}
-            {/*    disabled={date === undefined}*/}
-            {/*    style = {{}}*/}
-
-            {/*    value={morningAfternoon === "afternoon" ?? false}*/}
-            {/*    onChange={(_)=>{*/}
-            {/*        if(morningAfternoon === "afternoon") {*/}
-            {/*            setMorningAfternoon(undefined)*/}
-            {/*        }*/}
-            {/*        else setMorningAfternoon("afternoon")*/}
-            {/*        console.log("cliqué")*/}
-            {/*    }}*/}
-            {/*></Checkbox>*/}
 
 
         </View>
@@ -211,7 +186,8 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
         ></ThemedTextInput>
 
         <TouchableText
-            text={projectInput_.manager_id ? projects.getUserById(projectInput_.manager_id).firstName : ""}
+            placeholder={t("Manager")}
+            text={projectInput_.manager_id ? projects.getUserById(projectInput_.manager_id).firstName : undefined}
             onPress={_ => userBottomSheetModalRef.current!.present()}
             label={<TextWithIcon
                 icon={<Ionicons name={"person-circle-outline"} color={theme.colors.text} size={20}></Ionicons>}

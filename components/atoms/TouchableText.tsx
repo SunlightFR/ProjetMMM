@@ -1,40 +1,43 @@
 import {
     GestureResponderEvent,
-    KeyboardTypeOptions,
+    Pressable,
     StyleSheet,
     Text,
-    TextInput,
-    TouchableOpacity,
     View
 } from "react-native";
 import {useTheme} from "@/hooks/useThemeColor";
 import {ReactNode} from "react";
 
 interface Props{
-    text:string,
+    text?:string,
     onPress:(event:GestureResponderEvent)=>void,
     label:ReactNode,
+    placeholder?:string
 }
-export const TouchableText = ({text,label,onPress}:Props)=>{
+export const TouchableText = ({text,label,onPress, placeholder}:Props)=>{
     const {colors} = useTheme()
 
-    return <TouchableOpacity onPress={onPress} style={[
+    return <View  style={[
         { backgroundColor:colors.background },
         styles.container
     ]}>
         {label}
+        <Pressable onPress={onPress}>
+
         <Text style={[
             {
-                color:colors.text,
+                color:text ? colors.text : colors.placeholder,
                 backgroundColor:colors.background,
                 borderColor:colors.border,
                 shadowColor:colors.shadow,
             },
             styles.text
         ]}>
-            {text}
+            {text ?? placeholder}
         </Text>
-    </TouchableOpacity>
+        </Pressable>
+
+    </View>
 }
 
 const styles = StyleSheet.create({
@@ -42,10 +45,17 @@ const styles = StyleSheet.create({
 
     },
     text:{
-        padding:6,
+        paddingTop:7,
+        paddingBottom:4,
+        paddingHorizontal:10,
         borderRadius:10,
         borderWidth:2,
-        marginHorizontal:15,
+        justifyContent:"center",
+        alignItems:"center",
+        fontSize:15,
+        marginTop:6,
+
+        // marginHorizontal:15,
 
         elevation:5,
         shadowRadius:5,

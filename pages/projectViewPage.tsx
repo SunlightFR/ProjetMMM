@@ -93,6 +93,7 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId, userRole}: Pro
                 dateStyle:"medium"
             }).format(end)
             + (end.getHours() === 0 ? t("(morning)") : t("(afternoon)"))
+            + " (" + duration.toString() + " " + t("half-day") + ")"
     }
 
     return <ThemedPage>

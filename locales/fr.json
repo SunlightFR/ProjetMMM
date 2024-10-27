@@ -25,5 +25,6 @@
   "Manager": "Chef de chantier",
   "morning": "Matin",
   "afternoon": "Après-midi",
-  "select-date": "Veuillez sélectionner une date."
+  "select-date": "Veuillez sélectionner une date.",
+  "half-day": "demi-journées"
 }

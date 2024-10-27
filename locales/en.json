@@ -25,5 +25,6 @@
   "Manager": "Manager",
   "morning": "Morning",
   "afternoon": "Afternoon",
-  "select-date": "Please select a date first."
+  "select-date": "Please select a date first.",
+  "half-day": "half days"
 }

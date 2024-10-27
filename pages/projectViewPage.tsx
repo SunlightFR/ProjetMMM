@@ -25,9 +25,9 @@ import {getEndDate} from "@/utils/dateUtils";
 import {ResourcesViewer} from "@/components/ResourcesViewer";
 import {Pictures} from "@/components/Pictures";
 
-const screenWidth = Dimensions.get('window').width;
-const imageWidth = (screenWidth - 30) / 4
-console.info("width:", imageWidth)
+// const screenWidth = Dimensions.get('window').width;
+// const imageWidth = (screenWidth - 30) / 4
+// console.info("width:", imageWidth)
 
 interface Props {
     projectId: ProjectId,
@@ -80,6 +80,19 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId, userRole}: Pro
         }
     };
 
+    const formattedDate = (start:Date, duration:number)=>{
+        const end = getEndDate(start, duration)
+        return Intl.DateTimeFormat('fr', {//TODO locale
+                dateStyle:"medium"
+            }).format(start)
+            + (start.getHours() === 0 ? " (matin)" : " (aprem)")
+            + " - "
+            +Intl.DateTimeFormat('fr', {//TODO locale
+                dateStyle:"medium"
+            }).format(end)
+            + (end.getHours() === 0 ? " (matin)" : " (aprem)")
+    }
+
     return <ThemedPage>
         <BottomSheetModalProvider>
             <ScrollView>
@@ -110,7 +123,7 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId, userRole}: Pro
 
                     <TextWithIcon
                         icon={<Ionicons name={"calendar-outline"} color={theme.colors.text} size={20}></Ionicons>}
-                        text={project.start + "-" + getEndDate(project.start, project.duration).getDate()}
+                        text={formattedDate(project.start, project.duration)}
                         viewStyle={{marginBottom:8}}
                     ></TextWithIcon>
                     <TextWithIcon

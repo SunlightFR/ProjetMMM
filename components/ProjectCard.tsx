@@ -9,6 +9,7 @@ import {WarningIcon} from "@/components/atoms/WarningIcon";
 import {useProjects} from "@/contexts/ProjectsContext";
 import {Loader} from "@/components/atoms/Loader";
 import {ThemedText} from "@/components/ThemedText";
+import {getEndDate} from "@/utils/dateUtils";
 
 interface Props {
     project: Project,
@@ -36,7 +37,11 @@ export const ProjectCard = ({project, onPress}: Props) => {
         ]}>{project.object}</ThemedText>
         <TextWithIcon
             icon={<Ionicons name={"calendar-outline"} color={theme.colors.text} size={20}></Ionicons>}
-            text={project.location}
+            text={Intl.DateTimeFormat('fr', {//TODO locale
+                dateStyle:"medium"
+            }).format(project.start) +" - "+Intl.DateTimeFormat('fr', {//TODO locale
+                dateStyle:"medium"
+            }).format(getEndDate(project.start, project.duration))}
             viewStyle={{marginTop: 8}}
         ></TextWithIcon>
         <TextWithIcon

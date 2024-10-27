@@ -16,5 +16,13 @@
   "no-resource": "No resource",
   "vehicle": "Vehicles",
   "tools": "Tools",
-  "staff": "Staff"
+  "staff": "Staff",
+  "Object": "Object",
+  "Location": "Location",
+  "Client-number": "Client number",
+  "Date": "Start",
+  "Duration": "Duration",
+  "Manager": "Manager",
+  "morning": "Morning",
+  "afternoon": "Afternoon"
 }

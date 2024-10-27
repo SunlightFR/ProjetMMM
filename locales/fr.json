@@ -16,5 +16,13 @@
   "no-resource": "Aucune resource",
   "vehicle": "Véhicules",
   "tools": "Outils",
-  "staff": "Équipiers"
+  "staff": "Équipiers",
+  "Object": "Objet du chantier",
+  "Location": "Lieu du chantier",
+  "Client-number": "Numéro du client",
+  "Date": "Début du chantier",
+  "Duration": "Durée du chantier (en demi-journées)",
+  "Manager": "Chef de chantier",
+  "morning": "Matin",
+  "afternoon": "Après-midi"
 }

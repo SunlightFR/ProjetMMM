@@ -12,7 +12,7 @@ import {ResourceInput} from "@/types/inputTypes";
 
 interface Props {
     resourceIds?:ResourceId[],
-    selectedResource?:ResourceId,
+    selectedResources?:ResourceId[],
     onSelected:(selectedResources:ResourceId[])=>void,
     start:Date,
     duration:number
@@ -20,11 +20,15 @@ interface Props {
 
 
 
-export const ResourcePicker = ({resourceIds,selectedResource,onSelected, start, duration}:Props)=>{
+export const ResourcePicker = ({resourceIds,selectedResources,onSelected, start, duration}:Props)=>{
     const projects = useProjects()
     const [resources, setResources] = useState<ResourceWithAvailability[]>()
-    const [selectedResources, setSelectedResources] = useState<ResourceId[]>([])
+    const [selectedResources_, setSelectedResources] = useState<ResourceId[]>(selectedResources ?? [])
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+
+    useEffect(() => {
+        if(selectedResources) setSelectedResources(selectedResources)
+    }, [selectedResources]);
 
     useEffect(() => {
         (async ()=>{
@@ -63,10 +67,12 @@ export const ResourcePicker = ({resourceIds,selectedResource,onSelected, start, 
 
                 return 0;
             }).map(resource=><ResourceButton
-                selected={selectedResources.includes(resource.id)}
+                selected={selectedResources_.includes(resource.id)}
                 type={resource.type}
                 name={resource.name}
-                available={resource.available}
+                available={
+                    (selectedResources_.includes(resource.id) || selectedResources?.includes(resource.id)) ? true :
+                    resource.available}
                 onPress={_=>onPress(resource.id)}/>)}
             </View>
         </View>
@@ -83,7 +89,7 @@ export const ResourcePicker = ({resourceIds,selectedResource,onSelected, start, 
     }
 
     const onPress = (resourceId:ResourceId)=>{
-        if(selectedResources.includes(resourceId)){
+        if(selectedResources_.includes(resourceId)){
             setSelectedResources(r=>r.filter(id=>id!=resourceId))
         }else{
             setSelectedResources(r=>[...r, resourceId])
@@ -115,7 +121,7 @@ export const ResourcePicker = ({resourceIds,selectedResource,onSelected, start, 
         {resources && [...new Set(resources.map(resource => resource.type))].sort().map(type=>ResourceByType(resources,type))}
         <ThemedButton onPress={_=>setIsModalOpen(true)}
         ><ThemedText>Ajouter une resource</ThemedText></ThemedButton>
-        <ThemedButton onPress={_=>onSelected(selectedResources)}><ThemedText>Valider</ThemedText></ThemedButton>
+        <ThemedButton onPress={_=>onSelected(selectedResources_)}><ThemedText>Valider</ThemedText></ThemedButton>
         {isModalOpen && <ResourceEditor onClose={_=>setIsModalOpen(false)} visible={isModalOpen} onEnd={createResource}/>}
     </View>
 }

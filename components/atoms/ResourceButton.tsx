@@ -21,7 +21,7 @@ export const getResourceIcon = (type:ResourceType)=>{
 }
 export const ResourceButton = ({available,name,type,onPress, selected=false}:Props)=>{
     const {t} = useTranslation()
-    return <TouchableOpacity onPress={onPress} style={{
+    return <TouchableOpacity onPress={available ? onPress : undefined} style={{
         width:100,
         height:100,
         backgroundColor:"lightgrey",

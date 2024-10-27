@@ -24,5 +24,6 @@
   "Duration": "Durée du chantier (en demi-journées)",
   "Manager": "Chef de chantier",
   "morning": "Matin",
-  "afternoon": "Après-midi"
+  "afternoon": "Après-midi",
+  "select-date": "Veuillez sélectionner une date."
 }

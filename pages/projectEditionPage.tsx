@@ -151,14 +151,18 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
                     text={t("Date")}
                 ></TextWithIcon>}
             ></TouchableText>
-            <MorningAfternoonPicker onSelected={hour=>{
-                const date = projectInput_.start
-                date?.setHours(hour)
-                setProjectInput(s => ({
-                    ...s,
-                    start: date
-                }))
-            }}/>
+            <MorningAfternoonPicker
+                current={projectInput_.start?.getHours()}
+                onSelected={hour=>{
+                    const date = projectInput_.start
+                    date?.setHours(hour)
+                    setProjectInput(s => ({
+                        ...s,
+                        start: date
+                    }))
+                }}
+                disabled={projectInput_.start === undefined}
+            />
             {/*<Checkbox*/}
             {/*    disabled={projectInput_.start === undefined}*/}
             {/*    // style = {{backgroundColor:'red'}}*/}

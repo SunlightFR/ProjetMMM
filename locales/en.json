@@ -24,5 +24,6 @@
   "Duration": "Duration",
   "Manager": "Manager",
   "morning": "Morning",
-  "afternoon": "Afternoon"
+  "afternoon": "Afternoon",
+  "select-date": "Please select a date first."
 }

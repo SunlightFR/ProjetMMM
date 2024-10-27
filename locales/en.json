@@ -4,5 +4,6 @@
   "in-progress":"In progress",
   "stopped":"Stopped",
   "unavailable": "Unavailable",
-  "problems": " problems"
+  "problems": " problems",
+  "no-resource": "No resource"
 }

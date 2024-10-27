@@ -24,6 +24,7 @@ import {ProblemEditor} from "@/components/ProblemEditor";
 import {getEndDate} from "@/utils/dateUtils";
 import {ResourcesViewer} from "@/components/ResourcesViewer";
 import {Pictures} from "@/components/Pictures";
+import {useTranslation} from "react-i18next";
 
 // const screenWidth = Dimensions.get('window').width;
 // const imageWidth = (screenWidth - 30) / 4
@@ -35,6 +36,7 @@ interface Props {
 }
 
 export const ProjectViewPage = gestureHandlerRootHOC(({projectId, userRole}: Props) => {
+    const {t} = useTranslation()
     const theme = useTheme()
     const projects = useProjects()
     if (!projects.projects) return <ActivityIndicator></ActivityIndicator>
@@ -206,7 +208,13 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId, userRole}: Pro
                         //     marginBottom:8
                         // }}
                     ></TextWithIcon>
-                    <ResourcesViewer projectId={projectId}></ResourcesViewer>
+                    {
+                        project.resources.length > 0 ? <ResourcesViewer projectId={projectId}/> :
+                        <TextWithIcon
+                            text={t("no-resource")}
+                            viewStyle={{marginVertical:8}}
+                        />
+                    }
                 </View>
             </ScrollView>
 

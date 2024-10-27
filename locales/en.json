@@ -26,5 +26,7 @@
   "morning": "Morning",
   "afternoon": "Afternoon",
   "select-date": "Please select a date first.",
-  "half-day": "half days"
+  "half-day": "half days",
+  "submit": "Submit",
+  "edit-resources": "Edit resources"
 }

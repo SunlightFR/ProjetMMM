@@ -26,5 +26,7 @@
   "morning": "Matin",
   "afternoon": "Après-midi",
   "select-date": "Veuillez sélectionner une date.",
-  "half-day": "demi-journées"
+  "half-day": "demi-journées",
+  "submit": "Valider",
+  "edit-resources": "Modifier les ressources"
 }

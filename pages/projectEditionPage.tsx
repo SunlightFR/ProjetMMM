@@ -1,5 +1,5 @@
 import {Project, ProjectId} from "@/api/models/Project";
-import {Button, StyleSheet, View} from "react-native";
+import {Button, ScrollView, StyleSheet, View} from "react-native";
 import {useEffect, useRef, useState} from "react";
 import {ProjectInput} from "@/types/inputTypes";
 import {ThemedTextInput} from "@/components/atoms/TextInput";
@@ -20,6 +20,8 @@ import {ResourcePicker} from "@/components/ResourcePicker";
 import {MorningAfternoonPicker} from "@/components/MorningAfternoonPicker";
 import {useTranslation} from "react-i18next";
 import {toast} from "@/lib/toast";
+import {ThemedButton2} from "@/components/atoms/ThemedButton";
+import {ResourcesViewer} from "@/components/ResourcesViewer";
 
 
 interface Props {
@@ -98,7 +100,7 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
     }
 
     return <ThemedPage><BottomSheetModalProvider>
-        <View style={{marginHorizontal:15}}>
+        <ScrollView style={{marginHorizontal:15}}>
         <ThemedTextInput
             placeholder={t('Object')}
             style={{marginBottom:8}}
@@ -200,44 +202,31 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
                 text={t("Manager")}
             ></TextWithIcon>}
         ></TouchableText>
+            <TextWithIcon
+                viewStyle={{marginTop:8}}
+                icon={<Ionicons name={"cog"} color={theme.colors.text} size={20}></Ionicons>}
+                text={t("Resources")}
+            ></TextWithIcon>
+            <ResourcesViewer projectId={projectId}/>
+            <ThemedButton2
+                style={{marginHorizontal:'auto', width:"70%", marginTop:10}}
+                title={t('edit-resources')}
+                onPress={_ => resourcesBottomSheetModalRef.current!.present()}
+            ></ThemedButton2>
 
-        <Button title={"créer"} onPress={_ => {
-            submit()
-            // const pI = {...projectInput_}
-            // pI.supervisor_id = user.current!.userId
-            // pI.resources = []
-            // pI.duration = Number.parseInt(pI.duration)
-            // pI.status = 'not-done'
-            // projects.createNewProject(pI)
-            // projects.createNewProject({
-            //     object:"etvdsbhhhhb qerhk ts uoren qerk esr sqmerk ubqer rqe s jrebk qrej qer req qrve jfqdbuqyubqrh vqrubvr rv jrqdsuo jdfoqrvi qvoif",
-            //     duration:525,
-            //     start:new Date(),
-            //     clientNumber:"0235",
-            //     location:"Paris",
-            //     manager_id:user.current?.userId,
-            //     supervisor_id:user.current?.userId,
-            //     resources:[],
-            //     status:"not-done"
-            // })
-            //         .then(d=>{
-            //         console.log(d)
-            //     }).catch(e=>{
-            //         console.error(e)
-            // })
-        }}></Button>
-        <Button title={"ouvrir"} onPress={_ => resourcesBottomSheetModalRef.current!.present()}></Button>
+
+            <ThemedButton2
+            title={t('submit')}
+            onPress={_ => submit()}
+            style={{marginHorizontal:'auto', width:"70%", marginVertical:10}}
+        ></ThemedButton2>
 
         {isDatePickerVisible && <DateTimePicker
             value={projectInput_?.start ?? date ?? new Date()}
             mode="date"
             display="default"
             onChange={handleDateChange}
-
-            // style={styles.datetimePicker}
         />}
-        <ResourceButton selected={true} type={"tools"} name={"Outil1"} available={false} onPress={_ => {
-        }}></ResourceButton>
 
 
         <ThemedBottomSheetModal ref={userBottomSheetModalRef} snapPoints={['25%', '50%']}>
@@ -266,7 +255,7 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
                 }} start={projectInput_.start} duration={projectInput_.duration}></ResourcePicker>
             </BottomSheetView>
         </ThemedBottomSheetModal>
-        </View>
+        </ScrollView>
 
 
     </BottomSheetModalProvider>

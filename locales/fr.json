@@ -31,5 +31,9 @@
   "edit-resources": "Modifier les ressources",
   "no-ongoing-project": "Aucun chantier en cours",
   "see-all": "Voir tous les chantiers",
-  "no-project": "Aucun chantier."
+  "no-project": "Aucun chantier.",
+  "ongoing-projects": "Chantiers en cours",
+  "copied": "Code copié dans le presse-papier.",
+  "copy-error": "Le code n'a pas pu être copié dans le presse-papier.",
+  "give-code": "N'oubliez pas de donner votre code unique à votre responsable pour accéder à vos chantiers !"
 }

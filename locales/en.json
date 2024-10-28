@@ -31,5 +31,9 @@
   "edit-resources": "Edit resources",
   "no-ongoing-project": "No ongoing project",
   "see-all": "See all projects",
-  "no-project": "No project"
+  "no-project": "No project",
+  "ongoing-projects": "Ongoing projects",
+  "copied": "Code copied to clipboard.",
+  "copy-error": "The code couldn't be copied to the clipboard.",
+  "give-code": "Don't forget to give your code to your supervisor!"
 }

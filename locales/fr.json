@@ -28,5 +28,8 @@
   "select-date": "Veuillez sélectionner une date.",
   "half-day": "demi-journées",
   "submit": "Valider",
-  "edit-resources": "Modifier les ressources"
+  "edit-resources": "Modifier les ressources",
+  "no-ongoing-project": "Aucun chantier en cours",
+  "see-all": "Voir tous les chantiers",
+  "no-project": "Aucun chantier."
 }

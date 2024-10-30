@@ -11,6 +11,7 @@ import {View} from "react-native";
 import {ThemedButton2} from "@/components/atoms/ThemedButton";
 import * as Clipboard from 'expo-clipboard';
 import {CopyId} from "@/components/CopyId";
+import {router} from "expo-router";
 
 export const ManagerPage = ()=>{
     const user = useUser()
@@ -21,6 +22,7 @@ export const ManagerPage = ()=>{
     // if(Object.keys(projects.projects).length);
 
     return <ThemedPage>
+        <Ionicons name={"settings"} style={{position:"absolute",top:25, right:25}} color={theme.colors.text} size={30} onPress={_=>router.navigate('/settings')}></Ionicons>
         <TextWithIcon
             icon={<Ionicons name={"construct-outline"} color={theme.colors.text} size={20}></Ionicons>}
 

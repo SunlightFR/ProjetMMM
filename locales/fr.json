@@ -35,5 +35,13 @@
   "ongoing-projects": "Chantiers en cours",
   "copied": "Code copié dans le presse-papier.",
   "copy-error": "Le code n'a pas pu être copié dans le presse-papier.",
-  "give-code": "N'oubliez pas de donner votre code unique à votre responsable pour accéder à vos chantiers !"
+  "give-code": "N'oubliez pas de donner votre code unique à votre responsable pour accéder à vos chantiers !",
+  "password": "Mot de passe",
+  "email": "Adresse e-mail",
+  "first-name": "Prénom",
+  "last-name": "Nom",
+  "login": "Se connecter",
+  "register": "S'inscrire",
+  "go-register": "Je n'ai pas de compte",
+  "go-login": "J'ai déjà un compte"
 }

@@ -7,6 +7,7 @@ import {useUser} from "@/contexts/UserContext";
 import {useTranslation} from "react-i18next";
 import {UserRole} from "@/api/models/User";
 import {ThemedButton2} from "@/components/atoms/ThemedButton";
+import {ThemedText} from "@/components/ThemedText";
 
 export const RegisterForm = ()=>{
     const user = useUser()
@@ -18,15 +19,17 @@ export const RegisterForm = ()=>{
     const [role, setRole] = useState<UserRole>('manager');
 
     return <View style={styles.container}>
-        <Text style={styles.header}>Login or register</Text>
+        <ThemedText>{t('register')}</ThemedText>
         <ThemedTextInput
             value={email}
+            autoCapitalize={false}
             onChangeText={setEmail}
             label={<TextWithIcon
                 text={t("email")}
             ></TextWithIcon>}
         ></ThemedTextInput>
         <ThemedTextInput
+            autoCapitalize={false}
             value={password}
             secureTextEntry
             onChangeText={setPassword}
@@ -50,11 +53,13 @@ export const RegisterForm = ()=>{
         ></ThemedTextInput>
         <View style={styles.buttonContainer}>
             <ThemedButton2
-                title="Login"
+                title={t('register')}
                 onPress={
                     () => {
-                        user.register(email, password, firstName, lastName, role).then(()=>{
-                            router.navigate('/(tabs)/')
+                        user.register(email, password, firstName, lastName, "manager").then(()=>{
+                            router.navigate('/')
+                        }).catch(e=>{
+                            console.error("reg", e)
                         })
                     }
                 }

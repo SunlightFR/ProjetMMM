@@ -35,5 +35,13 @@
   "ongoing-projects": "Ongoing projects",
   "copied": "Code copied to clipboard.",
   "copy-error": "The code couldn't be copied to the clipboard.",
-  "give-code": "Don't forget to give your code to your supervisor!"
+  "give-code": "Don't forget to give your code to your supervisor!",
+  "password": "Password",
+  "email": "Email address",
+  "first-name": "First name",
+  "last-name": "Last name",
+  "login": "Login",
+  "register": "Register",
+  "go-register": "I don't have an account",
+  "go-login": "I already have an account"
 }

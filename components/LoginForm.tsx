@@ -32,7 +32,7 @@ export const LoginForm = ()=>{
         />
         <View style={styles.buttonContainer}>
             <Button
-                title="Login"
+                title={t('login')}
                 onPress={
                     () => {
                         user.login(email, password).then(()=>{

@@ -25,8 +25,11 @@ export function UserProvider({children}) {
 
     async function login(email:string, password:string) {
         try {
-            const user = await APIService.login(email, password);
-            setUser(user);
+            if(user){
+                await logout();
+            }
+            const u = await APIService.login(email, password);
+            setUser(u);
             toast('Welcome back. You are logged in');
         }catch(e){
             console.log("login ctx", e)
@@ -36,14 +39,17 @@ export function UserProvider({children}) {
     async function logout() {
         await account.deleteSession("current");
         setUser(null);
-        toast('Logged out');
+        // toast('Logged out');
     }
 
     async function register(email:string, password:string, firstName:string, lastName:string,role:UserRole) {
         try {
-            const user = await APIService.register(email,password, firstName, lastName, role);
-            console.log("registered:",user)
-            setUser(user)
+            if(user){
+                await logout()
+            }
+            const u = await APIService.register(email,password, firstName, lastName, role);
+            console.log("registered:",u)
+            setUser(u)
         }catch(e){
             console.log(e)
             toast(e)

@@ -16,6 +16,7 @@ export const LoginForm = ()=>{
     return <View style={styles.container}>
         <ThemedText>{t('login')}</ThemedText>
         <ThemedTextInput
+            autoCapitalize={false}
             value={email}
             onChangeText={setEmail}
             label={<TextWithIcon
@@ -23,6 +24,7 @@ export const LoginForm = ()=>{
             ></TextWithIcon>}
         ></ThemedTextInput>
         <ThemedTextInput
+            autoCapitalize={false}
             secureTextEntry
             label={<TextWithIcon text={t('password')}/>}
             value={password}
@@ -34,7 +36,7 @@ export const LoginForm = ()=>{
                 onPress={
                     () => {
                         user.login(email, password).then(()=>{
-                            router.navigate('/(tabs)/')
+                            router.navigate('/')
                         })
                     }
                 }

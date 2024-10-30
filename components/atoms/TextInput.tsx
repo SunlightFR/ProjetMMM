@@ -16,10 +16,12 @@ interface Props{
     style?:StyleProp<ViewStyle>,
     disabled?:boolean,
     disabledMessage?:string,
+    secureTextEntry?:boolean,
+    autoCapitalize?:boolean
 }
 
 
-export const ThemedTextInput = ({type,label,onChangeText,value,placeholder, lines, style, disabledMessage, disabled}:Props)=>{
+export const ThemedTextInput = ({autoCapitalize,secureTextEntry,type,label,onChangeText,value,placeholder, lines, style, disabledMessage, disabled}:Props)=>{
     const {colors} = useTheme()
 
     return <View style={[
@@ -29,6 +31,8 @@ export const ThemedTextInput = ({type,label,onChangeText,value,placeholder, line
     ]}>
         {label}
         <TextInput
+            autoCapitalize={autoCapitalize ? undefined : "none"}
+            secureTextEntry={secureTextEntry}
             placeholderTextColor={colors.placeholder}
             keyboardType={type}
             onChangeText={onChangeText}

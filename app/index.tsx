@@ -24,19 +24,13 @@ export default function (){
         return <Redirect href={"/sign-in"}></Redirect>
     }
 
+    console.log("current", current.firstName)
+
     if(!loaded){
         return <SplashScreen message={"Chargement des chantiers..."}/>
     }
 
-    if(current.role === "manager"){
-        router.push("/(manager)/")
-    }
-
-    if(current.role === "supervisor"){
-
-        //todo -> router
-        return <Redirect  href={"/(supervisor)/create"}></Redirect>
-    }
+    return <Redirect href={"/test"}></Redirect>
 
 
 

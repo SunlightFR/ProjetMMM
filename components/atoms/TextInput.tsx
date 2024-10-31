@@ -21,7 +21,7 @@ interface Props{
 }
 
 
-export const ThemedTextInput = ({autoCapitalize,secureTextEntry,type,label,onChangeText,value,placeholder, lines, style, disabledMessage, disabled}:Props)=>{
+export const ThemedTextInput = ({autoCapitalize=true,secureTextEntry,type,label,onChangeText,value,placeholder, lines, style, disabledMessage, disabled}:Props)=>{
     const {colors} = useTheme()
 
     return <View style={[
@@ -31,7 +31,7 @@ export const ThemedTextInput = ({autoCapitalize,secureTextEntry,type,label,onCha
     ]}>
         {label}
         <TextInput
-            autoCapitalize={autoCapitalize ? undefined : "none"}
+            autoCapitalize={autoCapitalize===true ? undefined : "none"}
             secureTextEntry={secureTextEntry}
             placeholderTextColor={colors.placeholder}
             keyboardType={type}

@@ -3,7 +3,7 @@ import {BottomSheetView} from "@gorhom/bottom-sheet";
 import {UserId} from "@/api/models/User";
 import {ThemedView} from "@/components/ThemedView";
 import {ThemedText} from "@/components/ThemedText";
-import {useEffect, useState} from "react";
+import {useEffect, useState, useTransition} from "react";
 import {TouchableOpacity, View} from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {useTheme} from "@/hooks/useThemeColor";
@@ -11,6 +11,7 @@ import {ThemedBottomSheetModal} from "@/components/atoms/ThemedBottomSheetModal"
 import {ThemedButton, ThemedButton2} from "@/components/atoms/ThemedButton";
 import {usePick} from "@/hooks/usePick";
 import {toast} from "@/lib/toast";
+import { useTranslation } from "react-i18next";
 
 interface Props{
     users:UserId[],
@@ -22,6 +23,7 @@ interface Props{
 
 export const UserPicker = ({start, duration, users, selectedUser, onSelected}:Props) =>{
     const {colors} = useTheme()
+    const {t} = useTranslation()
     const projects = useProjects();
     const [selectedUser_, setSelectedUser] = useState<UserId|undefined>()
 
@@ -74,15 +76,16 @@ export const UserPicker = ({start, duration, users, selectedUser, onSelected}:Pr
                             marginLeft:5
                         }}>
                             <ThemedText>{user.firstName} {user.lastName}</ThemedText>
-                            <ThemedText>{user.role}</ThemedText>
-                            {!projects.isManagerAvailable(userId, start, duration) && <ThemedText>Indisponible !</ThemedText>}
+                            <ThemedText>{t(user.role)}</ThemedText>
+                            {!projects.isManagerAvailable(userId, start, duration) && <ThemedText>{t('unavailable')}</ThemedText>}
                         </View>
                     </TouchableOpacity>
                 )
             })}
+            {users.length === 0 && <ThemedButton2 onPress={_=>{}} title={t('add-contact')} ></ThemedButton2>}
             <ThemedButton2
                 onPress={_=>onSelected(selectedUser_)}
-                title={"Valider"}
+                title={t('submit')}
             />
         </View>
     )

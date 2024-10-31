@@ -100,7 +100,9 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
     }
 
     return <ThemedPage><BottomSheetModalProvider>
-        <ScrollView style={{marginHorizontal:15}}>
+        <ScrollView style={{marginHorizontal:15}} 
+        // contentContainerStyle={{flex:1, justifyContent:'center'}}
+        >
         <ThemedTextInput
             placeholder={t('Object')}
             style={{marginBottom:8}}
@@ -207,7 +209,7 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
                 icon={<Ionicons name={"cog"} color={theme.colors.text} size={20}></Ionicons>}
                 text={t("Resources")}
             ></TextWithIcon>
-            <ResourcesViewer projectId={projectId}/>
+            <ResourcesViewer resources={projectInput_.resources}/>
             <ThemedButton2
                 style={{marginHorizontal:'auto', width:"70%", marginTop:10}}
                 title={t('edit-resources')}
@@ -233,7 +235,7 @@ export const ProjectEditionPage = gestureHandlerRootHOC(({projectInput, projectI
             <BottomSheetView>
                 <UserPicker
                     selectedUser={projectInput_.manager_id}
-                    users={['67052d650020a8263f27']}
+                    users={user.current?.contacts}
                     onSelected={u => setProjectInput(s => ({...s, manager_id: u}))}
                     start={projectInput_.start}
                     duration={projectInput_.duration}

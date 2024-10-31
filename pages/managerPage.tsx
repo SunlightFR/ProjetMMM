@@ -23,7 +23,7 @@ export const ManagerPage = ()=>{
 
     return <ThemedPage>
         <View style={{flex:1, justifyContent:"center", marginHorizontal:20}}>
-        <Ionicons name={"settings"} style={{position:"absolute",top:25, right:25}} color={theme.colors.text} size={30} onPress={_=>router.navigate('/settings')}></Ionicons>
+        <Ionicons name={"settings"} style={{position:"absolute",top:10, right:0}} color={theme.colors.text} size={30} onPress={_=>router.navigate('/settings')}></Ionicons>
         <TextWithIcon
             icon={<Ionicons name={"construct-outline"} color={theme.colors.text} size={20}></Ionicons>}
 

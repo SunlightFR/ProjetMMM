@@ -22,12 +22,13 @@ export const ManagerPage = ()=>{
     // if(Object.keys(projects.projects).length);
 
     return <ThemedPage>
+        <View style={{flex:1, justifyContent:"center", marginHorizontal:20}}>
         <Ionicons name={"settings"} style={{position:"absolute",top:25, right:25}} color={theme.colors.text} size={30} onPress={_=>router.navigate('/settings')}></Ionicons>
         <TextWithIcon
             icon={<Ionicons name={"construct-outline"} color={theme.colors.text} size={20}></Ionicons>}
 
             text={t("ongoing-projects")}
-            viewStyle={{marginBottom:8, marginHorizontal:20}}
+            viewStyle={{marginBottom:8}}
         ></TextWithIcon>
         <ProjectsViewer></ProjectsViewer>
 
@@ -38,5 +39,6 @@ export const ManagerPage = ()=>{
                 <ThemedButton2 onPress={_=>{}} title={t('manage-contacts')}/>
             </View>
         }
+        </View>
     </ThemedPage>
 }

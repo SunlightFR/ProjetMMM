@@ -1,10 +1,13 @@
-import { Text, type TextProps, StyleSheet } from 'react-native';
+import { Text, StyleSheet, StyleProp, TextStyle } from 'react-native';
+import {useTheme} from '@/hooks/useThemeColor';
+import { ReactNode } from 'react';
 
-import {useTheme, useThemeColor} from '@/hooks/useThemeColor';
+export type ThemedTextProps = {
+  style?:StyleProp<TextStyle>,
+  children:ReactNode
+}
 
-export type ThemedTextProps = TextProps;
-
-export function ThemedText(props: ThemedTextProps) {
+export function ThemedText({style, children}: ThemedTextProps) {
   const {colors} = useTheme()
 
   return (
@@ -15,9 +18,9 @@ export function ThemedText(props: ThemedTextProps) {
             color:colors.text,
             backgroundColor:colors.background
           },
+          style
       ]}
-      {...props}
-    />
+    >{children}</Text>
   );
 }
 

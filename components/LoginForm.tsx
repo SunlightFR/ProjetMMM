@@ -6,6 +6,7 @@ import {router} from "expo-router";
 import {useUser} from "@/contexts/UserContext";
 import {useTranslation} from "react-i18next";
 import {ThemedText} from "@/components/ThemedText";
+import { ThemedButton2 } from "./atoms/ThemedButton";
 
 export const LoginForm = ()=>{
     const user = useUser()
@@ -14,8 +15,13 @@ export const LoginForm = ()=>{
     const [password, setPassword] = useState('');
 
     return <View style={styles.container}>
-        <ThemedText>{t('login')}</ThemedText>
+        <ThemedText style={{
+            fontSize:20,
+            textAlign:'center',
+            marginBottom:10
+        }}>{t('login')}</ThemedText>
         <ThemedTextInput
+            style={{marginBottom:10}}
             autoCapitalize={false}
             value={email}
             onChangeText={setEmail}
@@ -24,6 +30,7 @@ export const LoginForm = ()=>{
             ></TextWithIcon>}
         ></ThemedTextInput>
         <ThemedTextInput
+            style={{marginBottom:10 }}
             autoCapitalize={false}
             secureTextEntry
             label={<TextWithIcon text={t('password')}/>}
@@ -31,7 +38,8 @@ export const LoginForm = ()=>{
             onChangeText={setPassword}
         />
         <View style={styles.buttonContainer}>
-            <Button
+            <ThemedButton2
+                style={{marginHorizontal:"auto", marginBottom:20}}
                 title={t('login')}
                 onPress={
                     () => {
@@ -47,20 +55,8 @@ export const LoginForm = ()=>{
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent: 'center',
-        padding: 16,
-    },
-    header: {
-        fontSize: 24,
-        marginBottom: 20,
-    },
-    input: {
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginBottom: 10,
-        paddingLeft: 8,
+        width:"80%",
+        justifyContent: 'center'
     },
     buttonContainer: {
         flexDirection: 'row',

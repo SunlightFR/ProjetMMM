@@ -19,8 +19,11 @@ export const RegisterForm = ()=>{
     const [role, setRole] = useState<UserRole>('manager');
 
     return <View style={styles.container}>
-        <ThemedText>{t('register')}</ThemedText>
+        <ThemedText style={{ fontSize:20,
+            textAlign:'center',
+            marginBottom:10}}>{t('register')}</ThemedText>
         <ThemedTextInput
+            style={{marginBottom:10}}
             value={email}
             autoCapitalize={false}
             onChangeText={setEmail}
@@ -29,6 +32,7 @@ export const RegisterForm = ()=>{
             ></TextWithIcon>}
         ></ThemedTextInput>
         <ThemedTextInput
+            style={{marginBottom:10}}
             autoCapitalize={false}
             value={password}
             secureTextEntry
@@ -38,6 +42,7 @@ export const RegisterForm = ()=>{
             ></TextWithIcon>}
         ></ThemedTextInput>
         <ThemedTextInput
+            style={{marginBottom:10}}
             value={firstName}
             onChangeText={setFirstName}
             label={<TextWithIcon
@@ -45,6 +50,7 @@ export const RegisterForm = ()=>{
             ></TextWithIcon>}
         ></ThemedTextInput>
         <ThemedTextInput
+            style={{marginBottom:10}}
             value={lastName}
             onChangeText={setLastName}
             label={<TextWithIcon
@@ -53,6 +59,7 @@ export const RegisterForm = ()=>{
         ></ThemedTextInput>
         <View style={styles.buttonContainer}>
             <ThemedButton2
+                style={{marginHorizontal:"auto", marginBottom:20}}
                 title={t('register')}
                 onPress={
                     () => {
@@ -70,20 +77,8 @@ export const RegisterForm = ()=>{
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        justifyContent: 'center',
-        padding: 16,
-    },
-    header: {
-        fontSize: 24,
-        marginBottom: 20,
-    },
-    input: {
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginBottom: 10,
-        paddingLeft: 8,
+        width:"80%",
+        justifyContent: 'center'
     },
     buttonContainer: {
         flexDirection: 'row',

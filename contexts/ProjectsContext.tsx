@@ -207,6 +207,13 @@ export const ProjectsProvider = ({children})=>{
 
     const uploadPicture = async (projectId:ProjectId, picture:CameraCapturedPicture)=>{
         try{
+            // setProjects(s=>({
+            //     ...s,
+            //     [projectId]:{
+            //         ...projects![projectId],
+            //         pics:[...(s![projectId]!.pics), undefined]
+            //     }
+            // }))
             const file = await APIService.uploadPicture(picture);
             console.info("photo uploadée !", file)
             const pics = projects![projectId].pics;
@@ -271,11 +278,33 @@ export const ProjectsProvider = ({children})=>{
         })
     }
 
+    //todo add contact
+    const addContact = async(userId:UserId)=>{
+        try{
+            const u = await user.addContact(userId)
+            setUsers({
+                ...users,
+                [userId]:u
+            })
+        }catch(e){
+            return Promise.reject(e)
+        }
+    }
+
+    const loadContacts = async ()=>{
+        for(const id of user.current!.contacts){
+            await loadUser(id)
+        }
+    }
+
 
     useEffect(() => {
         if(user.current){
             loadProjects().then(()=>{
-                setLoaded(true);
+                loadContacts().then(()=>{
+                    setLoaded(true);
+                })
+
             })
         }
     }, [user.current]);
@@ -296,7 +325,8 @@ export const ProjectsProvider = ({children})=>{
         createResource,
         resources,
         getProjectResources,
-        isManagerAvailable
+        isManagerAvailable,
+        addContact
     }}>
         {children}
     </ProjectsContext.Provider>

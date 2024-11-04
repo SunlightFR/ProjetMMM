@@ -2,7 +2,7 @@ import { ID } from "react-native-appwrite";
 import { createContext, useContext, useEffect, useState } from "react";
 import {account, teams, databases} from "@/lib/appwrite";
 import { toast } from "@/lib/toast";
-import {User, UserRole} from "@/api/models/User";
+import {User, UserId, UserRole} from "@/api/models/User";
 import {APIService} from "@/api/appwriteApi";
 
 interface UserContextType {
@@ -10,6 +10,7 @@ interface UserContextType {
     register:(email:string, password:string, firstName:string, lastName:string, role:UserRole)=>Promise<void>,
     logout:()=>Promise<void>,
     current:User | null,
+    addContact:(userId:UserId)=>Promise<User>,
     loading:boolean
 }
 
@@ -78,6 +79,24 @@ export function UserProvider({children}) {
         }
     }
 
+    async function addContact(userId:UserId){
+        try{
+            const u_ = await APIService.getUserById(userId);
+            if(!u_){
+                throw new Error("existe pas")
+            }
+            const contacts =  [...user!.contacts, userId]
+            await APIService.updateContacts(user!.userId, contacts)
+            setUser(u=>({
+                ...u!,
+                contacts:contacts
+            }))
+            return Promise.resolve(u_)
+        }catch(e){
+            return Promise.reject(e);
+        }
+    }
+
 
     async function init() {
         console.log("init")
@@ -105,7 +124,7 @@ export function UserProvider({children}) {
     }, []);
 
     return (
-        <UserContext.Provider value={{ current:user, login, logout, register, loading, joinTeam, createMembership}}>
+        <UserContext.Provider value={{ current:user, addContact, login, logout, register, loading, joinTeam, createMembership}}>
             {children}
         </UserContext.Provider>
     );

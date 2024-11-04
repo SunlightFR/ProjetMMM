@@ -12,6 +12,7 @@ import {ThemedButton, ThemedButton2} from "@/components/atoms/ThemedButton";
 import {usePick} from "@/hooks/usePick";
 import {toast} from "@/lib/toast";
 import { useTranslation } from "react-i18next";
+import {AddContactModal} from "@/components/AddContactModal";
 
 interface Props{
     users:UserId[],
@@ -26,7 +27,7 @@ export const UserPicker = ({start, duration, users, selectedUser, onSelected}:Pr
     const {t} = useTranslation()
     const projects = useProjects();
     const [selectedUser_, setSelectedUser] = useState<UserId|undefined>()
-
+    const [showModal, setShowModal] = useState(false);
     useEffect(() => {
         users.forEach(async (userId)=>{
             await projects.loadUser(userId)
@@ -82,10 +83,18 @@ export const UserPicker = ({start, duration, users, selectedUser, onSelected}:Pr
                     </TouchableOpacity>
                 )
             })}
-            {users.length === 0 && <ThemedButton2 onPress={_=>{}} title={t('add-contact')} ></ThemedButton2>}
+            {users.length === 0 && <ThemedButton2 onPress={_=>{
+                console.log("ayaya")
+                setShowModal(true)
+            }} title={t('add-contact')} ></ThemedButton2>}
             <ThemedButton2
                 onPress={_=>onSelected(selectedUser_)}
                 title={t('submit')}
+            />
+            <AddContactModal
+                onClose={_=>setShowModal(false)}
+                visible={showModal}
+                onEnd={_=>setShowModal(false)}
             />
         </View>
     )

@@ -65,18 +65,14 @@ export const APIService:ApiInterface = {
 
     register:async (email:string, password:string,firstName:string,lastName:string, role:UserRole)=>{
         try{
-            await APIService.logout();
             const x = await account.create(ID.unique(), email, password);
-            // const loggedIn = await account.createEmailPasswordSession(email, password);
+            const loggedIn = await account.createEmailPasswordSession(email, password);
             const y = await databases.createDocument(DATABASE_ID, USERS_COLLECTION_ID, x.$id,{
                 firstName:firstName,
                 lastName:lastName,
                 role:role,
                 contacts:[]
-            },[
-                Permission.update(`user:${x.$id}`),
-                Permission.delete(`user:${x.$id}`)
-            ])
+            })
             return Promise.resolve({
                 userId:x.$id,
                 firstName:firstName,
@@ -138,12 +134,14 @@ export const APIService:ApiInterface = {
                 ...projectInput,
                 problems:[],
                 pics:[]
-            },[
-                Permission.write(Role.user(projectInput.supervisor_id)),
-                Permission.write(Role.user(projectInput.manager_id)),
-                Permission.read(Role.user(projectInput.manager_id)),
-                Permission.read(Role.user(projectInput.supervisor_id))
-            ]);
+            }
+            // ,[
+            //     Permission.write(Role.user(projectInput.supervisor_id)),
+            //     Permission.write(Role.user(projectInput.manager_id)),
+            //     Permission.read(Role.user(projectInput.manager_id)),
+            //     Permission.read(Role.user(projectInput.supervisor_id))
+            // ]
+            );
             return {
                 ...projectInput,
                 id:result.$id,
@@ -198,6 +196,7 @@ export const APIService:ApiInterface = {
             return Promise.reject(e)
         }
     },
+
 
     getResourceAvailability:async (resourceId,from,to)=>{
         try{

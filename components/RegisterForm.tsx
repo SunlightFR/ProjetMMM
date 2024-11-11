@@ -8,6 +8,8 @@ import {useTranslation} from "react-i18next";
 import {UserRole} from "@/api/models/User";
 import {ThemedButton2} from "@/components/atoms/ThemedButton";
 import {ThemedText} from "@/components/ThemedText";
+import {TouchableText} from "@/components/atoms/TouchableText";
+import {UserRolePicker} from "@/components/UserRolePicker";
 
 export const RegisterForm = ()=>{
     const user = useUser()
@@ -57,6 +59,7 @@ export const RegisterForm = ()=>{
                 text={t("last-name")}
             ></TextWithIcon>}
         ></ThemedTextInput>
+        <UserRolePicker role={role} onSubmit={setRole}></UserRolePicker>
         <View style={styles.buttonContainer}>
             <ThemedButton2
                 style={{marginHorizontal:"auto", marginBottom:20}}

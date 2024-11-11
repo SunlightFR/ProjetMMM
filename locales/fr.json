@@ -43,5 +43,9 @@
   "login": "Se connecter",
   "register": "S'inscrire",
   "go-register": "Je n'ai pas de compte",
-  "go-login": "J'ai déjà un compte"
+  "go-login": "J'ai déjà un compte",
+  "pick-role": "Rôle",
+  "pick-role-ph":"Sélectionnez un rôle",
+  "supervisor": "Responsable de chantiers",
+  "manager": "Chef de chantier"
 }

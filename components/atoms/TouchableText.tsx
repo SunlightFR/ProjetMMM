@@ -33,7 +33,7 @@ export const TouchableText = ({text,label,onPress, placeholder}:Props)=>{
             },
             styles.text
         ]}>
-            {text ?? placeholder}
+            {text ?? placeholder ?? null}
         </Text>
         </Pressable>
 

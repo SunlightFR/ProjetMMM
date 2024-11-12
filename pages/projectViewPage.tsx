@@ -36,6 +36,7 @@ interface Props {
 }
 
 export const ProjectViewPage = gestureHandlerRootHOC(({projectId, userRole}: Props) => {
+    console.log("VIEW")
     const {t} = useTranslation()
     const theme = useTheme()
     const projects = useProjects()
@@ -211,7 +212,7 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId, userRole}: Pro
                         // }}
                     ></TextWithIcon>
                     {
-                        project.resources.length > 0 ? <ResourcesViewer projectId={projectId}/> :
+                        project.resources && project.resources.length > 0 ? <ResourcesViewer projectId={projectId}/> :
                         <TextWithIcon
                             text={t("no-resource")}
                             viewStyle={{marginVertical:8}}

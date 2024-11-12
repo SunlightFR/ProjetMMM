@@ -85,6 +85,32 @@ export const APIService:ApiInterface = {
         }
     },
 
+    getSupervisorProjects:async (supervisorId:UserId)=>{
+        try{
+            const results = await databases.listDocuments(DATABASE_ID, PROJECTS_COLLECTION_ID,[
+                Query.equal("supervisor_id",supervisorId)
+            ])
+            const projects:Project[] = results.documents.map(d=>({
+                duration:d.duration,
+                manager_id:d.manager_id,
+                clientNumber:d.clientNumber,
+                resources:d.resources,
+                object:d.object,
+                location:d.location,
+                problems:d.problems,
+                status:d.status,
+                start:new Date(d.start),
+                supervisor_id:supervisorId,
+                pics:d.pics,
+                id:d.$id
+            }))
+            return projects;
+        }catch(e){
+            console.error("get supervisor projects",e)
+            return Promise.reject(e)
+        }
+    },
+
     getManagerProjects:async(managerId:UserId)=>{
         // return Promise.resolve([
         //     {
@@ -181,9 +207,7 @@ export const APIService:ApiInterface = {
     getResourceById:async (resourceId) => {
         console.log("get resource")
         try{
-            const results = await databases.listDocuments(DATABASE_ID, RESOURCES_COLLECTION_ID,[
-                Query.equal("id",resourceId)
-            ])
+            const results = await databases.listDocuments(DATABASE_ID, RESOURCES_COLLECTION_ID,resourceId);
             const document = results.documents[0]
 
             return {

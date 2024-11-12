@@ -252,7 +252,12 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId, userRole}: Pro
                     backgroundColor: theme.colors.background,
                     marginHorizontal: "auto"
                 }}>
-                    <StatusPicker onSelected={_ => projects.updateProjectStatus(projectId, _)}></StatusPicker>
+                    <StatusPicker onSelected={_ => {
+                        projects.updateProjectStatus(projectId, _).then(()=>{
+                            bottomSheetModalRef.current!.close()
+                            toast(t("status-changed"))
+                        })
+                    }}></StatusPicker>
                 </BottomSheetView>
             </ThemedBottomSheetModal>
         </BottomSheetModalProvider>

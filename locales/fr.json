@@ -47,5 +47,6 @@
   "pick-role": "Rôle",
   "pick-role-ph":"Sélectionnez un rôle",
   "supervisor": "Responsable de chantiers",
-  "manager": "Chef de chantier"
+  "manager": "Chef de chantier",
+  "status-changed": "Statut modifié avec succès"
 }

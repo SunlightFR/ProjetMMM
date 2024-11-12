@@ -66,7 +66,7 @@ export const RegisterForm = ()=>{
                 title={t('register')}
                 onPress={
                     () => {
-                        user.register(email, password, firstName, lastName, "manager").then(()=>{
+                        user.register(email, password, firstName, lastName, role).then(()=>{
                             router.navigate('/')
                         }).catch(e=>{
                             console.error("reg", e)

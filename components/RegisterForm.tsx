@@ -62,7 +62,7 @@ export const RegisterForm = ()=>{
         <UserRolePicker role={role} onSubmit={setRole}></UserRolePicker>
         <View style={styles.buttonContainer}>
             <ThemedButton2
-                style={{marginHorizontal:"auto", marginBottom:20}}
+                style={{marginHorizontal:"auto", marginBottom:20,marginTop:10}}
                 title={t('register')}
                 onPress={
                     () => {

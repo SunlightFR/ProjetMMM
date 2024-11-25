@@ -27,12 +27,12 @@ export const UserRolePicker = ({role,onSubmit,visible,onClose}:Props)=>{
         setRole(r);
         onSubmit(r!);
     }
-    //todo styles
+
     return <>
         <TouchableText
         onPress={_=>setIsVisible(true)}
         label={<TextWithIcon text={t('pick-role')}/>}
-        text={role_}
+        text={t(role_)}
         placeholder={t('pick-role-ph')}
     ></TouchableText>
         <ThemedModal

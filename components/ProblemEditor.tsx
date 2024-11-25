@@ -6,6 +6,8 @@ import {ThemedButton} from "@/components/atoms/ThemedButton";
 import {Problem} from "@/api/models/Problems";
 import {ProblemInput} from "@/types/inputTypes";
 import {toast} from "@/lib/toast";
+import {useTranslation} from "react-i18next";
+import {ThemedText} from "@/components/ThemedText";
 
 interface Props{
     onClose:(event:any)=>void,
@@ -13,6 +15,7 @@ interface Props{
     onEnd:(problem:ProblemInput)=>void
 }
 export const ProblemEditor=({onClose,visible, onEnd}:Props)=>{
+    const {t} = useTranslation()
     const [title, setTitle] = useState<string>()
     const [description, setDescription] = useState<string>()
 
@@ -32,15 +35,18 @@ export const ProblemEditor=({onClose,visible, onEnd}:Props)=>{
         <ThemedTextInput
             value={title}
             onChangeText={setTitle}
-            label={<Text>Title</Text>}
-            placeholder={"yee"}></ThemedTextInput>
+            label={<ThemedText>{t('problem-title')}</ThemedText>}
+            placeholder={t('problem-title-ph')}></ThemedTextInput>
         <ThemedTextInput
+            style={{marginTop:10}}
             lines={5}
-            value={description} onChangeText={setDescription}
-            label={<Text>Desc</Text>}
+            value={description}
+            onChangeText={setDescription}
+            label={<ThemedText>{t('problem-desc')}</ThemedText>}
+            placeholder={t('problem-desc-ph')}
         ></ThemedTextInput>
-        <ThemedButton onPress={_=>{
+        <ThemedButton style={{marginTop:10}} onPress={_=>{
             onValidate()
-        }}><Text>Valider</Text></ThemedButton>
+        }}><Text>{t('submit')}</Text></ThemedButton>
     </ThemedModal>
 }

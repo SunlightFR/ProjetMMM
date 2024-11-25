@@ -52,5 +52,9 @@
   "create-project": "Nouveau chantier",
   "manage-resources": "Gérer les resources",
   "manage-contacts": "Gérer les contacts",
-  "logout": "Se déconnecter"
+  "logout": "Se déconnecter",
+  "problem-title": "Titre",
+  "problem-title-ph": "Titre du problème",
+  "problem-desc": "Description",
+  "problem-desc-ph": "Description du problème"
 }

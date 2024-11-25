@@ -48,5 +48,9 @@
   "pick-role-ph":"Sélectionnez un rôle",
   "supervisor": "Responsable de chantiers",
   "manager": "Chef de chantier",
-  "status-changed": "Statut modifié avec succès"
+  "status-changed": "Statut modifié avec succès",
+  "create-project": "Nouveau chantier",
+  "manage-resources": "Gérer les resources",
+  "manage-contacts": "Gérer les contacts",
+  "logout": "Se déconnecter"
 }

@@ -43,5 +43,6 @@
   "login": "Login",
   "register": "Register",
   "go-register": "I don't have an account",
-  "go-login": "I already have an account"
+  "go-login": "I already have an account",
+  "logout": "Logout"
 }

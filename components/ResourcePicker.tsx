@@ -104,7 +104,7 @@ export const ResourcePicker = ({resourceIds,selectedResources,onSelected, start,
     return <View>
         { !resources && <Loader/>}
         {resources && [...new Set(resources.map(resource => resource.type))].sort().map(type=>ResourceByType(resources,type))}
-        <ThemedButton2 style={{marginVertical:10, marginHorizontal:80}} title={t('add-resource')} onPress={_=>setIsModalOpen(true)}
+        <ThemedButton2 style={{marginHorizontal:80}} title={t('add-resource')} onPress={_=>setIsModalOpen(true)}
         ></ThemedButton2>
         <ThemedButton2 style={{marginHorizontal:80}} title={t('submit')} onPress={_=>onSelected(selectedResources_)}></ThemedButton2>
         {isModalOpen && <ResourceEditor onClose={_=>setIsModalOpen(false)} visible={isModalOpen} onEnd={createResource}/>}

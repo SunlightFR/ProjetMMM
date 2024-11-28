@@ -62,32 +62,34 @@ export const UserPicker = ({start, duration, users, selectedUser, onSelected}:Pr
                 const user = projects.getUserById(userId)
                 return (
                     <TouchableOpacity
+                        key={userId}
                         onPress={_=>toggle(userId)}
                         style={{
                             flexDirection:"row",
                             alignItems:"center",
                             backgroundColor:selectedUser_ === userId ? colors.border : colors.background,
                             paddingHorizontal:10,
-                            paddingVertical:5
+                            paddingVertical:5,
+                            borderRadius:5
                         }}
                     >
-                        <Ionicons name={"person-circle-outline"} size={20}></Ionicons>
+                        <Ionicons name={"person-circle-outline"} color={colors.text} size={20}></Ionicons>
                         <View style={{
                             backgroundColor:selectedUser_ === userId ? colors.border : colors.background,
                             marginLeft:5
                         }}>
-                            <ThemedText>{user.firstName} {user.lastName}</ThemedText>
-                            <ThemedText>{t(user.role)}</ThemedText>
+                            <ThemedText style={{backgroundColor:colors.border}}>{user.firstName} {user.lastName}</ThemedText>
+                            <ThemedText style={{backgroundColor:colors.border}}>{t(user.role)}</ThemedText>
                             {!projects.isManagerAvailable(userId, start, duration) && <ThemedText>{t('unavailable')}</ThemedText>}
                         </View>
                     </TouchableOpacity>
                 )
             })}
-            {users.length === 0 && <ThemedButton2 onPress={_=>{
-                console.log("ayaya")
+            {users.length === 0 && <ThemedButton2 style={{marginTop:5}} onPress={_=>{
                 setShowModal(true)
             }} title={t('add-contact')} ></ThemedButton2>}
             <ThemedButton2
+                style={{marginTop:5}}
                 onPress={_=>onSelected(selectedUser_)}
                 title={t('submit')}
             />

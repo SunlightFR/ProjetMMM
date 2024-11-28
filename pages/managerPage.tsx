@@ -32,7 +32,7 @@ export const ManagerPage = ()=>{
         ></TextWithIcon>
         <ProjectsViewer></ProjectsViewer>
 
-        {user.current?.role === "supervisor" ?
+        {user.current?.role === "manager" ?
             <CopyId id={user.current.userId}></CopyId>
             : <View>
                 <ThemedButton2 onPress={_=>{router.navigate('/create')}} title={t('create-project')}></ThemedButton2>

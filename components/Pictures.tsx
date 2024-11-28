@@ -26,7 +26,7 @@ export const Pictures = ({picturesIds}:Props)=>{
         gap:10,
         flexWrap:'wrap'
     }}>
-        {picturesIds.map((url,id)=><Pressable onPress={_=>onPress(id)}>
+        {picturesIds.map((url,id)=><Pressable key={id} onPress={_=>onPress(id)}>
             <Picture source={{
                 uri:APIService.getPicturePreview(url, 300, 525),
                 width:imageWidth,

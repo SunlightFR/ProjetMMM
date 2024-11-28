@@ -55,6 +55,7 @@ export interface ApiInterface{
      */
     getResourceById:(resourceId:ResourceId)=>Promise<Resource>,
     getResourceAvailability:(resourceId:ResourceId, from:Date, to:Date)=>Promise<boolean>,
+    getManagerAvailability:(managerId:UserId, from:Date, to:Date)=>Promise<boolean>,
     /**
      *
      * @param resourceInput

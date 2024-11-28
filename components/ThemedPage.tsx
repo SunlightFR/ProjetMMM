@@ -20,7 +20,6 @@ export const ThemedPage = ({children}:Props)=>{
 
 const styles = StyleSheet.create({
     pageStyle:{
-        flex:1,
-
+        flex:1
     }
 })

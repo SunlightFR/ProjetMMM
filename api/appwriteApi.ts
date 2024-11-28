@@ -192,7 +192,6 @@ export const APIService:ApiInterface = {
                 RESOURCES_COLLECTION_ID,
                 ID.unique(),
                 {...resourceInput, supervisor_id:supervisorId},
-                permissions
             );
             return {
                 ...resourceInput,
@@ -207,8 +206,8 @@ export const APIService:ApiInterface = {
     getResourceById:async (resourceId) => {
         console.log("get resource")
         try{
-            const results = await databases.listDocuments(DATABASE_ID, RESOURCES_COLLECTION_ID,resourceId);
-            const document = results.documents[0]
+            const document = await databases.getDocument(DATABASE_ID, RESOURCES_COLLECTION_ID,resourceId);
+            // const document = results.documents[0]
 
             return {
                 id:document.$id,

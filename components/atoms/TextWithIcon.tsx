@@ -14,7 +14,10 @@ export const TextWithIcon = ({textStyle,icon,viewStyle,text, iconPosition="left"
     const {colors} = useTheme()
     return <View style={[styles.container,viewStyle]}>
         {icon && iconPosition === "left" && icon}
-        <Text style={[{color:colors.text}, styles.text,textStyle, {marginLeft:icon ? 6 : 0}]}>{text}</Text>
+        <Text style={[{color:colors.text}, styles.text,textStyle, {
+            marginLeft:icon ? 6 : 0,
+            marginRight:6
+        }]}>{text}</Text>
         {icon && iconPosition === "right" && icon }
     </View>
 }

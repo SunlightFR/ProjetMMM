@@ -13,6 +13,8 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import {FontAwesome6} from "@expo/vector-icons";
 import {getResourceIcon} from "@/components/atoms/ResourceButton";
 import {useTheme} from "@/hooks/useThemeColor";
+import {useTranslation} from "react-i18next";
+import {ThemedText} from "@/components/ThemedText";
 
 interface Props{
     onClose:(event:any)=>void,
@@ -20,6 +22,7 @@ interface Props{
     onEnd:(resource:ResourceInput)=>void
 }
 export const ResourceEditor=({onClose,visible, onEnd}:Props)=>{
+    const {t} = useTranslation()
     const {colors} = useTheme()
     const [name, setName] = useState<string>()
     const [resourceType, setResourceType] = useState<ResourceType>()
@@ -37,7 +40,7 @@ export const ResourceEditor=({onClose,visible, onEnd}:Props)=>{
     }
 
     const TypeInput = ({type})=>{
-        return <View style={{flexDirection:"row"}}>
+        return <View style={{flexDirection:"row", marginTop:10}}>
             <Checkbox
                 value={resourceType ? resourceType===type : false}
                 onValueChange={value=>{
@@ -46,7 +49,8 @@ export const ResourceEditor=({onClose,visible, onEnd}:Props)=>{
                 disabled={false}
             ></Checkbox>
             <TextWithIcon
-                text={type}
+                viewStyle={{marginRight:10}}
+                text={t(type)}
                 iconPosition={"right"}
                 icon={<FontAwesome6 name={getResourceIcon(type)} color={colors.text}></FontAwesome6>}
             ></TextWithIcon>
@@ -57,8 +61,8 @@ export const ResourceEditor=({onClose,visible, onEnd}:Props)=>{
         <ThemedTextInput
             value={name}
             onChangeText={setName}
-            label={<Text>Title</Text>}
-            placeholder={"yee"}>
+            label={<ThemedText>{t('new-resource-title')}</ThemedText>}
+            placeholder={t('new-resource-ph')}>
         </ThemedTextInput>
         <View>
 
@@ -67,14 +71,8 @@ export const ResourceEditor=({onClose,visible, onEnd}:Props)=>{
             <TypeInput type={"tools"}></TypeInput>
 
         </View>
-
-        {/*<ThemedTextInput*/}
-        {/*    lines={5}*/}
-        {/*    value={description} onChangeText={setDescription}*/}
-        {/*    label={<Text>Desc</Text>}*/}
-        {/*></ThemedTextInput>*/}
-        <ThemedButton onPress={_=>{
+        <ThemedButton style={{marginTop:5}} onPress={_=>{
             onValidate()
-        }}><Text>Valider</Text></ThemedButton>
+        }}><Text>{t('submit')}</Text></ThemedButton>
     </ThemedModal>
 }

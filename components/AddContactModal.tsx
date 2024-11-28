@@ -2,13 +2,14 @@ import {ThemedModal} from "@/components/atoms/ThemedModal";
 import {ProblemInput} from "@/types/inputTypes";
 import {Text} from "react-native";
 import {ThemedTextInput} from "@/components/atoms/TextInput";
-import {useState} from "react";
+import React, {useState} from "react";
 import {ThemedButton2} from "@/components/atoms/ThemedButton";
 import {useTranslation} from "react-i18next";
 import {APIService} from "@/api/appwriteApi";
 import {useUser} from "@/contexts/UserContext";
 import {toast} from "@/lib/toast";
 import {useProjects} from "@/contexts/ProjectsContext";
+import {ThemedText} from "@/components/ThemedText";
 
 interface Props{
     onClose:(event:any)=>void,
@@ -22,7 +23,7 @@ export const AddContactModal = ({onClose, visible, onEnd}:Props)=>{
 
     const onValidate = ()=>{
         if(!userId || userId === ""){//todo
-            toast("")//todo
+            toast(t('contact-code-warning'))//todo
             return;
         }
         addContact(userId).then(_=>{
@@ -34,14 +35,15 @@ export const AddContactModal = ({onClose, visible, onEnd}:Props)=>{
 
     return <ThemedModal onClose={onClose} visible={visible}>
         <ThemedTextInput
+            style={{marginBottom:10}}
             value={userId}
             onChangeText={setUserId}
-            label={<Text>Title</Text>}
-            placeholder={"yee"}//todo
+            label={<ThemedText>{t('add-contact-title')}</ThemedText>}
+            placeholder={t('add-contact-ph')}
         />
         <ThemedButton2
             onPress={_=>onValidate()}
-            title={""}//todo
+            title={t('submit')}
         />
 
     </ThemedModal>

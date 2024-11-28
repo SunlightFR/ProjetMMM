@@ -40,7 +40,6 @@ export function UserProvider({children}) {
     async function logout() {
         await account.deleteSession("current");
         setUser(null);
-        // toast('Logged out');
     }
 
     async function register(email:string, password:string, firstName:string, lastName:string,role:UserRole) {

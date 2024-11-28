@@ -5,7 +5,7 @@ import {useLocalSearchParams} from "expo-router";
 import {useUser} from "@/contexts/UserContext";
 
 export default function (){
-    const {id} = useLocalSearchParams()
+    const {projectId} = useLocalSearchParams()
     const {current} = useUser()
-    return <ProjectViewPage projectId={id} userRole={current?.role}/>
+    return <ProjectViewPage projectId={projectId} userRole={current?.role}/>
 }

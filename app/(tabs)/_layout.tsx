@@ -5,14 +5,14 @@ import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import {useUser} from "@/contexts/UserContext";
-import {Text} from "react-native";
+import {SplashScreen} from "@/pages/splashScreen"
 
 export default function TabLayout() {
     const colorScheme = useColorScheme();
     const {login, register, current, loading} = useUser()
 
     if(loading){
-        return <Text>Loading...</Text>
+        return <SplashScreen ></SplashScreen>
     }
 
     if(!current){
@@ -20,6 +20,7 @@ export default function TabLayout() {
     }
 
     if(current.role === "manager"){
+        console.info("role ma,ager")
         return <Redirect href={"/(manager)"}></Redirect>
     }
 

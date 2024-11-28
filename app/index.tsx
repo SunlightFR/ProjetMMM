@@ -14,7 +14,7 @@ export default function (){
 
     const {login, register, current, loading} = useUser()
     const {loaded} = useProjects()
-    // SP.hideAsync();
+    SP.hideAsync();
 
     if(loading){
         return <SplashScreen message={"Connexion..."}></SplashScreen>

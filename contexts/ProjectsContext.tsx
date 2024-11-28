@@ -75,7 +75,7 @@ export const ProjectsProvider = ({children})=>{
                 if(user.current.role === "manager"){
                     await loadResources()
                     const p = await APIService.getManagerProjects(user.current.userId)
-
+                    console.info("manager", p)
                     setProjects(listToObject(p))
                     p.forEach(async (pp)=>{
                         await loadUser(pp.supervisor_id)
@@ -84,6 +84,7 @@ export const ProjectsProvider = ({children})=>{
                 else if(user.current.role==="supervisor"){
                     await loadResources()
                     const p = await APIService.getSupervisorProjects(user.current.userId)
+                    console.info(p)
                     setProjects(listToObject(p))
                     p.forEach(async (pp)=>{
                         await loadUser(pp.manager_id)
@@ -155,7 +156,7 @@ export const ProjectsProvider = ({children})=>{
                 }))
                 return resource
             }catch (e) {
-                console.error(e);
+                console.error("ici", e, resourceId);
                 return Promise.reject(e)
             }
         }

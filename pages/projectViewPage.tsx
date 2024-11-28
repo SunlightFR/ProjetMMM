@@ -36,7 +36,7 @@ interface Props {
 }
 
 export const ProjectViewPage = gestureHandlerRootHOC(({projectId, userRole}: Props) => {
-    console.log("VIEW")
+    console.log("VIEW", projectId)
     const {t} = useTranslation()
     const theme = useTheme()
     const projects = useProjects()
@@ -169,7 +169,8 @@ export const ProjectViewPage = gestureHandlerRootHOC(({projectId, userRole}: Pro
                         }}
                     ></TextWithIcon>
                     {problems === undefined && <Loader></Loader>}
-                    {problems != undefined && problems.length > 0 ? problems.sort((a,b)=>a.date<b.date ? -1 : 1).map(problem => <ProblemCard
+                    {problems != undefined && problems.length > 0 ? problems.sort((a,b)=>a.date<b.date ? -1 : 1).map((problem,id) => <ProblemCard
+                            key={id}
                             problem={problem}/>) :
                         <TextWithIcon
                             text={t("no-problem")}

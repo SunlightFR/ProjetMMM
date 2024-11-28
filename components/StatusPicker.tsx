@@ -17,8 +17,8 @@ export const StatusPicker = ({currentStatus, onSelected}:Props)=>{
         <View
             style={{marginHorizontal:"auto", gap:3, marginBottom:10}}
         >
-            {(['not-done', 'in-progress', 'finished', 'stopped'] as ProjectStatus[]).map(status=>{
-                return <ProjectStatusIcon status={status} onPress={_=>onSelected(status)}/>
+            {(['not-done', 'in-progress', 'finished', 'stopped'] as ProjectStatus[]).map((status,id)=>{
+                return <ProjectStatusIcon key={id} status={status} onPress={_=>onSelected(status)}/>
             })}
         </View>
     </View>

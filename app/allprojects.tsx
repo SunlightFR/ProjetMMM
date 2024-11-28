@@ -8,11 +8,11 @@ export default function (){
     const projects = useProjects();
 
     return <ThemedPage>
-        <ScrollView style={{height:'80%'}}>{Object.keys(projects.projects).map(projectId=><ProjectCard onPress={_=>router.navigate({
+        <ScrollView style={{height:'80%'}}>{Object.keys(projects.projects).map(projectId=><ProjectCard key={projectId} onPress={_=>router.navigate({
             params:{
                 projectId:projectId
             },
-            pathname:"/(supervisor)/view/"
+            pathname:"view/"
         })} project={projects.projects[projectId]}></ProjectCard>)}
         </ScrollView>
     </ThemedPage>

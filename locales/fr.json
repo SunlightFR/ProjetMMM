@@ -56,5 +56,12 @@
   "problem-title": "Titre",
   "problem-title-ph": "Titre du problème",
   "problem-desc": "Description",
-  "problem-desc-ph": "Description du problème"
+  "problem-desc-ph": "Description du problème",
+  "add-contact": "Ajouter un contact",
+  "add-contact-title": "Saisissez le code unique de votre contact",
+  "add-contact-ph": "Code secret",
+  "contact-code-warning": "Veuillez saisir un code valide",
+  "add-resource": "Ajouter une ressource",
+  "new-resource-title": "Création d'une nouvelle ressource",
+  "new-resource-ph": "Saisissez le nom de la resource"
 }

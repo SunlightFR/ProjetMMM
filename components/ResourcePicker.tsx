@@ -5,10 +5,11 @@ import {ResourceButton} from "@/components/atoms/ResourceButton";
 import {useEffect, useState} from "react";
 import {databases} from "@/lib/appwrite";
 import {Loader} from "@/components/atoms/Loader";
-import {ThemedButton} from "@/components/atoms/ThemedButton";
+import {ThemedButton, ThemedButton2} from "@/components/atoms/ThemedButton";
 import {ThemedText} from "@/components/ThemedText";
 import {ResourceEditor} from "@/components/ResourceEditor";
 import {ResourceInput} from "@/types/inputTypes";
+import {useTranslation} from "react-i18next";
 
 interface Props {
     resourceIds?:ResourceId[],
@@ -21,6 +22,7 @@ interface Props {
 
 
 export const ResourcePicker = ({resourceIds,selectedResources,onSelected, start, duration}:Props)=>{
+    const {t} = useTranslation()
     const projects = useProjects()
     const [resources, setResources] = useState<ResourceWithAvailability[]>()
     const [selectedResources_, setSelectedResources] = useState<ResourceId[]>(selectedResources ?? [])
@@ -49,8 +51,8 @@ export const ResourcePicker = ({resourceIds,selectedResources,onSelected, start,
     }, []);
 
     const ResourceByType = (resources:Resource[], type:ResourceType)=>{
-        return <View style={{alignItems:'center', paddingHorizontal:10, width:'100%', justifyContent:'center'}}>
-            <ThemedText>{type}</ThemedText>
+        return <View key={type} style={{alignItems:'center', paddingHorizontal:10, width:'100%', justifyContent:'center'}}>
+            <ThemedText>{t(type)}</ThemedText>
             <View style={{
                 flexDirection:'row',
                 flexWrap:"wrap",
@@ -66,7 +68,8 @@ export const ResourcePicker = ({resourceIds,selectedResources,onSelected, start,
 
 
                 return 0;
-            }).map(resource=><ResourceButton
+            }).map((resource,id)=><ResourceButton
+                key={id}
                 selected={selectedResources_.includes(resource.id)}
                 type={resource.type}
                 name={resource.name}
@@ -81,8 +84,10 @@ export const ResourcePicker = ({resourceIds,selectedResources,onSelected, start,
     const createResource = (resourceInput:ResourceInput)=>{
         //todo
         projects.createResource(resourceInput).then(resource=>{
-            resource.available = projects.isResourceAvailable(resource.id, start, duration)
-            console.info(projects.isResourceAvailable(resource.id, start, duration), start, duration)
+            console.log('créée avec succès')
+            //resource.available = projects.isResourceAvailable(resource.id, start, duration)
+            resource.available = true;
+            // console.info(projects.isResourceAvailable(resource.id, start, duration), start, duration)
             setResources(r=>[...r, resource])
             setIsModalOpen(false)
         })
@@ -98,30 +103,10 @@ export const ResourcePicker = ({resourceIds,selectedResources,onSelected, start,
 
     return <View>
         { !resources && <Loader/>}
-        {/*{resources && resources.sort((a, b) => {*/}
-
-        {/*    if (a.type < b.type) return -1;*/}
-        {/*    if (a.type > b.type) return 1;*/}
-
-        {/*    if (a.available && !b.available) return -1;*/}
-        {/*    if (!a.available && b.available) return 1;*/}
-        {/*    if (a.name < b.name) return -1;*/}
-        {/*    if (a.name > b.name) return 1;*/}
-
-
-        {/*    return 0;*/}
-        {/*}).map(resource=>{*/}
-        {/*    console.log(resources)*/}
-        {/*    return <ResourceButton*/}
-        {/*    selected={selectedResources.includes(resource.id)}*/}
-        {/*    type={resource.type}*/}
-        {/*    name={resource.name}*/}
-        {/*    available={resource.available}*/}
-        {/*    onPress={_=>onPress(resource.id)}/>})}*/}
         {resources && [...new Set(resources.map(resource => resource.type))].sort().map(type=>ResourceByType(resources,type))}
-        <ThemedButton onPress={_=>setIsModalOpen(true)}
-        ><ThemedText>Ajouter une resource</ThemedText></ThemedButton>
-        <ThemedButton onPress={_=>onSelected(selectedResources_)}><ThemedText>Valider</ThemedText></ThemedButton>
+        <ThemedButton2 style={{marginVertical:10, marginHorizontal:80}} title={t('add-resource')} onPress={_=>setIsModalOpen(true)}
+        ></ThemedButton2>
+        <ThemedButton2 style={{marginHorizontal:80}} title={t('submit')} onPress={_=>onSelected(selectedResources_)}></ThemedButton2>
         {isModalOpen && <ResourceEditor onClose={_=>setIsModalOpen(false)} visible={isModalOpen} onEnd={createResource}/>}
     </View>
 }

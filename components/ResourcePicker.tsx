@@ -1,16 +1,18 @@
 import {ResourceId, Resource, ResourceWithAvailability, ResourceType} from "@/api/models/Resource";
-import {Button, View} from "react-native";
+import {View} from "react-native";
 import {useProjects} from "@/contexts/ProjectsContext";
 import {ResourceButton} from "@/components/atoms/ResourceButton";
 import {useEffect, useState} from "react";
-import {databases} from "@/lib/appwrite";
 import {Loader} from "@/components/atoms/Loader";
-import {ThemedButton, ThemedButton2} from "@/components/atoms/ThemedButton";
+import {ThemedButton2} from "@/components/atoms/ThemedButton";
 import {ThemedText} from "@/components/ThemedText";
 import {ResourceEditor} from "@/components/ResourceEditor";
 import {ResourceInput} from "@/types/inputTypes";
 import {useTranslation} from "react-i18next";
 
+/**
+ * Ce composant permet à un responsable de sélectionner des resources pour son chantier.
+ */
 interface Props {
     resourceIds?:ResourceId[],
     selectedResources?:ResourceId[],
@@ -18,8 +20,6 @@ interface Props {
     start:Date,
     duration:number
 }
-
-
 
 export const ResourcePicker = ({resourceIds,selectedResources,onSelected, start, duration}:Props)=>{
     const {t} = useTranslation()
@@ -35,13 +35,9 @@ export const ResourcePicker = ({resourceIds,selectedResources,onSelected, start,
     useEffect(() => {
         (async ()=>{
            const r:ResourceWithAvailability[] = []
-            // console.log("resource picker : ", resourceIds)
            for(let id in resourceIds){
                const resource = resourceIds[id]
-               // console.log("resource", resource)
                resource.available = projects.isResourceAvailable(id, start, duration)
-               console.info(projects.isResourceAvailable(resource.id, start, duration), start, duration)
-
                r.push(resource)
            }
            setResources(r)
@@ -58,15 +54,12 @@ export const ResourcePicker = ({resourceIds,selectedResources,onSelected, start,
                 flexWrap:"wrap",
                 gap:10,
                 marginHorizontal:"auto"
-                // justifyContent:"",
             }}>
             {resources.filter(r=>r.type===type).sort((a,b)=>{
                 if (a.available && !b.available) return -1;
                 if (!a.available && b.available) return 1;
                 if (a.name < b.name) return -1;
                 if (a.name > b.name) return 1;
-
-
                 return 0;
             }).map((resource,id)=><ResourceButton
                 key={id}
@@ -82,12 +75,9 @@ export const ResourcePicker = ({resourceIds,selectedResources,onSelected, start,
     }
 
     const createResource = (resourceInput:ResourceInput)=>{
-        //todo
         projects.createResource(resourceInput).then(resource=>{
             console.log('créée avec succès')
-            //resource.available = projects.isResourceAvailable(resource.id, start, duration)
             resource.available = true;
-            // console.info(projects.isResourceAvailable(resource.id, start, duration), start, duration)
             setResources(r=>[...r, resource])
             setIsModalOpen(false)
         })
@@ -102,11 +92,24 @@ export const ResourcePicker = ({resourceIds,selectedResources,onSelected, start,
     }
 
     return <View>
-        { !resources && <Loader/>}
+        { !resources && <Loader/> }
         {resources && [...new Set(resources.map(resource => resource.type))].sort().map(type=>ResourceByType(resources,type))}
-        <ThemedButton2 style={{marginHorizontal:80}} title={t('add-resource')} onPress={_=>setIsModalOpen(true)}
-        ></ThemedButton2>
-        <ThemedButton2 style={{marginHorizontal:80}} title={t('submit')} onPress={_=>onSelected(selectedResources_)}></ThemedButton2>
-        {isModalOpen && <ResourceEditor onClose={_=>setIsModalOpen(false)} visible={isModalOpen} onEnd={createResource}/>}
+        <ThemedButton2
+            style={{marginHorizontal:80}}
+            title={t('add-resource')}
+            onPress={_=>setIsModalOpen(true)}
+        />
+        <ThemedButton2
+            style={{marginHorizontal:80}}
+            title={t('submit')}
+            onPress={_=>onSelected(selectedResources_)}
+        />
+        {isModalOpen &&
+            <ResourceEditor
+                onClose={_=>setIsModalOpen(false)}
+                visible={isModalOpen}
+                onEnd={createResource}
+            />
+        }
     </View>
 }

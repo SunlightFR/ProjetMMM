@@ -1,9 +1,23 @@
+# Vidéo
+
+Voici le lien Google Drive de la vidéo (elle était trop lourde pour Github) : https://drive.google.com/file/d/1py3C6hojs05O2BKJaHhM9r-bj4Gwybt4/view?usp=sharing.
+
+# Note sur le travail
+Dû à ma situation, je n'ai pas pu travailler autant que je l'ai voulu.
+
+J'ai également travaillé seul, sans binôme.
+
+J'ai fait des pauses forcées parfois de plusieurs semaines, et je n'ai donc pas pu implémenter tout ce que j'aurais voulu. Néanmoins toutes les fonctionnalités demandées dans le sujet l'ont été.
+
+Tout le code a été conçu pour supporter un changement de thème de couleur (sombre/clair) et de langue (tous les textes de l'application sont en français et en anglais) mais je n'ai pas eu le temps d'implémenter ce changement de thème et de langue.
+
+
 # Fonctionnalités implémentées
 
 ## Connection
 - Inscription avec nom, email, mot de passe et choix du rôle (chef de chantier ou responsable).
 - Connexion avec email et mot de passe
-- Déconnection
+- Déconnexion
 
 ## Fonctionnalités communes
 Tous les utilisateurs peuvent :
@@ -98,12 +112,3 @@ Quand on clique sur une carte, on arrive sur une page affichant cette fois toute
 - Et comme dit précédemment, un bouton pour appeler le client.
 
 Il y a également une page de paramètres, ne contenant qu'un bouton pour se déconnecter.
-
-# Note sur le travail
-Dû à ma situation, je n'ai pas pu travailler autant que je l'ai voulu.
-
-J'ai également travaillé seul, sans binôme.
-
-J'ai fait des pauses forcées parfois de plusieurs semaines, et je n'ai donc pas pu implémenter tout ce que j'aurais voulu. Néanmoins toutes les fonctionnalités demandées dans le sujet l'ont été.
-
-Tout le code a été conçu pour supporter un changement de thème de couleur (sombre/clair) et de langue (tous les textes de l'application sont en français et en anglais) mais je n'ai pas eu le temps d'implémenter ce changement de thème et de langue.
